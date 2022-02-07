@@ -14,7 +14,6 @@ import {
     isUndefinedOrNullOrStringEmpty,
 } from '../../../../lib';
 import Colors from '../../../../lib/colors';
-import AppState from '../../../../state/app';
 
 import styles from './CircleTimer.styles';
 

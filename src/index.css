@@ -5,15 +5,22 @@ body {
     width: 100%;
     transform: translate3D(0,0,0);
     background: white;
-    border-radius: .85rem;
     overflow: hidden;
 }
+
+#dragBar {
+    -webkit-app-region: drag;
+    position: absolute;
+    width: 100%;
+    height: 20px;
+    top: 0;
+}
+
 html {
     padding: 0;
     margin: 0;
     height: 100%;
     width: 100%;
-    background: black;
     overflow: hidden;
 }
 
@@ -21,7 +28,6 @@ html {
     background: radial-gradient(50% 50% at 50% 50%, rgb(80, 144, 234, .1) 0%, rgba(80, 144, 234, .34) 100%);
     height: 100%;
     width: 100%;
-    border-radius: .85rem;
     overflow: hidden;
 }
 

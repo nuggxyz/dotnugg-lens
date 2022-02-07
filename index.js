@@ -2,7 +2,7 @@ const path = require('path');
 const os = require('os');
 
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
-const { compiler, dotnugg } = require('@nuggxyz/dotnugg-sdk');
+const { dotnugg } = require('@nuggxyz/dotnugg-sdk');
 const isDev = require('electron-is-dev');
 
 function createWindow() {
@@ -16,10 +16,12 @@ function createWindow() {
         titleBarStyle: 'hidden',
     });
 
+    win.maximize();
+
     win.loadURL(
         isDev
             ? 'http://localhost:3000'
-            : `file://${path.join(__dirname, '../build/index.html')}`,
+            : `file://${path.join(__dirname, 'build/index.html')}`,
     );
     if (isDev) {
         win.webContents.openDevTools();

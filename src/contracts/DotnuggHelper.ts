@@ -1,3 +1,4 @@
+import { Web3Provider } from '@ethersproject/providers';
 import { Contract } from 'ethers';
 
 import { getProvider } from '../config';
@@ -12,11 +13,10 @@ export class DotnuggV1Helper extends ContractHelper {
     static get instance() {
         if (isUndefinedOrNullOrObjectEmpty(DotnuggV1Helper._instance)) {
             DotnuggV1Helper._instance = new Contract(
-                Web3Config.activeChain__DotnuggV1,
+                Web3Config.DOTNUGG_V1,
                 DotnuggV1__factory.abi,
-                getProvider(),
             ) as DotnuggV1;
         }
-        return DotnuggV1Helper._instance;
+        return DotnuggV1Helper._instance.connect(getProvider());
     }
 }

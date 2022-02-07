@@ -48,7 +48,7 @@ class AppState extends NLState<NL.Redux.App.State> {
             modalData: {},
             apiKey: '',
             artLocation: '',
-            compiledItems: [],
+            compiledItems: {},
         });
     }
 

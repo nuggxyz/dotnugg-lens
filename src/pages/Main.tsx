@@ -11,6 +11,7 @@ import Text from '../components/general/Texts/Text/Text';
 import List from '../components/general/List/List';
 import Colors from '../lib/colors';
 import { DotnuggV1Helper } from '../contracts/DotnuggHelper';
+import Loader from '../components/general/Loader/Loader';
 
 import Connect from './Connect';
 
@@ -20,8 +21,7 @@ const Main = () => {
 
     const [selectedItems, setSelectedItems] = React.useState([]);
     const [svg, setSvg] = React.useState('');
-
-    console.log(items);
+    const [loading, setLoading] = React.useState(false);
 
     return !isUndefinedOrNullOrStringEmpty(apiKey) ? (
         <div
@@ -30,6 +30,7 @@ const Main = () => {
                 display: 'flex',
                 flexDirection: 'column',
                 height: '100%',
+                width: '100%',
             }}>
             <Button
                 label="Clear Api Key"
@@ -41,7 +42,7 @@ const Main = () => {
                     })
                 }
             />
-            {!isUndefinedOrNullOrObjectEmpty(items) ? (
+            {isUndefinedOrNullOrObjectEmpty(items) ? (
                 <Button
                     label="Locate Art Repo"
                     onClick={() => window.dotnugg.selectFiles()}
@@ -49,26 +50,31 @@ const Main = () => {
             ) : (
                 <Button
                     label="Replace Art Repo"
-                    onClick={() =>
+                    onClick={() => {
                         AppState.dispatch.setArtLocation({
                             _localStorageTarget: 'artLocation',
                             _localStorageExpectedType: 'unique',
                             _localStorageValue: '',
-                        })
-                    }
+                        });
+                        window.dotnugg.selectFiles();
+                    }}
                 />
             )}
             <Button
                 label="GET THE NUGG"
-                onClick={() =>
+                onClick={() => {
+                    setLoading(true);
                     DotnuggV1Helper.instance
                         .sim(selectedItems.map((item) => item.hex))
                         .then((svg) => setSvg(svg))
-                }
+                        .catch((e) => alert(e))
+                        .finally(() => setLoading(false));
+                }}
+                rightIcon={loading && <Loader />}
             />
             <div style={{ display: 'flex', overflow: 'scroll' }}>
-                {Object.keys(items).map((feature) => (
-                    <div style={{ height: '30rem' }}>
+                {Object.keys(items).map((feature, index) => (
+                    <div style={{ height: '500px' }} key={index}>
                         <Text>{constants.DOTNUGG_ITEMS[feature]}</Text>
                         <List
                             extraData={[selectedItems, setSelectedItems]}
@@ -78,7 +84,9 @@ const Main = () => {
                     </div>
                 ))}
             </div>
-            <img src={svg} style={{ height: '550px', width: '550px' }} />
+            {svg && (
+                <img src={svg} style={{ height: '550px', width: '550px' }} />
+            )}
         </div>
     ) : (
         <Connect />
@@ -90,9 +98,9 @@ export default Main;
 const RenderItem = ({ item, extraData, index }) => {
     const [svg, setSvg] = React.useState('');
     const selectedItems = extraData[0];
-    React.useEffect(() => {
-        DotnuggV1Helper.instance.sim([item.hex]).then((svg) => setSvg(svg));
-    }, [item, selectedItems]);
+    // React.useEffect(() => {
+    //     DotnuggV1Helper.instance.sim([item.hex]).then((svg) => setSvg(svg));
+    // }, [item, selectedItems]);
     return (
         <Button
             buttonStyle={{
