@@ -2,6 +2,7 @@ const path = require('path');
 const os = require('os');
 
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { autoUpdater } = require('electron-updater');
 const { dotnugg } = require('@nuggxyz/dotnugg-sdk');
 const isDev = require('electron-is-dev');
 
@@ -27,8 +28,10 @@ function createWindow() {
         win.webContents.openDevTools();
     }
 }
-
-app.whenReady().then(createWindow);
+app.on('ready', () => {
+    createWindow();
+    autoUpdater.checkForUpdatesAndNotify();
+});
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
