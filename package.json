@@ -11,7 +11,7 @@
     "scripts": {
         "start": "node scripts/start.js",
         "develop": "node scripts/start.js",
-        "build": "yarn typechain && node scripts/build.js",
+        "build": "node scripts/build.js",
         "serve": "serve -s build",
         "test": "node scripts/test.js",
         "typechain": "typechain --target ethers-v5 --out-dir src/typechain/ './src/abis/*'",
@@ -122,6 +122,7 @@
         "prettier": "^2.3.2",
         "sass-loader": "^12.4.0",
         "terser-webpack-plugin": "^5.3.1",
+        "typechain": "^7.0.0",
         "typescript": "^4.3.5",
         "wait-on": "^6.0.0",
         "webpack": "^5.68.0",
@@ -179,7 +180,6 @@
         "stream-http": "^3.2.0",
         "style-loader": "^3.3.1",
         "subscriptions-transport-ws": "^0.11.0",
-        "tailwindcss": "^3.0.2",
-        "typechain": "^7.0.0"
+        "tailwindcss": "^3.0.2"
     }
 }
