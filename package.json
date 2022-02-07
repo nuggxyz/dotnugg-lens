@@ -11,7 +11,7 @@
     "scripts": {
         "start": "node scripts/start.js",
         "develop": "node scripts/start.js",
-        "build": "node scripts/build.js",
+        "build": "yarn typechain && node scripts/build.js",
         "serve": "serve -s build",
         "test": "node scripts/test.js",
         "typechain": "typechain --target ethers-v5 --out-dir src/typechain/ './src/abis/*'",
