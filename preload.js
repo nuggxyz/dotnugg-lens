@@ -1,6 +1,5 @@
 process.once('loaded', () => {
     const { contextBridge, ipcRenderer } = require('electron');
-    const { dotnugg } = require('@nuggxyz/dotnugg-sdk');
 
     contextBridge.exposeInMainWorld('dotnugg', {
         createCompiler: (path) => {

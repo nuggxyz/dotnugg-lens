@@ -9,7 +9,7 @@ declare namespace NL.Redux.App {
         modalData: ModalsData;
         apiKey: string;
         artLocation: string;
-        compiledItems: any;
+        compiledItems: any[];
     }
 
     interface Toast {

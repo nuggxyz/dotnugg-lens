@@ -57,21 +57,34 @@ ipcMain.on('select-files', function (event) {
             })
             .then(({ filePaths }) => {
                 if (filePaths) event.reply('file-selected', filePaths[0]);
+                else event.reply('file-error');
             });
     } else {
         dialog
             .showOpenDialog({
-                properties: ['openFile', 'openDirectory'],
+                properties: ['openDirectory'],
             })
             .then(({ filePaths }) => {
                 if (filePaths) event.reply('file-selected', filePaths[0]);
+                else event.reply('file-error');
             });
     }
 });
 
 ipcMain.on('fetch-compiler-items', async function (event, path) {
-    await dotnugg.compiler.init();
-    const compiler = dotnugg.compiler.compileDirectoryWithCache(path);
+    try {
+        await dotnugg.compiler.init();
+        const compiler = dotnugg.compiler.compileDirectoryCheckCache(path);
 
-    event.reply('items-fetched', compiler.outputByItem);
+        if (compiler.outputByItem) {
+            event.reply('items-fetched', compiler.outputByItem);
+        } else {
+            event.reply(
+                'compiler-error',
+                'Error: unknown error while compiling files',
+            );
+        }
+    } catch (e) {
+        event.reply('compiler-error', e);
+    }
 });

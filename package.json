@@ -133,7 +133,7 @@
     "dependencies": {
         "@ethersproject/providers": "^5.4.5",
         "@loadable/component": "^5.15.2",
-        "@nuggxyz/dotnugg-sdk": "^0.1.16",
+        "@nuggxyz/dotnugg-sdk": "^0.1.18",
         "@reduxjs/toolkit": "^1.6.1",
         "@web3-react/core": "^6.1.9",
         "@web3-react/network-connector": "^6.1.9",

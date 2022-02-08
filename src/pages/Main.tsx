@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import AppState from '../state/app';
 import {
+    isUndefinedOrNullOrArrayEmpty,
     isUndefinedOrNullOrObjectEmpty,
     isUndefinedOrNullOrStringEmpty,
 } from '../lib';
@@ -17,7 +18,7 @@ import Connect from './Connect';
 
 const Main = () => {
     const apiKey = AppState.select.apiKey();
-    const items = AppState.select.compiledItems();
+    const compiledItems = AppState.select.compiledItems();
 
     const [selectedItems, setSelectedItems] = React.useState([]);
     const [svg, setSvg] = React.useState('');
@@ -42,7 +43,7 @@ const Main = () => {
                     })
                 }
             />
-            {isUndefinedOrNullOrObjectEmpty(items) ? (
+            {isUndefinedOrNullOrArrayEmpty(compiledItems) ? (
                 <Button
                     label="Locate Art Repo"
                     onClick={() => window.dotnugg.selectFiles()}
@@ -73,12 +74,12 @@ const Main = () => {
                 rightIcon={loading && <Loader />}
             />
             <div style={{ display: 'flex', overflow: 'scroll' }}>
-                {Object.keys(items).map((feature, index) => (
+                {Object.keys(compiledItems).map((feature, index) => (
                     <div style={{ height: '500px' }} key={index}>
                         <Text>{constants.DOTNUGG_ITEMS[feature]}</Text>
                         <List
                             extraData={[selectedItems, setSelectedItems]}
-                            data={Object.values(items[feature])}
+                            data={Object.values(compiledItems[feature])}
                             RenderItem={RenderItem}
                         />
                     </div>
