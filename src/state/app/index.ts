@@ -39,6 +39,7 @@ class AppState extends NLState<NL.Redux.App.State> {
 
     constructor() {
         super(STATE_NAME, updater, middlewares, thactions, hooks, {
+            os: 'darwin',
             dimensions: {
                 height: 0,
                 width: 0,
@@ -47,6 +48,7 @@ class AppState extends NLState<NL.Redux.App.State> {
             modalIsOpen: undefined,
             modalData: {},
             apiKey: '',
+            asepriteFiles: [],
             artLocation: '',
             compiledItems: [],
         });
@@ -113,6 +115,15 @@ class AppState extends NLState<NL.Redux.App.State> {
             },
             setCompiledItems: (state, action: PayloadAction<string[]>) => {
                 state.compiledItems = action.payload;
+            },
+            addToAsepriteFiles: (state, action: PayloadAction<string[]>) => {
+                state.asepriteFiles = [
+                    ...state.asepriteFiles,
+                    ...action.payload,
+                ];
+            },
+            setOS: (state, action: PayloadAction<NL.Redux.App.OS>) => {
+                state.os = action.payload;
             },
         },
     });

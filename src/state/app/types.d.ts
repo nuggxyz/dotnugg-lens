@@ -1,5 +1,6 @@
 declare namespace NL.Redux.App {
     interface State {
+        os: OS;
         dimensions: {
             height: number;
             width: number;
@@ -8,9 +9,12 @@ declare namespace NL.Redux.App {
         modalIsOpen: Modals;
         modalData: ModalsData;
         apiKey: string;
+        asepriteFiles: string[];
         artLocation: string;
         compiledItems: any[];
     }
+
+    type OS = 'win32' | 'linux' | 'darwin';
 
     interface Toast {
         title: string;

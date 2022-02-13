@@ -2,7 +2,7 @@ import React, { FunctionComponent, useCallback, useMemo } from 'react';
 
 import useOnHover from '../../../../hooks/useOnHover';
 import AppState from '../../../../state/app';
-import Text from '../../Texts/Text/Text';
+import Text, { TextProps } from '../../Texts/Text/Text';
 
 import styles from './Button.styles';
 
@@ -16,18 +16,18 @@ export type ButtonProps = {
     hoverStyle?: React.CSSProperties;
     disabled?: boolean;
     isHovering?: (hover: boolean) => void;
-};
+} & Partial<TextProps>;
 
 const Button: FunctionComponent<ButtonProps> = ({
     onClick,
     label,
     buttonStyle,
-    textStyle,
     rightIcon,
     leftIcon,
     disabled = false,
     isHovering,
     hoverStyle,
+    ...textProps
 }) => {
     const [ref, hover] = useOnHover(isHovering);
 
@@ -50,13 +50,8 @@ const Button: FunctionComponent<ButtonProps> = ({
         [leftIcon],
     );
     const Label = useCallback(
-        () =>
-            label ? (
-                <Text weight="bold" textStyle={{ ...textStyle }}>
-                    {label}
-                </Text>
-            ) : null,
-        [label, textStyle],
+        () => (label ? <Text {...textProps}>{label}</Text> : null),
+        [label, textProps],
     );
 
     return (

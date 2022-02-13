@@ -80,12 +80,16 @@ interface Window {
         createCompiler: (paths: string) => void;
         on: (eventName: string, callback: (_?: any, _?: any) => void) => void;
         send: (eventName: string) => void;
+        openTo: (path: string) => void;
         selectFiles: () => void;
+        convertAseprite: (sourcePath: string, destPath: string) => void;
+        checkOs: () => void;
     };
 }
 
 interface Array<T> {
     first(count?: number): Array<T>;
+    last(count?: number): Array<T>;
     insert<U extends { index: number }>(element: U): Array<U>;
     toggle<U extends { id: string }>(element: U, field?: string);
     remove<U extends { index: number }>(element: U): Array<U>;

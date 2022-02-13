@@ -18,7 +18,7 @@ const styles = NLStyleSheetCreator({
     },
     border: {
         width: '0%',
-        height: '1px',
+        height: '1.5px',
         marginTop: '.1rem',
         marginBottom: '.2rem',
         background: 'white',

@@ -1,4 +1,5 @@
 import React, { CSSProperties, FunctionComponent, ReactNode } from 'react';
+import { animated, AnimatedProps } from 'react-spring';
 
 import Colors from '../../../../lib/colors';
 
@@ -9,7 +10,7 @@ export interface TextProps {
     weight?: 'light' | 'regular' | 'bold' | 'bolder';
     size?: 'smaller' | 'small' | 'medium' | 'large' | 'larger' | 'largest';
     type?: 'title' | 'text';
-    textStyle?: CSSProperties;
+    textStyle?: CSSProperties | AnimatedProps<CSSProperties>;
 }
 
 const Text: FunctionComponent<TextProps> = ({
@@ -25,7 +26,7 @@ const Text: FunctionComponent<TextProps> = ({
         ...styles[size],
         ...textStyle,
     };
-    return <div style={style}>{children}</div>;
+    return <animated.div style={style}>{children}</animated.div>;
 };
 
 export default React.memo(Text);

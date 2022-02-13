@@ -3,8 +3,9 @@ import React, {
     FunctionComponent,
     PropsWithChildren,
 } from 'react';
+import { animated, config, useTransition } from 'react-spring';
 
-import useOnClickOutside from '../../../../hooks/useOnClickOutside';
+import useOnHover from '../../../../hooks/useOnHover';
 
 import styles from './Flyout.styles';
 
@@ -19,25 +20,37 @@ const Flyout: FunctionComponent<PropsWithChildren<Props>> = ({
     children,
 }) => {
     const [open, setOpen] = React.useState(false);
+    const [openRef, openHover] = useOnHover(() => setOpen(true));
+    const [closeRef, closeHover] = useOnHover(() =>
+        setOpen(openHover || closeHover),
+    );
 
-    const closeModal = React.useCallback(() => setOpen(false), [setOpen]);
-
-    const node = React.useRef<HTMLDivElement>();
-
-    useOnClickOutside(node, closeModal);
+    const transition = useTransition(open, {
+        from: { opacity: 0 },
+        enter: { opacity: 1 },
+        leave: { opacity: 0 },
+        config: config.default,
+    });
 
     return (
-        <>
-            <div style={{ display: 'flex' }} onClick={() => setOpen(!open)}>
-                {button}
-            </div>
-
-            {open && (
-                <div ref={node} style={{ ...styles.container, ...style }}>
-                    {children}
-                </div>
+        <div ref={openRef}>
+            <div onClick={() => setOpen(false)}>{button}</div>
+            {transition(
+                (animatedStyle, open) =>
+                    open && (
+                        <animated.div
+                            //@ts-ignore
+                            ref={closeRef}
+                            style={{
+                                ...styles.container,
+                                ...style,
+                                ...animatedStyle,
+                            }}>
+                            {children}
+                        </animated.div>
+                    ),
             )}
-        </>
+        </div>
     );
 };
 

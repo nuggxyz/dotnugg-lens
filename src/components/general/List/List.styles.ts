@@ -39,6 +39,11 @@ const styles = NLStyleSheetCreator({
         justifyContent: 'space-between',
         marginBottom: '.5rem',
     },
+    sticky: {
+        position: 'sticky',
+        top: 0,
+        zIndex: 100,
+    },
     // noItems: {
     //     fontFamily: Layout.font.inter.bold,
     //     fontSize: FontSize.h5,

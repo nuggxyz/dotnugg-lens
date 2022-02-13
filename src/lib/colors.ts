@@ -46,6 +46,8 @@ const Colors = {
     shadows: {
         nuggPink: '#b347a1',
         nuggBlue: '#255aa8',
+        grey: '#788796',
+        lightGrey: 'rgba(0, 0, 0, 0.1)',
     },
 };
 
