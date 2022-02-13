@@ -32,7 +32,7 @@ export type ListRenderItemProps<T> = {
     style?: CSSProperties;
 };
 
-type Props = {
+export type ListProps = {
     data: any[];
     RenderItem: FunctionComponent<ListRenderItemProps<any>>;
     loading?: boolean;
@@ -53,7 +53,7 @@ type Props = {
     // itemHeight: number;
 };
 
-const List: FunctionComponent<Props> = ({
+const List: FunctionComponent<ListProps> = ({
     data = [],
     RenderItem,
     loading = false,

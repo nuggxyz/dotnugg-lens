@@ -3,17 +3,28 @@ process.once('loaded', () => {
 
     contextBridge.exposeInMainWorld('dotnugg', {
         createCompiler: (path) => {
-            console.log(path);
             ipcRenderer.send('fetch-compiler-items', path);
         },
-        on(eventName, callback) {
+        on: (eventName, callback) => {
             ipcRenderer.on(eventName, callback);
         },
-        send(eventName) {
+        send: (eventName) => {
             ipcRenderer.send(eventName);
         },
-        selectFiles() {
+        selectFiles: () => {
             ipcRenderer.send('select-files');
+        },
+        verifyFile: (path) => {
+            ipcRenderer.send('verify-file', path);
+        },
+        openTo: (path) => {
+            ipcRenderer.send('open-to', path);
+        },
+        checkOs: () => {
+            ipcRenderer.send('check-os');
+        },
+        convertAseprite: (sourcePath, destPath) => {
+            ipcRenderer.send('convert-aseprite', sourcePath, destPath);
         },
     });
 });

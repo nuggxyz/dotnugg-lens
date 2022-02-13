@@ -9,22 +9,22 @@ import store from './state/store';
 import './index.css';
 import Initializer from './state/Initializer';
 import Modal from './components/general/Modals/Modal/Modal';
-import Main from './pages/Main';
+import App from './pages/App';
 import ToastContainer from './components/general/Toast/ToastContainer';
 import './state/ipcListeners';
 
 ReactDOM.render(
-    <div style={{ width: '100%', height: '100%' }}>
+    <React.Fragment>
         <div id="dragBar" />
         <React.StrictMode>
             <Provider store={store}>
                 <Initializer>
                     <ToastContainer />
                     <Modal />
-                    <Main />
+                    <App />
                 </Initializer>
             </Provider>
         </React.StrictMode>
-    </div>,
+    </React.Fragment>,
     document.getElementById('root'),
 );

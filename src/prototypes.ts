@@ -24,7 +24,29 @@ Array.prototype.first = function (count?: number) {
     }, []);
 };
 
-Array.prototype.toggle = function <T extends { id: string }>(
+Array.prototype.last = function (count?: number) {
+    if (isUndefinedOrNullOrArrayEmpty(this)) {
+        return [];
+    }
+
+    if (isUndefinedOrNullOrNotNumber(count)) {
+        return this[this.length - 1];
+    }
+
+    return this.slice(0)
+        .reverse()
+        .reduce((result, element, i, arr) => {
+            if (result.length < count) {
+                result.push(element);
+            } else {
+                arr.splice(1);
+            }
+            return result;
+        }, [])
+        .reverse();
+};
+
+Array.prototype.toggle = function <T extends { id: string } | string>(
     element: T,
     field?: string,
 ) {
@@ -34,7 +56,11 @@ Array.prototype.toggle = function <T extends { id: string }>(
     }
 
     const index = val.findIndex((item: T) =>
-        field ? item[field] === element[field] : item.id === element.id,
+        field
+            ? item[field] === element[field]
+            : typeof element === 'string' || typeof item === 'string'
+            ? item === element
+            : item.id === element.id,
     );
 
     if (!isUndefinedOrNullOrNotNumber(index) && index >= 0) {
@@ -48,6 +74,13 @@ Array.prototype.toggle = function <T extends { id: string }>(
 Array.prototype.insert = function <T extends { index: number }>(element: T) {
     if (isUndefinedOrNullOrArrayEmpty(this)) {
         return [element];
+    }
+    if (typeof element === 'string') {
+        if (this.indexOf(element) !== -1) {
+            return this;
+        } else {
+            return [...this, element];
+        }
     }
     if (element.index === this.length) {
         return [...this, element];
@@ -68,6 +101,14 @@ Array.prototype.insert = function <T extends { index: number }>(element: T) {
 Array.prototype.remove = function <T extends { index: number }>(element: T) {
     if (isUndefinedOrNullOrArrayEmpty(this)) {
         return [];
+    }
+    if (typeof element === 'string') {
+        const temp = [...this];
+        temp.splice(
+            this.findIndex((item) => element === item),
+            1,
+        );
+        return temp;
     }
     return this.reduce((acc, elem) => {
         if (elem.index === element.index) {

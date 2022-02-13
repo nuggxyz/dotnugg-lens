@@ -2,6 +2,7 @@ import { getAddress } from '@ethersproject/address';
 import { BytesLike, ethers } from 'ethers';
 
 import config from '../config';
+import store from '../state/store';
 // 6287103
 // VERIFICATION
 export const isAnybodyThere = (value: any) => {
@@ -299,4 +300,11 @@ export const smartReplace = <T extends { id: string }>(
 
 export const toGwei = (num: string): ethers.BigNumber => {
     return ethers.utils.parseUnits(num, 'gwei');
+};
+
+export const shortenPathName = (pathName: string) => {
+    const splitPath = pathName.split(
+        store.getState().app.os === 'win32' ? '\\' : '/',
+    );
+    return `${splitPath.first(2).join('/')}/.../${splitPath.last(1)}`;
 };

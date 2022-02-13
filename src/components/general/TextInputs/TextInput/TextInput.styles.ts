@@ -16,7 +16,7 @@ const styles = NLStyleSheetCreator({
     headingContainer: {
         display: 'flex',
         alignItems: 'flex-end',
-        marginLeft: '.2rem',
+        // marginLeft: '.2rem',
     },
     marginTop: {
         marginTop: '1rem',

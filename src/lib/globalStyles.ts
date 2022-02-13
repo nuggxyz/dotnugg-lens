@@ -21,6 +21,12 @@ const globalStyles = NLStyleSheetCreator({
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
     },
+    centerFlex: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+    },
 });
 
 export default globalStyles;

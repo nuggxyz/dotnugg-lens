@@ -1,10 +1,15 @@
 const path = require('path');
 const os = require('os');
+const { exec } = require('child_process');
+const fs = require('fs');
 
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron');
 const { autoUpdater } = require('electron-updater');
-const { dotnugg } = require('@nuggxyz/dotnugg-sdk');
 const isDev = require('electron-is-dev');
+const { dotnugg } = require('@nuggxyz/dotnugg-sdk');
+// const {
+//     dotnugg,
+// } = require('/Users/***REMOVED***/Work/***REMOVED***/nuggxyz/dotnugg-sdk/dist/index.js');
 
 function createWindow() {
     const win = new BrowserWindow({
@@ -71,6 +76,16 @@ ipcMain.on('select-files', function (event) {
     }
 });
 
+ipcMain.on('open-to', function (event, path) {
+    shell.openPath(path);
+});
+
+ipcMain.on('verify-file', function (event, file) {});
+
+ipcMain.on('check-os', function (event) {
+    event.reply('receive-os', os.platform());
+});
+
 ipcMain.on('fetch-compiler-items', async function (event, path) {
     try {
         await dotnugg.compiler.init();
@@ -86,5 +101,41 @@ ipcMain.on('fetch-compiler-items', async function (event, path) {
         }
     } catch (e) {
         event.reply('compiler-error', e);
+    }
+});
+
+ipcMain.on('convert-aseprite', async function (event, sourcePath, destPath) {
+    try {
+        let asepriteLocation =
+            '/Applications/Aseprite.app/Contents/MacOS/aseprite';
+        if (os.platform() === 'win32') {
+            asepriteLocation = 'C:\\Program Files\\Aseprite\\Aseprite.exe';
+        }
+        if (!sourcePath.endsWith('.aseprite')) {
+            throw new Error('Selected file is not an aseprite file');
+        }
+        if (!fs.existsSync(destPath + '/generated')) {
+            exec(`mkdir ${destPath}/generated`);
+        }
+        exec(
+            asepriteLocation +
+                ' -b --script-param source=' +
+                sourcePath +
+                ' --script-param dest=' +
+                destPath +
+                ' --script aseprite2dotnugg.lua',
+            (error, stdout, stderr) => {
+                console.log(stdout);
+                console.log(stderr);
+                console.log(error);
+                if (error !== null) {
+                    throw new Error(error);
+                }
+                shell.openPath(destPath + '/generated');
+                event.reply('script-success');
+            },
+        );
+    } catch (e) {
+        event.reply('script-error', e);
     }
 });
