@@ -9,6 +9,21 @@ const styles = NLStyleSheetCreator({
         top: '1.5rem',
         right: '2rem',
     },
+    trayButton: {
+        position: 'absolute',
+        top: '1.5rem',
+        right: '5.5rem',
+    },
+    badge: {
+        position: 'absolute',
+        top: '-.4rem',
+        right: '-.2rem',
+        color: 'white',
+        background: Colors.nuggRedText,
+        padding: '.2rem .4rem',
+        borderRadius: Layout.borderRadius.large,
+        fontFamily: Layout.font.code.regular,
+    },
     artLocationPicker: {
         color: Colors.nuggBlueText,
     },
@@ -28,6 +43,5 @@ const styles = NLStyleSheetCreator({
         padding: '.5rem 1rem',
     },
 });
-
 
 export default styles;

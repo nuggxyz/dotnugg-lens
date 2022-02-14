@@ -12,12 +12,14 @@ import styles from './Flyout.styles';
 type Props = {
     button: JSX.Element;
     style?: CSSProperties;
+    containerStyle?: CSSProperties;
 };
 
 const Flyout: FunctionComponent<PropsWithChildren<Props>> = ({
     style,
     button,
     children,
+    containerStyle,
 }) => {
     const [open, setOpen] = React.useState(false);
     const [openRef, openHover] = useOnHover(() => setOpen(true));
@@ -26,27 +28,37 @@ const Flyout: FunctionComponent<PropsWithChildren<Props>> = ({
     );
 
     const transition = useTransition(open, {
-        from: { opacity: 0 },
-        enter: { opacity: 1 },
-        leave: { opacity: 0 },
-        config: config.default,
+        from: {
+            width: '50px',
+            height: '100px',
+            zIndex: 99,
+            pointerEvents: 'none',
+            position: 'absolute',
+            top: 0,
+            opacity: 0,
+        },
+        enter: { opacity: 1, pointerEvents: 'auto' },
+        leave: { opacity: 0, pointerEvents: 'none' },
+        config: config.stiff,
     });
 
     return (
-        <div ref={openRef}>
+        <div style={containerStyle} ref={openRef}>
             <div onClick={() => setOpen(false)}>{button}</div>
             {transition(
                 (animatedStyle, open) =>
                     open && (
                         <animated.div
                             //@ts-ignore
-                            ref={closeRef}
-                            style={{
-                                ...styles.container,
-                                ...style,
-                                ...animatedStyle,
-                            }}>
-                            {children}
+                            style={animatedStyle}>
+                            <div
+                                ref={closeRef}
+                                style={{
+                                    ...styles.container,
+                                    ...style,
+                                }}>
+                                {children}
+                            </div>
                         </animated.div>
                     ),
             )}

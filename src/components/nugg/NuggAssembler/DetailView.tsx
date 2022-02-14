@@ -93,8 +93,10 @@ const DetailView: FunctionComponent<Props> = ({
                     </div>
                 </animated.div>
                 <div ref={scrollRef} style={styles.detailSelectedItems}>
-                    {selectedItems.map((item) => (
-                        <div style={styles.detailSelectedItem}>
+                    {selectedItems.map((item, index) => (
+                        <div
+                            style={styles.detailSelectedItem}
+                            key={`item-${index}`}>
                             <Button
                                 buttonStyle={styles.detailSelectedItemClose}
                                 rightIcon={<IoClose />}

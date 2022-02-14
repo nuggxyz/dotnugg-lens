@@ -23,8 +23,8 @@ const styles = NLStyleSheetCreator({
     },
     flyoutContainer: {
         position: 'absolute',
-        left: '0',
-        top: '2rem',
+        left: '-.6rem',
+        top: '2.1rem',
         overflow: 'hidden',
     },
     flyoutSelect: {

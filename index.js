@@ -132,10 +132,10 @@ ipcMain.on('convert-aseprite', async function (event, sourcePath, destPath) {
                     throw new Error(error);
                 }
                 shell.openPath(destPath + '/generated');
-                event.reply('script-success');
+                event.reply('script-success', sourcePath);
             },
         );
     } catch (e) {
-        event.reply('script-error', e);
+        event.reply('script-error', e, sourcePath);
     }
 });

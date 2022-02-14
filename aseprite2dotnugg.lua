@@ -51,9 +51,6 @@ local function getData(img, x, y, w, h, palette)
     local center = math.floor(w / 2)
     res = res .. "\tversions := {\n"
     res = res .. "\t\t0 := {\n"
-    res = res .. "\t\t\texpanders := { r: 0, l: 0, u: 0, d: 0 }\n"
-    res = res .. "\t\t\tradii := { r: 0, l: 0, u: 0, d: 0 }\n"
-    res = res .. "\t\t\texpanders := { r: 0, l: 0, u: 0, d: 0 }\n"
     res = res .. "\t\t\tanchor := { x: " .. center .. ", y: " .. center .. " }\n"
     res = res .. "\t\t\tdata := {\n"
 
@@ -94,7 +91,7 @@ local function exportFrame(frm)
         img:drawSprite(sprite, frm)
         usedColors = {}
 
-        local f = io.open(app.params["dest"] .. "/generated/" .. layer.name:gsub("/", "_") .. "_frm_" .. frm .. ".nugg", "w")
+        local f = io.open(app.params["dest"] .. "/generated/" .. "generated." .. i .. "." .. layer.name:gsub("/", "_") .. "_frm_" .. frm .. ".item.nugg", "w")
         io.output(f)
 
         io.write("@item(INVALID) := {\n")

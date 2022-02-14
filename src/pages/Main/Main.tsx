@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IoClose, IoCreateOutline, IoDocument, IoPower } from 'react-icons/io5';
+import { IoFileTrayOutline, IoPower } from 'react-icons/io5';
 
 import AppState from '../../state/app';
 import {
@@ -11,18 +11,12 @@ import {
 import Button from '../../components/general/Buttons/Button/Button';
 import constants from '../../lib/constants';
 import Text from '../../components/general/Texts/Text/Text';
-import List from '../../components/general/List/List';
 import Colors from '../../lib/colors';
-import { DotnuggV1Helper } from '../../contracts/DotnuggHelper';
-import Loader from '../../components/general/Loader/Loader';
 import Dropzone from '../../components/nugg/Dropzone/Dropzone';
-import AsepriteButton from '../../components/nugg/AsepriteButton/AsepriteButton';
-import InteractiveText from '../../components/general/Texts/InteractiveText/InteractiveText';
 import ArtRepoHandler from '../../components/nugg/ArtRepoHandler/ArtRepoHandler';
-import StickyList from '../../components/general/List/StickyList';
-import globalStyles from '../../lib/globalStyles';
-import Layout from '../../lib/layout';
 import NuggAssembler from '../../components/nugg/NuggAssembler/NuggAssembler';
+import Flyout from '../../components/general/Flyouts/Flyout/Flyout';
+import AsepriteFlyout from '../../components/nugg/AsepriteFlyout/AsepriteFlyout';
 
 import styles from './Main.styles';
 
@@ -44,7 +38,13 @@ const Main = () => {
 
     return (
         <Dropzone
-            onDrop={(files) => AppState.dispatch.addToAsepriteFiles(files)}>
+            onDrop={(files) =>
+                AppState.dispatch.addToAsepriteFiles(
+                    files.map((file) => {
+                        return { path: file, compiled: false, loading: false };
+                    }),
+                )
+            }>
             <ArtRepoHandler />
             <Button
                 buttonStyle={{ ...styles.powerButton, ...styles.buttonRound }}
@@ -57,6 +57,50 @@ const Main = () => {
                     })
                 }
             />
+            <Flyout
+                containerStyle={styles.trayButton}
+                style={{
+                    top: '2.9rem',
+                    right: '-.5rem',
+                    minWidth: '200px',
+                    height: '400px',
+                    padding: '0rem 1rem',
+                    overflow: 'scroll',
+                }}
+                button={
+                    <>
+                        <Button
+                            buttonStyle={styles.buttonRound}
+                            rightIcon={
+                                <IoFileTrayOutline
+                                    color={Colors.nuggBlueText}
+                                    size={25}
+                                />
+                            }
+                            onClick={() => {}}
+                        />
+                        {!isUndefinedOrNullOrArrayEmpty(asepriteFiles) &&
+                            asepriteFiles.filter((file) => !file.compiled)
+                                .length > 0 && (
+                                <Text
+                                    textStyle={styles.badge}
+                                    type="text"
+                                    size="smaller">
+                                    {
+                                        asepriteFiles.filter(
+                                            (file) => !file.compiled,
+                                        ).length
+                                    }
+                                </Text>
+                            )}
+                    </>
+                }>
+                <AsepriteFlyout
+                    asepriteFiles={asepriteFiles}
+                    artLocation={artLocation}
+                />
+            </Flyout>
+
             {isUndefinedOrNullOrStringEmpty(artLocation) && (
                 <Button
                     textStyle={styles.artLocationPicker}
@@ -66,82 +110,6 @@ const Main = () => {
                 />
             )}
             <NuggAssembler data={formattedCompiledItems} />
-            {/* <div
-                style={{
-                    overflow: 'scroll',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: '100%',
-                    width: '100%',
-                }}>
-                <Button
-                    label="Open art repo"
-                    onClick={() => window.dotnugg.openTo(dest)}
-                />
-                <Button
-                    label="Clear Api Key"
-                    onClick={() =>
-                        AppState.dispatch.setApiKey({
-                            _localStorageTarget: 'apiKey',
-                            _localStorageExpectedType: 'unique',
-                            _localStorageValue: '',
-                        })
-                    }
-                />
-                {isUndefinedOrNullOrArrayEmpty(compiledItems) ? (
-                    <Button
-                        label="Locate Art Repo"
-                        onClick={() => window.dotnugg.selectFiles()}
-                    />
-                ) : (
-                    <Button
-                        label="Replace Art Repo"
-                        onClick={() => {
-                            AppState.dispatch.setArtLocation({
-                                _localStorageTarget: 'artLocation',
-                                _localStorageExpectedType: 'unique',
-                                _localStorageValue: '',
-                            });
-                            window.dotnugg.selectFiles();
-                        }}
-                    />
-                )}
-                <Button
-                    label="GET THE NUGG"
-                    onClick={() => {
-                        setLoading(true);
-                        DotnuggV1Helper.instance
-                            .sim(selectedItems.map((item) => item.hex))
-                            .then((svg) => setSvg(svg))
-                            .catch((e) => alert(e))
-                            .finally(() => setLoading(false));
-                    }}
-                    rightIcon={loading && <Loader />}
-                />
-                <div style={{ display: 'flex', overflow: 'scroll' }}>
-                    {Object.keys(compiledItems).map((feature, index) => (
-                        <div style={{ height: '500px' }} key={index}>
-                            <Text>{constants.DOTNUGG_ITEMS[feature]}</Text>
-                            <List
-                                extraData={[selectedItems, setSelectedItems]}
-                                data={Object.values(compiledItems[feature])}
-                                RenderItem={RenderItem}
-                            />
-                        </div>
-                    ))}
-                </div>
-                {svg && (
-                    <img
-                        src={svg}
-                        style={{ height: '550px', width: '550px' }}
-                    />
-                )}
-                <div>
-                    {asepriteFiles.map((file) => (
-                        <AsepriteButton file={file} />
-                    ))}
-                </div>
-            </div> */}
         </Dropzone>
     );
 };
