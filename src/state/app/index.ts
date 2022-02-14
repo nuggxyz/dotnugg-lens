@@ -116,10 +116,21 @@ class AppState extends NLState<NL.Redux.App.State> {
             setCompiledItems: (state, action: PayloadAction<string[]>) => {
                 state.compiledItems = action.payload;
             },
-            addToAsepriteFiles: (state, action: PayloadAction<string[]>) => {
+            addToAsepriteFiles: (
+                state,
+                action: PayloadAction<NL.Redux.App.AsepriteFile[]>,
+            ) => {
                 state.asepriteFiles = [
                     ...state.asepriteFiles,
                     ...action.payload,
+                ];
+            },
+            updateAsepriteFiles: (
+                state,
+                action: PayloadAction<NL.Redux.App.AsepriteFile>,
+            ) => {
+                state.asepriteFiles = [
+                    ...state.asepriteFiles.replace(action.payload, 'path'),
                 ];
             },
             setOS: (state, action: PayloadAction<NL.Redux.App.OS>) => {

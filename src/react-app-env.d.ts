@@ -78,7 +78,10 @@ declare module '*.svg' {
 interface Window {
     dotnugg: {
         createCompiler: (paths: string) => void;
-        on: (eventName: string, callback: (_?: any, _?: any) => void) => void;
+        on: (
+            eventName: string,
+            callback: (_?: any, _?: any, _?: any) => void,
+        ) => void;
         send: (eventName: string) => void;
         openTo: (path: string) => void;
         selectFiles: () => void;
@@ -91,9 +94,12 @@ interface Array<T> {
     first(count?: number): Array<T>;
     last(count?: number): Array<T>;
     insert<U extends { index: number }>(element: U): Array<U>;
-    toggle<U extends { id: string }>(element: U, field?: string);
+    toggle<U extends { id: string }>(element: U, field?: keyof U);
     remove<U extends { index: number }>(element: U): Array<U>;
-    replace<U extends { id: string }>(element: U): Array<U>;
+    replace<U extends { id: string } | object>(
+        element: U,
+        field?: keyof U,
+    ): Array<U>;
 }
 
 namespace NL {

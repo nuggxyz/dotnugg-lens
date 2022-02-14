@@ -9,10 +9,16 @@ declare namespace NL.Redux.App {
         modalIsOpen: Modals;
         modalData: ModalsData;
         apiKey: string;
-        asepriteFiles: string[];
+        asepriteFiles: AsepriteFile[];
         artLocation: string;
         compiledItems: any[];
     }
+
+    type AsepriteFile = {
+        path: string;
+        compiled: boolean;
+        loading: boolean;
+    };
 
     type OS = 'win32' | 'linux' | 'darwin';
 

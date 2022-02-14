@@ -3,6 +3,7 @@ import {
     isUndefinedOrNullOrNotNumber,
     isUndefinedOrNullOrNumberZero,
     isUndefinedOrNullOrObjectEmpty,
+    isUndefinedOrNullOrStringEmpty,
 } from './lib';
 
 Array.prototype.first = function (count?: number) {
@@ -48,7 +49,7 @@ Array.prototype.last = function (count?: number) {
 
 Array.prototype.toggle = function <T extends { id: string } | string>(
     element: T,
-    field?: string,
+    field?: keyof T,
 ) {
     const val = [...this];
     if (isUndefinedOrNullOrArrayEmpty(val)) {
@@ -122,12 +123,19 @@ Array.prototype.remove = function <T extends { index: number }>(element: T) {
     }, []);
 };
 
-Array.prototype.replace = function <T extends { id: string }>(element: T) {
+Array.prototype.replace = function <T extends { id: string } | object>(
+    element: T,
+    field?: keyof T,
+) {
     if (isUndefinedOrNullOrArrayEmpty(this)) {
         return [];
     }
     return this.reduce((acc, elem) => {
-        if (elem.id === element.id) {
+        if (
+            !isUndefinedOrNullOrStringEmpty(field)
+                ? elem[field] === element[field]
+                : elem.id === (element as any).id
+        ) {
             acc.push({
                 ...elem,
                 ...element,

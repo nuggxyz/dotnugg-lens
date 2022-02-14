@@ -72,20 +72,22 @@ const StickyList: FunctionComponent<PropsWithChildren<Props>> = ({
         <animated.div style={{ display: 'flex', ...style }}>
             <div style={styleLeft}>
                 {refData.map((item, index) => (
-                    <FeatureRenderItem
-                        onClick={() =>
-                            setY({
-                                y:
-                                    item.ref.current.getBoundingClientRect()
-                                        .top +
-                                    listRef.current.scrollTop -
-                                    listRef.current.offsetHeight / 3,
-                            })
-                        }
-                        isSelected={!current.includes(item.title)}
-                        feature={item.title}
-                        numberOfItems={refData[index].items.length}
-                    />
+                    <React.Fragment key={`feature-${index}`}>
+                        <FeatureRenderItem
+                            onClick={() =>
+                                setY({
+                                    y:
+                                        item.ref.current.getBoundingClientRect()
+                                            .top +
+                                        listRef.current.scrollTop -
+                                        listRef.current.offsetHeight / 3,
+                                })
+                            }
+                            isSelected={!current.includes(item.title)}
+                            feature={item.title}
+                            numberOfItems={refData[index].items.length}
+                        />
+                    </React.Fragment>
                     // <div
                     //     onClick={() => {
                     //         setY({
@@ -108,20 +110,22 @@ const StickyList: FunctionComponent<PropsWithChildren<Props>> = ({
             <div
                 style={{ height: '100%', overflow: 'scroll', ...styleRight }}
                 ref={listRef}>
-                {refData.map((item) => (
-                    <RenderItem
-                        {...{
-                            item,
-                            TitleRenderItem,
-                            ChildRenderItem,
-                            extraData: [
-                                ...extraData,
-                                animating,
-                                refData.map((item) => item.title),
-                            ],
-                            setCurrent,
-                        }}
-                    />
+                {refData.map((item, index) => (
+                    <React.Fragment key={`list-${index}`}>
+                        <RenderItem
+                            {...{
+                                item,
+                                TitleRenderItem,
+                                ChildRenderItem,
+                                extraData: [
+                                    ...extraData,
+                                    animating,
+                                    refData.map((item) => item.title),
+                                ],
+                                setCurrent,
+                            }}
+                        />
+                    </React.Fragment>
                 ))}
             </div>
             {children && children}
@@ -158,7 +162,9 @@ const RenderItem = ({
                 <TitleRenderItem title={item.title} />
             </div>
             {item.items.map((item, index) => (
-                <ChildRenderItem {...{ index, item, extraData }} />
+                <React.Fragment key={`child-${index}`}>
+                    <ChildRenderItem {...{ index, item, extraData }} />
+                </React.Fragment>
             ))}
         </div>
     );

@@ -13,6 +13,7 @@ const styles = NLStyleSheetCreator({
         position: 'absolute',
         zIndex: 100,
         userSelect: 'none',
+        pointerEvents: 'auto',
     },
 });
 

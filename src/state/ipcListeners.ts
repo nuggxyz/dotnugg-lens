@@ -9,6 +9,7 @@ window.dotnugg.on('file-selected', (event, path) => {
 });
 
 window.dotnugg.on('items-fetched', (event, items) => {
+    console.log(items)
     AppState.dispatch.setCompiledItems(items);
 });
 
@@ -20,11 +21,21 @@ window.dotnugg.on('file-error', (event) => {
     alert('Error locating art');
 });
 
-window.dotnugg.on('script-error', (event) => {
-    alert('Error converting to dotnugg');
+window.dotnugg.on('script-error', (event, error, file) => {
+    AppState.dispatch.updateAsepriteFiles({
+        path: file,
+        loading: false,
+        compiled: false,
+    });
+    alert('Error converting to dotnugg: ' + error);
 });
 
-window.dotnugg.on('script-success', (event, generated) => {
+window.dotnugg.on('script-success', (event, file) => {
+    AppState.dispatch.updateAsepriteFiles({
+        path: file,
+        loading: false,
+        compiled: true,
+    });
     // alert(`Success! Check ${generated} to categorize your dotnugg files`);
 });
 
