@@ -9,6 +9,7 @@ import { DotnuggV1Helper } from '../../contracts/DotnuggHelper';
 import Colors from '../../lib/colors';
 import globalStyles from '../../lib/globalStyles';
 import AppState from '../../state/app';
+import Web3Config from '../../Web3Config';
 
 import styles from './Connect.styles';
 
@@ -32,7 +33,9 @@ const Connect: FunctionComponent<Props> = () => {
             <TextInput
                 styleInputContainer={globalStyles.fillWidth}
                 styleInput={styles.textInput}
-                setValue={setApiKey}
+                setValue={(text) =>
+                    setApiKey(text === 'dotnugg' ? Web3Config.INFURA_KEY : text)
+                }
                 value={apiKey}
                 placeholder="e.g., a1b2c3d4e5..."
             />
@@ -43,7 +46,7 @@ const Connect: FunctionComponent<Props> = () => {
                     setLoading(true);
                     DotnuggV1Helper.instance
                         .connect(getProvider(apiKey))
-                        .template()
+                        ['combo(uint256[],bool)']([], true)
                         .then(() =>
                             AppState.dispatch.setApiKey({
                                 _localStorageTarget: 'apiKey',

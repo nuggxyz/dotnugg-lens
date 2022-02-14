@@ -11,6 +11,7 @@ import {
 import { isUndefinedOrNullOrStringEmpty, shortenPathName } from '../../../lib';
 import Colors from '../../../lib/colors';
 import AppState from '../../../state/app';
+import Web3Config from '../../../Web3Config';
 import Button from '../../general/Buttons/Button/Button';
 import Flyout from '../../general/Flyouts/Flyout/Flyout';
 import InteractiveText from '../../general/Texts/InteractiveText/InteractiveText';
@@ -22,6 +23,7 @@ type Props = {};
 
 const ArtRepoHandler: FunctionComponent<Props> = () => {
     const artLocation = AppState.select.artLocation();
+    const apiKey = AppState.select.apiKey();
 
     return !isUndefinedOrNullOrStringEmpty(artLocation) ? (
         <div style={styles.artLocationContainer}>
@@ -40,21 +42,6 @@ const ArtRepoHandler: FunctionComponent<Props> = () => {
                     />
                 }>
                 <>
-                    <Button
-                        buttonStyle={styles.flyoutSelect}
-                        type="text"
-                        size="small"
-                        textStyle={styles.flyoutSelectText}
-                        leftIcon={
-                            <IoFolderOpenOutline
-                                color={Colors.nuggBlueText}
-                                size={20}
-                                style={styles.flyoutSelectIcon}
-                            />
-                        }
-                        label="Change directories"
-                        onClick={() => window.dotnugg.selectFiles()}
-                    />
                     <Button
                         buttonStyle={styles.flyoutSelect}
                         type="text"
@@ -84,8 +71,27 @@ const ArtRepoHandler: FunctionComponent<Props> = () => {
                         }
                         label="Recompile"
                         onClick={() =>
-                            window.dotnugg.createCompiler(artLocation)
+                            window.dotnugg.createCompiler(
+                                artLocation,
+                                Web3Config.DOTNUGG_V1,
+                                apiKey,
+                            )
                         }
+                    />
+                    <Button
+                        buttonStyle={styles.flyoutSelect}
+                        type="text"
+                        size="small"
+                        textStyle={styles.flyoutSelectText}
+                        leftIcon={
+                            <IoFolderOpenOutline
+                                color={Colors.nuggBlueText}
+                                size={20}
+                                style={styles.flyoutSelectIcon}
+                            />
+                        }
+                        label="Change directories"
+                        onClick={() => window.dotnugg.selectFiles()}
                     />
                 </>
             </Flyout>

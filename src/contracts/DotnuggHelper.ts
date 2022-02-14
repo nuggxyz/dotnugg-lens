@@ -1,5 +1,5 @@
 import { Web3Provider } from '@ethersproject/providers';
-import { Contract } from 'ethers';
+import { Contract, ethers } from 'ethers';
 
 import { getProvider } from '../config';
 import { isUndefinedOrNullOrObjectEmpty } from '../lib';
@@ -18,5 +18,15 @@ export class DotnuggV1Helper extends ContractHelper {
             ) as DotnuggV1;
         }
         return DotnuggV1Helper._instance.connect(getProvider());
+    }
+
+    public static async renderOnChain(
+        data: ethers.BigNumber[][],
+        base64: boolean,
+    ): Promise<string> {
+        return await DotnuggV1Helper.instance['combo(uint256[][],bool)'](
+            data,
+            base64,
+        );
     }
 }

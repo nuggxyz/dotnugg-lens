@@ -22,14 +22,6 @@ import styles from './Main.styles';
 
 const Main = () => {
     const compiledItems = AppState.select.compiledItems();
-    const formattedCompiledItems = React.useMemo(() => {
-        return Object.entries(compiledItems).map(([key, value]) => {
-            return {
-                title: constants.DOTNUGG_ITEMS[key],
-                items: Object.values(value),
-            };
-        });
-    }, [compiledItems]);
     const artLocation = AppState.select.artLocation();
     const asepriteFiles = AppState.select.asepriteFiles();
 
@@ -39,6 +31,7 @@ const Main = () => {
     return (
         <Dropzone
             onDrop={(files) =>
+                !isUndefinedOrNullOrStringEmpty(artLocation) &&
                 AppState.dispatch.addToAsepriteFiles(
                     files.map((file) => {
                         return { path: file, compiled: false, loading: false };
@@ -57,49 +50,51 @@ const Main = () => {
                     })
                 }
             />
-            <Flyout
-                containerStyle={styles.trayButton}
-                style={{
-                    top: '2.9rem',
-                    right: '-.5rem',
-                    minWidth: '200px',
-                    height: '400px',
-                    padding: '0rem 1rem',
-                    overflow: 'scroll',
-                }}
-                button={
-                    <>
-                        <Button
-                            buttonStyle={styles.buttonRound}
-                            rightIcon={
-                                <IoFileTrayOutline
-                                    color={Colors.nuggBlueText}
-                                    size={25}
-                                />
-                            }
-                            onClick={() => {}}
-                        />
-                        {!isUndefinedOrNullOrArrayEmpty(asepriteFiles) &&
-                            asepriteFiles.filter((file) => !file.compiled)
-                                .length > 0 && (
-                                <Text
-                                    textStyle={styles.badge}
-                                    type="text"
-                                    size="smaller">
-                                    {
-                                        asepriteFiles.filter(
-                                            (file) => !file.compiled,
-                                        ).length
-                                    }
-                                </Text>
-                            )}
-                    </>
-                }>
-                <AsepriteFlyout
-                    asepriteFiles={asepriteFiles}
-                    artLocation={artLocation}
-                />
-            </Flyout>
+            {!isUndefinedOrNullOrStringEmpty(artLocation) && (
+                <Flyout
+                    containerStyle={styles.trayButton}
+                    style={{
+                        top: '2.9rem',
+                        right: '-.5rem',
+                        minWidth: '200px',
+                        height: '400px',
+                        padding: '0rem 1rem',
+                        overflow: 'scroll',
+                    }}
+                    button={
+                        <>
+                            <Button
+                                buttonStyle={styles.buttonRound}
+                                rightIcon={
+                                    <IoFileTrayOutline
+                                        color={Colors.nuggBlueText}
+                                        size={25}
+                                    />
+                                }
+                                onClick={() => {}}
+                            />
+                            {!isUndefinedOrNullOrArrayEmpty(asepriteFiles) &&
+                                asepriteFiles.filter((file) => !file.compiled)
+                                    .length > 0 && (
+                                    <Text
+                                        textStyle={styles.badge}
+                                        type="text"
+                                        size="smaller">
+                                        {
+                                            asepriteFiles.filter(
+                                                (file) => !file.compiled,
+                                            ).length
+                                        }
+                                    </Text>
+                                )}
+                        </>
+                    }>
+                    <AsepriteFlyout
+                        asepriteFiles={asepriteFiles}
+                        artLocation={artLocation}
+                    />
+                </Flyout>
+            )}
 
             {isUndefinedOrNullOrStringEmpty(artLocation) && (
                 <Button
@@ -109,7 +104,7 @@ const Main = () => {
                     onClick={() => window.dotnugg.selectFiles()}
                 />
             )}
-            <NuggAssembler data={formattedCompiledItems} />
+            <NuggAssembler data={compiledItems} />
         </Dropzone>
     );
 };

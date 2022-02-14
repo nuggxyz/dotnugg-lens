@@ -7,6 +7,9 @@ const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const isDev = require('electron-is-dev');
 const { dotnugg } = require('@nuggxyz/dotnugg-sdk');
+const ethers = require('ethers');
+const fixPath = require('fix-path');
+fixPath();
 // const {
 //     dotnugg,
 // } = require('/Users/remymcconnell/Work/dhlabs/nuggxyz/dotnugg-sdk/dist/index.js');
@@ -86,23 +89,35 @@ ipcMain.on('check-os', function (event) {
     event.reply('receive-os', os.platform());
 });
 
-ipcMain.on('fetch-compiler-items', async function (event, path) {
-    try {
-        await dotnugg.compiler.init();
-        const compiler = dotnugg.compiler.compileDirectoryCheckCache(path);
+ipcMain.on(
+    'fetch-compiler-items',
+    async function (event, path, address, apiKey) {
+        try {
+            await dotnugg.compiler.init();
+            const compiler =
+                await dotnugg.compiler.compileDirectoryCheckCacheAndRender(
+                    address,
+                    new ethers.providers.InfuraProvider('goerli', apiKey),
+                    path,
+                );
 
-        if (compiler.outputByItem) {
-            event.reply('items-fetched', compiler.outputByItem);
-        } else {
-            event.reply(
-                'compiler-error',
-                'Error: unknown error while compiling files',
-            );
+            if (compiler.outputByItem) {
+                event.reply(
+                    'items-fetched',
+                    compiler.outputByItem,
+                    compiler.render,
+                );
+            } else {
+                event.reply(
+                    'compiler-error',
+                    'Error: unknown error while compiling files',
+                );
+            }
+        } catch (e) {
+            event.reply('compiler-error', e);
         }
-    } catch (e) {
-        event.reply('compiler-error', e);
-    }
-});
+    },
+);
 
 ipcMain.on('convert-aseprite', async function (event, sourcePath, destPath) {
     try {
@@ -118,16 +133,11 @@ ipcMain.on('convert-aseprite', async function (event, sourcePath, destPath) {
             exec(`mkdir ${destPath}/generated`);
         }
         exec(
-            asepriteLocation +
-                ' -b --script-param source="' +
-                sourcePath +
-                '" --script-param dest="' +
-                destPath +
-                '" --script aseprite2dotnugg.lua',
-            (error, stdout, stderr) => {
-                console.log(stdout);
-                console.log(stderr);
-                console.log(error);
+            `${asepriteLocation} -b --script-param source="${sourcePath}" --script-param dest="${destPath}" --script "${path.join(
+                __dirname,
+                '../aseprite2dotnugg.lua',
+            )}"`,
+            (error) => {
                 if (error !== null) {
                     throw new Error(error);
                 }

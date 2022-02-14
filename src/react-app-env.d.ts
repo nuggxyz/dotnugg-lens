@@ -77,7 +77,11 @@ declare module '*.svg' {
 
 interface Window {
     dotnugg: {
-        createCompiler: (paths: string) => void;
+        createCompiler: (
+            paths: string,
+            address: string,
+            apiKey: string,
+        ) => void;
         on: (
             eventName: string,
             callback: (_?: any, _?: any, _?: any) => void,

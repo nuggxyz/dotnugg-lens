@@ -2,489 +2,132 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Contract, Signer, utils } from 'ethers';
-import { Provider } from '@ethersproject/providers';
-import type { DotnuggV1, DotnuggV1Interface } from '../DotnuggV1';
+import { Contract, Signer, utils } from "ethers";
+import { Provider } from "@ethersproject/providers";
+import type { DotnuggV1, DotnuggV1Interface } from "../DotnuggV1";
 
 const _abi = [
-    {
-        type: 'constructor',
-        inputs: [],
-    },
-    {
-        type: 'function',
-        name: 'chunk',
-        inputs: [
-            {
-                internalType: 'address',
-                name: 'implementer',
-                type: 'address',
-            },
-            {
-                internalType: 'uint256',
-                name: 'artifactId',
-                type: 'uint256',
-            },
-            {
-                internalType: 'address',
-                name: 'resolver',
-                type: 'address',
-            },
-            {
-                internalType: 'bool',
-                name: 'rekt',
-                type: 'bool',
-            },
-            {
-                internalType: 'bool',
-                name: 'back',
-                type: 'bool',
-            },
-            {
-                internalType: 'bool',
-                name: 'stats',
-                type: 'bool',
-            },
-            {
-                internalType: 'bool',
-                name: 'base64',
-                type: 'bool',
-            },
-            {
-                internalType: 'bytes',
-                name: 'data',
-                type: 'bytes',
-            },
-            {
-                internalType: 'uint8',
-                name: 'chunks',
-                type: 'uint8',
-            },
-            {
-                internalType: 'uint8',
-                name: 'index',
-                type: 'uint8',
-            },
-        ],
-        outputs: [
-            {
-                internalType: 'string',
-                name: 'res',
-                type: 'string',
-            },
-        ],
-        stateMutability: 'view',
-    },
-    {
-        type: 'function',
-        name: 'comp',
-        inputs: [
-            {
-                internalType: 'address',
-                name: 'implementer',
-                type: 'address',
-            },
-            {
-                internalType: 'uint256',
-                name: 'artifactId',
-                type: 'uint256',
-            },
-            {
-                internalType: 'address',
-                name: 'resolver',
-                type: 'address',
-            },
-            {
-                internalType: 'bytes',
-                name: 'data',
-                type: 'bytes',
-            },
-        ],
-        outputs: [
-            {
-                internalType: 'struct IDotnuggV1File.Compressed',
-                name: 'res',
-                type: 'tuple',
-                components: [
-                    {
-                        type: 'uint256[]',
-                    },
-                    {
-                        type: 'tuple',
-                        components: [
-                            {
-                                type: 'uint8[]',
-                            },
-                            {
-                                type: 'uint8[]',
-                            },
-                            {
-                                type: 'uint8[]',
-                            },
-                            {
-                                type: 'uint256',
-                            },
-                            {
-                                type: 'address',
-                            },
-                            {
-                                type: 'uint256',
-                            },
-                            {
-                                type: 'string[]',
-                            },
-                            {
-                                type: 'string[]',
-                            },
-                            {
-                                type: 'string',
-                            },
-                            {
-                                type: 'bytes',
-                            },
-                        ],
-                    },
-                ],
-            },
-        ],
-        stateMutability: 'view',
-    },
-    {
-        type: 'function',
-        name: 'dat',
-        inputs: [
-            {
-                internalType: 'address',
-                name: 'implementer',
-                type: 'address',
-            },
-            {
-                internalType: 'uint256',
-                name: 'artifactId',
-                type: 'uint256',
-            },
-            {
-                internalType: 'address',
-                name: 'resolver',
-                type: 'address',
-            },
-            {
-                internalType: 'string',
-                name: 'name',
-                type: 'string',
-            },
-            {
-                internalType: 'string',
-                name: 'desc',
-                type: 'string',
-            },
-            {
-                internalType: 'bool',
-                name: 'base64',
-                type: 'bool',
-            },
-            {
-                internalType: 'bytes',
-                name: 'data',
-                type: 'bytes',
-            },
-        ],
-        outputs: [
-            {
-                internalType: 'string',
-                name: 'res',
-                type: 'string',
-            },
-        ],
-        stateMutability: 'view',
-    },
-    {
-        type: 'function',
-        name: 'img',
-        inputs: [
-            {
-                internalType: 'address',
-                name: 'implementer',
-                type: 'address',
-            },
-            {
-                internalType: 'uint256',
-                name: 'artifactId',
-                type: 'uint256',
-            },
-            {
-                internalType: 'address',
-                name: 'resolver',
-                type: 'address',
-            },
-            {
-                internalType: 'bool',
-                name: 'rekt',
-                type: 'bool',
-            },
-            {
-                internalType: 'bool',
-                name: 'back',
-                type: 'bool',
-            },
-            {
-                internalType: 'bool',
-                name: 'stats',
-                type: 'bool',
-            },
-            {
-                internalType: 'bool',
-                name: 'base64',
-                type: 'bool',
-            },
-            {
-                internalType: 'bytes',
-                name: 'data',
-                type: 'bytes',
-            },
-        ],
-        outputs: [
-            {
-                internalType: 'string',
-                name: 'res',
-                type: 'string',
-            },
-        ],
-        stateMutability: 'view',
-    },
-    {
-        type: 'function',
-        name: 'lib',
-        inputs: [],
-        outputs: [
-            {
-                internalType: 'contract DotnuggV1Lib',
-                name: '',
-                type: 'address',
-            },
-        ],
-        stateMutability: 'view',
-    },
-    {
-        type: 'function',
-        name: 'proc',
-        inputs: [
-            {
-                internalType: 'address',
-                name: 'implementer',
-                type: 'address',
-            },
-            {
-                internalType: 'uint256',
-                name: 'artifactId',
-                type: 'uint256',
-            },
-            {
-                internalType: 'address',
-                name: 'resolver',
-                type: 'address',
-            },
-            {
-                internalType: 'bytes',
-                name: 'data',
-                type: 'bytes',
-            },
-        ],
-        outputs: [
-            {
-                internalType: 'struct IDotnuggV1File.Processed',
-                name: 'res',
-                type: 'tuple',
-                components: [
-                    {
-                        type: 'uint256[]',
-                    },
-                    {
-                        type: 'tuple',
-                        components: [
-                            {
-                                type: 'uint8[]',
-                            },
-                            {
-                                type: 'uint8[]',
-                            },
-                            {
-                                type: 'uint8[]',
-                            },
-                            {
-                                type: 'uint256',
-                            },
-                            {
-                                type: 'address',
-                            },
-                            {
-                                type: 'uint256',
-                            },
-                            {
-                                type: 'string[]',
-                            },
-                            {
-                                type: 'string[]',
-                            },
-                            {
-                                type: 'string',
-                            },
-                            {
-                                type: 'bytes',
-                            },
-                        ],
-                    },
-                ],
-            },
-        ],
-        stateMutability: 'view',
-    },
-    {
-        type: 'function',
-        name: 'proxyOf',
-        inputs: [
-            {
-                internalType: 'address',
-                name: 'implementer',
-                type: 'address',
-            },
-        ],
-        outputs: [
-            {
-                internalType: 'contract IDotnuggV1StorageProxy',
-                name: 'proxy',
-                type: 'address',
-            },
-        ],
-        stateMutability: 'view',
-    },
-    {
-        type: 'function',
-        name: 'raw',
-        inputs: [
-            {
-                internalType: 'address',
-                name: 'implementer',
-                type: 'address',
-            },
-            {
-                internalType: 'uint256',
-                name: 'artifactId',
-                type: 'uint256',
-            },
-            {
-                internalType: 'address',
-                name: 'resolver',
-                type: 'address',
-            },
-            {
-                internalType: 'bytes',
-                name: 'data',
-                type: 'bytes',
-            },
-        ],
-        outputs: [
-            {
-                internalType: 'struct IDotnuggV1File.Raw',
-                name: 'res',
-                type: 'tuple',
-                components: [
-                    {
-                        type: 'uint256[][]',
-                    },
-                    {
-                        type: 'tuple',
-                        components: [
-                            {
-                                type: 'uint8[]',
-                            },
-                            {
-                                type: 'uint8[]',
-                            },
-                            {
-                                type: 'uint8[]',
-                            },
-                            {
-                                type: 'uint256',
-                            },
-                            {
-                                type: 'address',
-                            },
-                            {
-                                type: 'uint256',
-                            },
-                            {
-                                type: 'string[]',
-                            },
-                            {
-                                type: 'string[]',
-                            },
-                            {
-                                type: 'string',
-                            },
-                            {
-                                type: 'bytes',
-                            },
-                        ],
-                    },
-                ],
-            },
-        ],
-        stateMutability: 'view',
-    },
-    {
-        type: 'function',
-        name: 'register',
-        inputs: [],
-        outputs: [
-            {
-                internalType: 'contract IDotnuggV1StorageProxy',
-                name: 'proxy',
-                type: 'address',
-            },
-        ],
-        stateMutability: 'nonpayable',
-    },
-    {
-        type: 'function',
-        name: 'sim',
-        inputs: [
-            {
-                internalType: 'uint256[][]',
-                name: 'files',
-                type: 'uint256[][]',
-            },
-        ],
-        outputs: [
-            {
-                internalType: 'string',
-                name: 'res',
-                type: 'string',
-            },
-        ],
-        stateMutability: 'view',
-    },
-    {
-        type: 'function',
-        name: 'template',
-        inputs: [],
-        outputs: [
-            {
-                internalType: 'address',
-                name: '',
-                type: 'address',
-            },
-        ],
-        stateMutability: 'view',
-    },
+  {
+    type: "function",
+    name: "calc",
+    inputs: [
+      {
+        internalType: "uint256[][]",
+        name: "reads",
+        type: "uint256[][]",
+      },
+    ],
+    outputs: [
+      {
+        internalType: "uint256[]",
+        name: "calculated",
+        type: "uint256[]",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "calc",
+    inputs: [
+      {
+        internalType: "uint256[]",
+        name: "read",
+        type: "uint256[]",
+      },
+    ],
+    outputs: [
+      {
+        internalType: "uint256[]",
+        name: "calculated",
+        type: "uint256[]",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "combo",
+    inputs: [
+      {
+        internalType: "uint256[]",
+        name: "read",
+        type: "uint256[]",
+      },
+      {
+        internalType: "bool",
+        name: "base64",
+        type: "bool",
+      },
+    ],
+    outputs: [
+      {
+        internalType: "string",
+        name: "data",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "combo",
+    inputs: [
+      {
+        internalType: "uint256[][]",
+        name: "reads",
+        type: "uint256[][]",
+      },
+      {
+        internalType: "bool",
+        name: "base64",
+        type: "bool",
+      },
+    ],
+    outputs: [
+      {
+        internalType: "string",
+        name: "data",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "svg",
+    inputs: [
+      {
+        internalType: "uint256[]",
+        name: "calculated",
+        type: "uint256[]",
+      },
+      {
+        internalType: "bool",
+        name: "base64",
+        type: "bool",
+      },
+    ],
+    outputs: [
+      {
+        internalType: "string",
+        name: "data",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+  },
 ];
 
 export class DotnuggV1__factory {
-    static readonly abi = _abi;
-    static createInterface(): DotnuggV1Interface {
-        return new utils.Interface(_abi) as DotnuggV1Interface;
-    }
-    static connect(address: string, signerOrProvider: Signer | Provider): DotnuggV1 {
-        return new Contract(address, _abi, signerOrProvider) as DotnuggV1;
-    }
+  static readonly abi = _abi;
+  static createInterface(): DotnuggV1Interface {
+    return new utils.Interface(_abi) as DotnuggV1Interface;
+  }
+  static connect(
+    address: string,
+    signerOrProvider: Signer | Provider
+  ): DotnuggV1 {
+    return new Contract(address, _abi, signerOrProvider) as DotnuggV1;
+  }
 }
