@@ -119,11 +119,11 @@ ipcMain.on('convert-aseprite', async function (event, sourcePath, destPath) {
         }
         exec(
             asepriteLocation +
-                ' -b --script-param source=' +
+                ' -b --script-param source="' +
                 sourcePath +
-                ' --script-param dest=' +
+                '" --script-param dest="' +
                 destPath +
-                ' --script aseprite2dotnugg.lua',
+                '" --script aseprite2dotnugg.lua',
             (error, stdout, stderr) => {
                 console.log(stdout);
                 console.log(stderr);
