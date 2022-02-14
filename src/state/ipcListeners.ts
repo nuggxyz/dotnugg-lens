@@ -9,7 +9,6 @@ window.dotnugg.on('file-selected', (event, path) => {
 });
 
 window.dotnugg.on('items-fetched', (event, items) => {
-    console.log(items)
     AppState.dispatch.setCompiledItems(items);
 });
 
