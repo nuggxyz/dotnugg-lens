@@ -4,11 +4,13 @@ import {
     isUndefinedOrNullOrStringEmpty,
     loadStringFromLocalStorage,
 } from '../../lib';
+import Web3Config from '../../Web3Config';
 
 import AppState from '.';
 
 export default () => {
     const artLocation = AppState.select.artLocation();
+    const apiKey = AppState.select.apiKey();
     const resizer = () => {
         AppState.dispatch.setWindowDimensions({
             height: window.innerHeight,
@@ -17,10 +19,17 @@ export default () => {
     };
 
     useEffect(() => {
-        if (!isUndefinedOrNullOrStringEmpty(artLocation)) {
-            window.dotnugg.createCompiler(artLocation);
+        if (
+            !isUndefinedOrNullOrStringEmpty(artLocation) &&
+            !isUndefinedOrNullOrStringEmpty(apiKey)
+        ) {
+            window.dotnugg.createCompiler(
+                artLocation,
+                Web3Config.DOTNUGG_V1,
+                apiKey,
+            );
         }
-    }, [artLocation]);
+    }, [artLocation, apiKey]);
 
     useEffect(() => {
         resizer();

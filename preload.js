@@ -1,9 +1,10 @@
+// import { contextBridge, ipcRenderer } from 'electron';
 process.once('loaded', () => {
     const { contextBridge, ipcRenderer } = require('electron');
 
     contextBridge.exposeInMainWorld('dotnugg', {
-        createCompiler: (path) => {
-            ipcRenderer.send('fetch-compiler-items', path);
+        createCompiler: (path, address, apiKey) => {
+            ipcRenderer.send('fetch-compiler-items', path, address, apiKey);
         },
         on: (eventName, callback) => {
             ipcRenderer.on(eventName, callback);

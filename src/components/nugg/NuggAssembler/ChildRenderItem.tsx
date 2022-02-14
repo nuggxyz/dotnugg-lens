@@ -17,7 +17,6 @@ const ChildRenderItem: FunctionComponent<Props> = ({
     extraData,
     index,
 }) => {
-    const [svg, setSvg] = React.useState('');
     const isSelected = useMemo(() => {
         return !isUndefinedOrNullOrObjectEmpty(
             extraData[0].find(
@@ -25,10 +24,6 @@ const ChildRenderItem: FunctionComponent<Props> = ({
             ),
         );
     }, [extraData, item]);
-
-    React.useEffect(() => {
-        DotnuggV1Helper.instance.sim([item.hex]).then((svg) => setSvg(svg));
-    }, [item]);
 
     return (
         <Button
@@ -55,16 +50,16 @@ const ChildRenderItem: FunctionComponent<Props> = ({
             }
             onClick={() => {
                 extraData[1]((items) => {
-                    item = { ...item, svg };
+                    // item = { ...item, svg: item.svg };
                     return items
                         .toggle(item, 'fileName')
                         .sort((a, b) => a.feature - b.feature);
                 });
             }}
             rightIcon={
-                svg ? (
+                item.svg ? (
                     <img
-                        src={svg}
+                        src={item.svg}
                         style={{
                             height: '150px',
                             width: '150px',

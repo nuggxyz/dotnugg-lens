@@ -9,6 +9,7 @@ import {
     smartRemove,
     smartReplace,
 } from '../../lib';
+import constants from '../../lib/constants';
 import Layout from '../../lib/layout';
 import { NLState } from '../NLState';
 import store from '../store';
@@ -51,6 +52,7 @@ class AppState extends NLState<NL.Redux.App.State> {
             asepriteFiles: [],
             artLocation: '',
             compiledItems: [],
+            mainProcessLoading: false,
         });
     }
 
@@ -58,6 +60,9 @@ class AppState extends NLState<NL.Redux.App.State> {
         name: this._name,
         initialState: this._initialState,
         reducers: {
+            setMainProcessLoading: (state, action: PayloadAction<boolean>) => {
+                state.mainProcessLoading = action.payload;
+            },
             setWindowDimensions: (
                 state,
                 action: PayloadAction<{ height: number; width: number }>,
@@ -113,8 +118,34 @@ class AppState extends NLState<NL.Redux.App.State> {
             setArtLocation: (state, action: PayloadAction<string>) => {
                 state.artLocation = action.payload;
             },
-            setCompiledItems: (state, action: PayloadAction<string[]>) => {
-                state.compiledItems = action.payload;
+            setCompiledItems: (
+                state,
+                action: PayloadAction<{
+                    items: any[];
+                    renderData?: { [_: string]: { data: string } };
+                }>,
+            ) => {
+                state.compiledItems = Object.entries(action.payload.items).map(
+                    ([key, value]) => {
+                        return {
+                            title: constants.DOTNUGG_ITEMS[key],
+                            items: Object.values(value).map((item: any) => {
+                                return {
+                                    ...item,
+                                    svg: !isUndefinedOrNullOrObjectEmpty(
+                                        action.payload.renderData[
+                                            item.fileName
+                                        ],
+                                    )
+                                        ? action.payload.renderData[
+                                              item.fileName
+                                          ].data
+                                        : undefined,
+                                };
+                            }),
+                        };
+                    },
+                );
             },
             addToAsepriteFiles: (
                 state,

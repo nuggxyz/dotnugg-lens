@@ -23,7 +23,6 @@ export const getProvider = (key?: string): Web3Provider => {
         library.pollingInterval = 1000;
         return library;
     } catch (e) {
-        console.log('bitch', e);
         throw new Error(e);
     }
 };

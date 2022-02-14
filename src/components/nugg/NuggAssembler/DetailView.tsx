@@ -41,8 +41,10 @@ const DetailView: FunctionComponent<Props> = ({
     useEffect(() => {
         if (!isUndefinedOrNullOrArrayEmpty(selectedItems)) {
             setLoading(true);
-            DotnuggV1Helper.instance
-                .sim(selectedItems.map((item) => item.hex))
+            DotnuggV1Helper.renderOnChain(
+                selectedItems.map((item) => item.hex),
+                true,
+            )
                 .then((svg) => setSvg(svg))
                 .catch((e) => alert(e))
                 .finally(() => setLoading(false));
@@ -52,10 +54,7 @@ const DetailView: FunctionComponent<Props> = ({
 
     return !isUndefinedOrNullOrArrayEmpty(selectedItems) ? (
         <div style={styles.detailContainer}>
-            <div
-                style={{
-                    zIndex: 200,
-                }}>
+            <div style={{ zIndex: 2 }}>
                 {!isUndefinedOrNullOrStringEmpty(svg) && (
                     <div
                         style={{

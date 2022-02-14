@@ -8,11 +8,13 @@ window.dotnugg.on('file-selected', (event, path) => {
     });
 });
 
-window.dotnugg.on('items-fetched', (event, items) => {
-    AppState.dispatch.setCompiledItems(items);
+window.dotnugg.on('items-fetched', (event, items, renderData) => {
+    AppState.dispatch.setMainProcessLoading(false);
+    AppState.dispatch.setCompiledItems({ items, renderData });
 });
 
 window.dotnugg.on('compiler-error', (event, error) => {
+    AppState.dispatch.setMainProcessLoading(false);
     alert('Dotnugg ' + error);
 });
 
@@ -21,6 +23,7 @@ window.dotnugg.on('file-error', (event) => {
 });
 
 window.dotnugg.on('script-error', (event, error, file) => {
+    AppState.dispatch.setMainProcessLoading(false);
     AppState.dispatch.updateAsepriteFiles({
         path: file,
         loading: false,
@@ -30,6 +33,7 @@ window.dotnugg.on('script-error', (event, error, file) => {
 });
 
 window.dotnugg.on('script-success', (event, file) => {
+    AppState.dispatch.setMainProcessLoading(false);
     AppState.dispatch.updateAsepriteFiles({
         path: file,
         loading: false,

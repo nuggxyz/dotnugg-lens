@@ -2,7 +2,7 @@
     "name": "dotnugg-lens",
     "productName": "dotnuggLens",
     "homepage": ".",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "description": "dotnugg desktop application",
     "main": "index.js",
     "author": "@nuggxyz",
@@ -24,48 +24,27 @@
         "productName": "dotnuggLens",
         "appId": "com.nuggxyz.dotnuggLens",
         "icon": "./AppIcon/AppIcon.icns",
-        "files": [
-            "./build/**/*",
-            "./index.js",
-            "./preload.js",
-            "./aseprite2dotnugg.lua"
-        ],
+        "files": ["./build/**/*", "./index.js", "./preload.js"],
+        "extraResources": ["./aseprite2dotnugg.lua"],
         "mac": {
             "artifactName": "${productName}-${version}.${ext}",
             "category": "public.app-category.productivity",
-            "target": [
-                "dmg",
-                "zip"
-            ]
+            "target": ["dmg", "zip"]
         },
         "linux": {
             "artifactName": "${productName}-${version}-${arch}.${ext}",
             "maintainer": "xxxx",
-            "target": [
-                "tar.gz",
-                "deb",
-                "rpm"
-            ]
+            "target": ["tar.gz", "deb", "rpm"]
         },
         "win": {
-            "target": [
-                "zip",
-                "dir"
-            ]
+            "target": ["zip", "dir"]
         }
     },
     "eslintConfig": {
-        "extends": [
-            "react-app",
-            "react-app/jest"
-        ]
+        "extends": ["react-app", "react-app/jest"]
     },
     "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
+        "production": [">0.2%", "not dead", "not op_mini all"],
         "development": [
             "last 1 chrome version",
             "last 1 firefox version",
@@ -134,7 +113,7 @@
     "dependencies": {
         "@ethersproject/providers": "^5.4.5",
         "@loadable/component": "^5.15.2",
-        "@nuggxyz/dotnugg-sdk": "0.1.19",
+        "@nuggxyz/dotnugg-sdk": "0.1.20",
         "@reduxjs/toolkit": "^1.6.1",
         "@web3-react/core": "^6.1.9",
         "@web3-react/network-connector": "^6.1.9",
@@ -150,6 +129,7 @@
         "electron-updater": "^4.6.5",
         "ethers": "^5.4.6",
         "file-loader": "^6.2.0",
+        "fix-path": "3.0.0",
         "fs": "^0.0.1-security",
         "fs-extra": "^10.0.0",
         "https-browserify": "^1.0.0",
