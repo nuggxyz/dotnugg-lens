@@ -42,7 +42,7 @@ const styles = NLStyleSheetCreator({
     sticky: {
         position: 'sticky',
         top: 0,
-        zIndex: 100,
+        zIndex: 20,
     },
     // noItems: {
     //     fontFamily: Layout.font.inter.bold,

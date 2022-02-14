@@ -11,7 +11,7 @@ const styles = NLStyleSheetCreator({
         borderRadius: Layout.borderRadius.mediumish,
         display: 'inline-block',
         position: 'absolute',
-        zIndex: 100,
+        zIndex: 1000,
         userSelect: 'none',
         pointerEvents: 'auto',
     },

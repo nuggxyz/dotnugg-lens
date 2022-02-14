@@ -46,7 +46,10 @@ const AsepriteFile: FunctionComponent<Props> = ({
                 }}
                 onClick={() => {
                     if (file.loading) {
-                        return;
+                        AppState.dispatch.updateAsepriteFiles({
+                            ...file,
+                            loading: false,
+                        });
                     } else {
                         AppState.dispatch.updateAsepriteFiles({
                             ...file,
