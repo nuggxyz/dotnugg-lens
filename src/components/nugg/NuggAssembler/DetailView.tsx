@@ -55,7 +55,7 @@ const DetailView: FunctionComponent<Props> = ({
                 style={{
                     zIndex: 2,
                     width: '100%',
-                    height: '50%',
+                    height: '70%',
                     justifyContent: 'center',
                     alignItems: 'center',
                     display: 'flex',
@@ -69,7 +69,7 @@ const DetailView: FunctionComponent<Props> = ({
                             <img
                                 src={svg}
                                 style={{
-                                    height: height / 2,
+                                    height: height / 2.1,
                                     // width: '350px',
                                 }}
                             />
