@@ -81,7 +81,7 @@ const StickyList: FunctionComponent<PropsWithChildren<Props>> = ({
                                             item.ref.current.getBoundingClientRect()
                                                 .top +
                                             listRef.current.scrollTop -
-                                            listRef.current.offsetHeight / 3,
+                                            listRef.current.offsetHeight / 4.7,
                                     })
                                 }
                                 isSelected={!current.includes(item.title)}
