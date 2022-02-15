@@ -19,6 +19,7 @@ declare namespace NL.Redux.App {
         path: string;
         compiled: boolean;
         loading: boolean;
+        layers?: Omit<AsepriteFile, 'layers'>[];
     };
 
     type OS = 'win32' | 'linux' | 'darwin';

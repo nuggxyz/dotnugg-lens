@@ -93,6 +93,7 @@ interface Window {
         selectFiles: () => void;
         convertAseprite: (sourcePath: string, destPath: string) => void;
         checkOs: () => void;
+        listLayers: (path: string) => void;
     };
 }
 
