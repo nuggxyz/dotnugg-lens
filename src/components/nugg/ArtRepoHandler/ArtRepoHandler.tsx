@@ -6,6 +6,7 @@ import {
     IoMenu,
     IoOpenOutline,
     IoReload,
+    IoTrashBinOutline,
 } from 'react-icons/io5';
 
 import { isUndefinedOrNullOrStringEmpty, shortenPathName } from '../../../lib';
@@ -70,13 +71,31 @@ const ArtRepoHandler: FunctionComponent<Props> = () => {
                             />
                         }
                         label="Recompile"
-                        onClick={() =>
+                        onClick={() => {
+                            AppState.dispatch.setMainProcessLoading(true);
                             window.dotnugg.createCompiler(
                                 artLocation,
                                 Web3Config.DOTNUGG_V1,
                                 apiKey,
-                            )
+                            );
+                        }}
+                    />
+                    <Button
+                        buttonStyle={styles.flyoutSelect}
+                        type="text"
+                        size="small"
+                        textStyle={styles.flyoutSelectText}
+                        leftIcon={
+                            <IoTrashBinOutline
+                                color={Colors.nuggBlueText}
+                                size={20}
+                                style={styles.flyoutSelectIcon}
+                            />
                         }
+                        label="Clear cache"
+                        onClick={() => {
+                            window.dotnugg.clearCache(artLocation);
+                        }}
                     />
                     <Button
                         buttonStyle={styles.flyoutSelect}

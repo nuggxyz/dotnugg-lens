@@ -88,6 +88,8 @@ interface Window {
         ) => void;
         send: (eventName: string) => void;
         openTo: (path: string) => void;
+        clearCache: (path: string) => void;
+        openLink: (url: string) => void;
         selectFiles: () => void;
         convertAseprite: (sourcePath: string, destPath: string) => void;
         checkOs: () => void;

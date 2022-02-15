@@ -9,7 +9,8 @@ const styles = NLStyleSheetCreator({
         borderRadius: Layout.borderRadius.medium,
         overflow: 'hidden',
         background: Colors.gradient3Transparent,
-        height: '60%',
+        height: '70%',
+        position: 'absolute'
     },
     left: {
         justifyContent: 'space-around',
@@ -54,11 +55,11 @@ const styles = NLStyleSheetCreator({
         justifyContent: 'space-between',
         display: 'flex',
         flexDirection: 'column',
-        width: '350px',
+        width: '500px',
     },
     detailSelectedItems: {
         display: 'flex',
-        width: '350px',
+        width: '500px',
         overflow: 'scroll',
         // background: Colors.transparentWhite,
         padding: '0rem .25rem',
