@@ -25,7 +25,7 @@
         "appId": "com.nuggxyz.dotnuggLens",
         "icon": "./AppIcon/AppIcon.icns",
         "files": ["./build/**/*", "./index.js", "./preload.js"],
-        "extraResources": ["./aseprite2dotnugg.lua"],
+        "extraResources": ["./aseprite2dotnugg.lua", "./collection.nugg"],
         "mac": {
             "artifactName": "${productName}-${version}.${ext}",
             "category": "public.app-category.productivity",

@@ -12,6 +12,9 @@ const styles = NLStyleSheetCreator({
         fontFamily: Layout.font.inter.regular,
         // color: Colors.textColor,
     },
+    code: {
+        fontFamily: Layout.font.code.regular,
+    },
     light: {
         fontWeight: 'lighter',
     },

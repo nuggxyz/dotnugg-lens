@@ -6,17 +6,16 @@ import React, {
     useState,
 } from 'react';
 import { IoClose } from 'react-icons/io5';
-import { animated, config, useSpring } from 'react-spring';
 
 import { DotnuggV1Helper } from '../../../contracts/DotnuggHelper';
 import {
     isUndefinedOrNullOrArrayEmpty,
     isUndefinedOrNullOrStringEmpty,
 } from '../../../lib';
-import Colors from '../../../lib/colors';
-import Layout from '../../../lib/layout';
+import AppState from '../../../state/app';
 import Button from '../../general/Buttons/Button/Button';
 import AnimatedCard from '../../general/Cards/AnimatedCard/AnimatedCard';
+import FadeInOut from '../../general/FadeInOut/FadeInOut';
 import Loader from '../../general/Loader/Loader';
 import Text from '../../general/Texts/Text/Text';
 
@@ -34,10 +33,8 @@ const DetailView: FunctionComponent<Props> = ({
     const scrollRef = useRef<HTMLDivElement>();
     const [svg, setSvg] = React.useState('');
     const [loading, setLoading] = useState(false);
-    const { opacity } = useSpring({
-        opacity: loading ? 1 : 0,
-        config: config.stiff,
-    });
+    const { height } = AppState.select.dimensions();
+
     useEffect(() => {
         if (!isUndefinedOrNullOrArrayEmpty(selectedItems)) {
             setLoading(true);
@@ -54,7 +51,15 @@ const DetailView: FunctionComponent<Props> = ({
 
     return !isUndefinedOrNullOrArrayEmpty(selectedItems) ? (
         <div style={styles.detailContainer}>
-            <div style={{ zIndex: 2 }}>
+            <div
+                style={{
+                    zIndex: 2,
+                    width: '100%',
+                    height: '50%',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    display: 'flex',
+                }}>
                 {!isUndefinedOrNullOrStringEmpty(svg) && (
                     <div
                         style={{
@@ -64,8 +69,8 @@ const DetailView: FunctionComponent<Props> = ({
                             <img
                                 src={svg}
                                 style={{
-                                    height: '350px',
-                                    width: '350px',
+                                    height: height / 2,
+                                    // width: '350px',
                                 }}
                             />
                         </AnimatedCard>
@@ -73,12 +78,7 @@ const DetailView: FunctionComponent<Props> = ({
                 )}
             </div>
             <div>
-                <animated.div
-                    style={{
-                        opacity,
-                        display: 'flex',
-                        justifyContent: 'center',
-                    }}>
+                <FadeInOut toggle={loading}>
                     <div style={styles.detailLoading}>
                         <Text
                             type="text"
@@ -90,7 +90,7 @@ const DetailView: FunctionComponent<Props> = ({
                         </Text>
                         <Loader color="white" />
                     </div>
-                </animated.div>
+                </FadeInOut>
                 <div ref={scrollRef} style={styles.detailSelectedItems}>
                     {selectedItems.map((item, index) => (
                         <div

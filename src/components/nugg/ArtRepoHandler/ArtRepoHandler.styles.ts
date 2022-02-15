@@ -4,8 +4,6 @@ import Layout from '../../../lib/layout';
 
 const styles = NLStyleSheetCreator({
     artLocationContainer: {
-        position: 'absolute',
-        top: '1.5rem',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',

@@ -21,6 +21,12 @@ process.once('loaded', () => {
         openTo: (path) => {
             ipcRenderer.send('open-to', path);
         },
+        openLink: (url) => {
+            ipcRenderer.send('open-link', url);
+        },
+        clearCache: (path) => {
+            ipcRenderer.send('clear-cache', path);
+        },
         checkOs: () => {
             ipcRenderer.send('check-os');
         },

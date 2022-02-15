@@ -73,8 +73,26 @@ ipcMain.on('select-files', function (event) {
                 properties: ['openDirectory'],
             })
             .then(({ filePaths }) => {
-                if (filePaths) event.reply('file-selected', filePaths[0]);
-                else event.reply('file-error');
+                if (filePaths) {
+                    event.reply('file-selected', filePaths[0]);
+                    fs.readdir(filePaths[0], function (err, list) {
+                        if (err) throw err;
+                        for (var i = 0; i < list.length; i++) {
+                            if (path.extname(list[i]) === 'collection.nugg') {
+                                console.log(list[i]);
+                                return;
+                            }
+                        }
+                        console.log(filePaths[0]);
+                        exec(
+                            `cat "${
+                                isDev
+                                    ? 'collection.nugg'
+                                    : path.join(__dirname, '../collection.nugg')
+                            }" >> "${filePaths[0]}/collection.nugg"`,
+                        );
+                    });
+                } else event.reply('file-error');
             });
     }
 });
@@ -129,14 +147,20 @@ ipcMain.on('convert-aseprite', async function (event, sourcePath, destPath) {
         if (!sourcePath.endsWith('.aseprite')) {
             throw new Error('Selected file is not an aseprite file');
         }
-        if (!fs.existsSync(destPath + '/generated')) {
-            exec(`mkdir ${destPath}/generated`);
+        if (
+            fs.existsSync(`${destPath}`) &&
+            !fs.existsSync(`${destPath}/generated"`)
+        ) {
+            exec(`mkdir "${destPath}/generated"`);
+        } else if (!fs.existsSync(`${destPath}`)) {
+            throw new Error('Incorrect Art Repo');
         }
         exec(
-            `${asepriteLocation} -b --script-param source="${sourcePath}" --script-param dest="${destPath}" --script "${path.join(
-                __dirname,
-                '../aseprite2dotnugg.lua',
-            )}"`,
+            `${asepriteLocation} -b --script-param source="${sourcePath}" --script-param dest="${destPath}" --script "${
+                isDev
+                    ? 'aseprite2dotnugg.lua'
+                    : path.join(__dirname, '../aseprite2dotnugg.lua')
+            }"`,
             (error) => {
                 if (error !== null) {
                     throw new Error(error);
@@ -148,4 +172,12 @@ ipcMain.on('convert-aseprite', async function (event, sourcePath, destPath) {
     } catch (e) {
         event.reply('script-error', e, sourcePath);
     }
+});
+
+ipcMain.on('open-link', function (event, url) {
+    shell.openExternal(url);
+});
+
+ipcMain.on('clear-cache', function (event, path) {
+    exec(`rm -rf ${path.replaceAll(' ', '\\ ')}/dotnugg**.cache.json`);
 });

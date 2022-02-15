@@ -42,6 +42,15 @@ const styles = NLStyleSheetCreator({
         background: Colors.nuggBlueTransparent,
         padding: '.5rem 1rem',
     },
+    loaderContainer: {
+        position: 'absolute',
+        top: '1.5rem',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '.5rem .7rem',
+        background: Colors.transparentWhite,
+        borderRadius: Layout.borderRadius.mediumish,
+    },
 });
 
 export default styles;

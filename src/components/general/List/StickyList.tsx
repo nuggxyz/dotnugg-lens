@@ -71,24 +71,25 @@ const StickyList: FunctionComponent<PropsWithChildren<Props>> = ({
     return (
         <animated.div style={{ display: 'flex', ...style }}>
             <div style={styleLeft}>
-                {refData.map((item, index) => (
-                    <React.Fragment key={`feature-${index}`}>
-                        <FeatureRenderItem
-                            onClick={() =>
-                                setY({
-                                    y:
-                                        item.ref.current.getBoundingClientRect()
-                                            .top +
-                                        listRef.current.scrollTop -
-                                        listRef.current.offsetHeight / 3,
-                                })
-                            }
-                            isSelected={!current.includes(item.title)}
-                            feature={item.title}
-                            numberOfItems={refData[index].items.length}
-                        />
-                    </React.Fragment>
-                    // <div
+                {refData.map((item, index) =>
+                    refData[index].items.length > 0 ? (
+                        <React.Fragment key={`feature-${index}`}>
+                            <FeatureRenderItem
+                                onClick={() =>
+                                    setY({
+                                        y:
+                                            item.ref.current.getBoundingClientRect()
+                                                .top +
+                                            listRef.current.scrollTop -
+                                            listRef.current.offsetHeight / 3,
+                                    })
+                                }
+                                isSelected={!current.includes(item.title)}
+                                feature={item.title}
+                                numberOfItems={refData[index].items.length}
+                            />
+                        </React.Fragment>
+                    ) : // <div
                     //     onClick={() => {
                     //         setY({
                     //             y:
@@ -105,28 +106,31 @@ const StickyList: FunctionComponent<PropsWithChildren<Props>> = ({
                     //     }}>
                     //     {item.title}
                     // </div>
-                ))}
+                    null,
+                )}
             </div>
             <div
                 style={{ height: '100%', overflow: 'scroll', ...styleRight }}
                 ref={listRef}>
-                {refData.map((item, index) => (
-                    <React.Fragment key={`list-${index}`}>
-                        <RenderItem
-                            {...{
-                                item,
-                                TitleRenderItem,
-                                ChildRenderItem,
-                                extraData: [
-                                    ...extraData,
-                                    animating,
-                                    refData.map((item) => item.title),
-                                ],
-                                setCurrent,
-                            }}
-                        />
-                    </React.Fragment>
-                ))}
+                {refData.map((item, index) =>
+                    refData[index].items.length > 0 ? (
+                        <React.Fragment key={`list-${index}`}>
+                            <RenderItem
+                                {...{
+                                    item,
+                                    TitleRenderItem,
+                                    ChildRenderItem,
+                                    extraData: [
+                                        ...extraData,
+                                        animating,
+                                        refData.map((item) => item.title),
+                                    ],
+                                    setCurrent,
+                                }}
+                            />
+                        </React.Fragment>
+                    ) : null,
+                )}
             </div>
             {children && children}
         </animated.div>

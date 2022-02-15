@@ -21,6 +21,7 @@ const styles = NLStyleSheetCreator({
     text: {
         color: Colors.textColor,
         margin: '0rem .5rem 1.5rem .5rem',
+        textAlign: 'center',
     },
     textInput: {
         textAlign: 'left',

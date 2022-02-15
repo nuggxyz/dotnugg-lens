@@ -17,6 +17,9 @@ import ArtRepoHandler from '../../components/nugg/ArtRepoHandler/ArtRepoHandler'
 import NuggAssembler from '../../components/nugg/NuggAssembler/NuggAssembler';
 import Flyout from '../../components/general/Flyouts/Flyout/Flyout';
 import AsepriteFlyout from '../../components/nugg/AsepriteFlyout/AsepriteFlyout';
+import FadeInOut from '../../components/general/FadeInOut/FadeInOut';
+import Loader from '../../components/general/Loader/Loader';
+import UseOurs from '../../components/nugg/UseOurs';
 
 import styles from './Main.styles';
 
@@ -24,9 +27,7 @@ const Main = () => {
     const compiledItems = AppState.select.compiledItems();
     const artLocation = AppState.select.artLocation();
     const asepriteFiles = AppState.select.asepriteFiles();
-
-    const [svg, setSvg] = React.useState('');
-    const [loading, setLoading] = React.useState(false);
+    const loading = AppState.select.mainProcessLoading();
 
     return (
         <Dropzone
@@ -38,7 +39,24 @@ const Main = () => {
                     }),
                 )
             }>
-            <ArtRepoHandler />
+            <FadeInOut toggle={loading} style={styles.loaderContainer}>
+                <Text
+                    textStyle={{
+                        color: Colors.nuggBlueText,
+                        marginRight: '.5rem',
+                    }}>
+                    Computing
+                </Text>
+                <Loader color={Colors.nuggBlueText} />
+            </FadeInOut>
+            <FadeInOut
+                toggle={!loading}
+                style={{
+                    position: 'absolute',
+                    top: '1.5rem',
+                }}>
+                <ArtRepoHandler />
+            </FadeInOut>
             <Button
                 buttonStyle={{ ...styles.powerButton, ...styles.buttonRound }}
                 rightIcon={<IoPower color={Colors.nuggBlueText} size={25} />}
@@ -97,14 +115,19 @@ const Main = () => {
             )}
 
             {isUndefinedOrNullOrStringEmpty(artLocation) && (
-                <Button
-                    textStyle={styles.artLocationPicker}
-                    buttonStyle={styles.buttonLong}
-                    label="Select Art Directory"
-                    onClick={() => window.dotnugg.selectFiles()}
-                />
+                <div>
+                    <Button
+                        textStyle={styles.artLocationPicker}
+                        buttonStyle={styles.buttonLong}
+                        label="Select Art Directory"
+                        onClick={() => window.dotnugg.selectFiles()}
+                    />
+                    <UseOurs />
+                </div>
             )}
-            <NuggAssembler data={compiledItems} />
+            {!isUndefinedOrNullOrStringEmpty(artLocation) && (
+                <NuggAssembler data={compiledItems} />
+            )}
         </Dropzone>
     );
 };
