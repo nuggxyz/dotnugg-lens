@@ -31,14 +31,20 @@ const Main = () => {
 
     return (
         <Dropzone
-            onDrop={(files) =>
-                !isUndefinedOrNullOrStringEmpty(artLocation) &&
-                AppState.dispatch.addToAsepriteFiles(
-                    files.map((file) => {
-                        return { path: file, compiled: false, loading: false };
-                    }),
-                )
-            }>
+            onDrop={(files) => {
+                if (!isUndefinedOrNullOrStringEmpty(artLocation)) {
+                    files.forEach((file) => window.dotnugg.listLayers(file));
+                    AppState.dispatch.addToAsepriteFiles(
+                        files.map((file) => {
+                            return {
+                                path: file,
+                                compiled: false,
+                                loading: false,
+                            };
+                        }),
+                    );
+                }
+            }}>
             <FadeInOut toggle={loading} style={styles.loaderContainer}>
                 <Text
                     textStyle={{
@@ -74,8 +80,8 @@ const Main = () => {
                     style={{
                         top: '2.9rem',
                         right: '-.5rem',
-                        minWidth: '200px',
-                        height: '400px',
+                        minWidth: '400px',
+                        height: '500px',
                         padding: '0rem 1rem',
                         overflow: 'scroll',
                     }}

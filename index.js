@@ -137,13 +137,16 @@ ipcMain.on(
     },
 );
 
+function asepritePath() {
+    let asepriteLocation = '/Applications/Aseprite.app/Contents/MacOS/aseprite';
+    if (os.platform() === 'win32') {
+        asepriteLocation = 'C:\\Program Files\\Aseprite\\Aseprite.exe';
+    }
+    return asepriteLocation;
+}
+
 ipcMain.on('convert-aseprite', async function (event, sourcePath, destPath) {
     try {
-        let asepriteLocation =
-            '/Applications/Aseprite.app/Contents/MacOS/aseprite';
-        if (os.platform() === 'win32') {
-            asepriteLocation = 'C:\\Program Files\\Aseprite\\Aseprite.exe';
-        }
         if (!sourcePath.endsWith('.aseprite')) {
             throw new Error('Selected file is not an aseprite file');
         }
@@ -156,7 +159,7 @@ ipcMain.on('convert-aseprite', async function (event, sourcePath, destPath) {
             throw new Error('Incorrect Art Repo');
         }
         exec(
-            `${asepriteLocation} -b --script-param source="${sourcePath}" --script-param dest="${destPath}" --script "${
+            `${asepritePath()} -b --script-param source="${sourcePath}" --script-param dest="${destPath}" --script "${
                 isDev
                     ? 'aseprite2dotnugg.lua'
                     : path.join(__dirname, '../aseprite2dotnugg.lua')
@@ -180,4 +183,16 @@ ipcMain.on('open-link', function (event, url) {
 
 ipcMain.on('clear-cache', function (event, path) {
     exec(`rm -rf ${path.replaceAll(' ', '\\ ')}/dotnugg**.cache.json`);
+});
+
+ipcMain.on('list-layers', function (event, path) {
+    const yo = exec(
+        `${asepritePath()} -b --all-layers --list-layers "${path}"`,
+        (error, stdout, stderr) => {
+            if (error !== null) {
+                throw new Error(error);
+            }
+            event.reply('layers', path, stdout);
+        },
+    );
 });

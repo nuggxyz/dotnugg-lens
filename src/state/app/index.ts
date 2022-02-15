@@ -158,10 +158,13 @@ class AppState extends NLState<NL.Redux.App.State> {
             },
             updateAsepriteFiles: (
                 state,
-                action: PayloadAction<NL.Redux.App.AsepriteFile>,
+                action: PayloadAction<Partial<NL.Redux.App.AsepriteFile>>,
             ) => {
                 state.asepriteFiles = [
-                    ...state.asepriteFiles.replace(action.payload, 'path'),
+                    ...(state.asepriteFiles.replace(
+                        action.payload,
+                        'path',
+                    ) as NL.Redux.App.AsepriteFile[]),
                 ];
             },
             setOS: (state, action: PayloadAction<NL.Redux.App.OS>) => {
@@ -169,10 +172,6 @@ class AppState extends NLState<NL.Redux.App.State> {
             },
         },
     });
-
-    public static silentlySetRoute(route: string) {
-        window.location.hash = route;
-    }
 }
 
 export default AppState;

@@ -33,5 +33,8 @@ process.once('loaded', () => {
         convertAseprite: (sourcePath, destPath) => {
             ipcRenderer.send('convert-aseprite', sourcePath, destPath);
         },
+        listLayers: (path) => {
+            ipcRenderer.send('list-layers', path);
+        },
     });
 });

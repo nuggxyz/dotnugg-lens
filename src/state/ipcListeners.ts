@@ -45,3 +45,12 @@ window.dotnugg.on('script-success', (event, file) => {
 window.dotnugg.on('receive-os', (event, os) => {
     AppState.dispatch.setOS(os);
 });
+
+window.dotnugg.on('layers', (event, path, layers) => {
+    AppState.dispatch.updateAsepriteFiles({
+        path,
+        layers: layers.split('\n').map((layer) => {
+            return { path: layer, compiled: false, loading: false };
+        }),
+    });
+});
