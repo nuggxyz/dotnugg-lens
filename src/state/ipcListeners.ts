@@ -1,3 +1,5 @@
+import { isUndefinedOrNullOrStringEmpty } from '../lib';
+
 import AppState from './app';
 
 window.dotnugg.on('file-selected', (event, path) => {
@@ -66,8 +68,15 @@ window.dotnugg.on('receive-os', (event, os) => {
 window.dotnugg.on('layers', (event, path, layers) => {
     AppState.dispatch.updateAsepriteFiles({
         path,
-        layers: layers.split('\n').map((layer) => {
-            return { path: layer, compiled: false, loading: false };
-        }),
+        layers: layers.split('\n').reduce((accumulator, layer) => {
+            if (!isUndefinedOrNullOrStringEmpty(layer)) {
+                accumulator.push({
+                    path: layer,
+                    compiled: false,
+                    loading: false,
+                });
+            }
+            return accumulator;
+        }, []),
     });
 });

@@ -36,6 +36,11 @@ const styles = NLStyleSheetCreator({
     flyoutSelectIcon: {
         marginRight: '.5rem',
     },
+    divider: {
+        width: '100%',
+        height: '5px',
+        background: Colors.transparentLightGrey,
+    },
 });
 
 export default styles;

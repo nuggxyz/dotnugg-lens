@@ -69,7 +69,7 @@ const AsepriteFile: FunctionComponent<Props> = ({
                         )
                     }
                 />
-                <Button
+                {/* <Button
                     buttonStyle={{
                         background: Colors.nuggBlueTransparent,
                         borderRadius: Layout.borderRadius.large,
@@ -88,7 +88,7 @@ const AsepriteFile: FunctionComponent<Props> = ({
                     rightIcon={
                         <SiVisualstudiocode color={Colors.nuggBlueText} />
                     }
-                />
+                /> */}
                 <Button
                     buttonStyle={{
                         background: Colors.nuggBlueTransparent,

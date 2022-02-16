@@ -123,7 +123,7 @@ const StickyList: FunctionComponent<PropsWithChildren<Props>> = ({
             </div>
             <div
                 style={{
-                    // height: '100%',
+                    height: '100%',
                     overflow: 'scroll',
                     ...styleRight,
                 }}
@@ -201,6 +201,7 @@ const RenderItem = ({
                 style={{
                     opacity,
                     height: open && previous === open ? 'auto' : height,
+                    overflow: 'hidden',
                 }}>
                 <animated.div style={{ opacity, y }} ref={ref}>
                     {item.items.map((childItem, index) => (
