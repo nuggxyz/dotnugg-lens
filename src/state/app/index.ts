@@ -160,9 +160,54 @@ class AppState extends NLState<NL.Redux.App.State> {
                 state,
                 action: PayloadAction<Partial<NL.Redux.App.AsepriteFile>>,
             ) => {
+                let file = { ...action.payload };
+
+                if ('options' in action.payload) {
+                    const options = { ...(file as any).options };
+                    delete (action.payload as any).options;
+                    console.log(options, action.payload);
+
+                    if ('layers' in options) {
+                        let found = state.asepriteFiles.find(
+                            (_file) => file.path === _file.path,
+                        );
+                        file = {
+                            ...file,
+                            layers: found.layers.map((layer) => {
+                                return {
+                                    ...layer,
+                                    ...options.layers,
+                                };
+                            }),
+                        };
+                    }
+                }
                 state.asepriteFiles = [
                     ...(state.asepriteFiles.replace(
-                        action.payload,
+                        file,
+                        'path',
+                    ) as NL.Redux.App.AsepriteFile[]),
+                ];
+            },
+            updateAsepriteLayer: (
+                state,
+                action: PayloadAction<{
+                    layer: NL.Redux.App.AsepriteFile;
+                    file: string;
+                }>,
+            ) => {
+                let file = state.asepriteFiles.find(
+                    (file) => file.path === action.payload.file,
+                );
+                console.log(file, action.payload);
+                file = {
+                    ...file,
+                    layers: file.layers.replace(action.payload.layer, 'path'),
+                };
+
+                state.asepriteFiles = [
+                    ...(state.asepriteFiles.replace(
+                        file,
                         'path',
                     ) as NL.Redux.App.AsepriteFile[]),
                 ];

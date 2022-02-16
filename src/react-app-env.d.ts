@@ -87,11 +87,15 @@ interface Window {
             callback: (_?: any, _?: any, _?: any) => void,
         ) => void;
         send: (eventName: string) => void;
-        openTo: (path: string) => void;
+        openTo: (path: string, application?: string) => void;
         clearCache: (path: string) => void;
         openLink: (url: string) => void;
         selectFiles: () => void;
-        convertAseprite: (sourcePath: string, destPath: string) => void;
+        convertAseprite: (
+            sourcePath: string,
+            destPath: string,
+            layer?: string,
+        ) => void;
         checkOs: () => void;
         listLayers: (path: string) => void;
     };

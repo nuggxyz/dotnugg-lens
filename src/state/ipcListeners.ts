@@ -32,13 +32,30 @@ window.dotnugg.on('script-error', (event, error, file) => {
     alert('Error converting to dotnugg: ' + error);
 });
 
-window.dotnugg.on('script-success', (event, file) => {
+window.dotnugg.on('script-success', (event, file, layer) => {
     AppState.dispatch.setMainProcessLoading(false);
-    AppState.dispatch.updateAsepriteFiles({
-        path: file,
-        loading: false,
-        compiled: true,
-    });
+    if (layer === '_') {
+        AppState.dispatch.updateAsepriteFiles({
+            path: file,
+            loading: false,
+            compiled: true,
+            options: {
+                layers: {
+                    loading: false,
+                    compiled: true,
+                },
+            },
+        });
+    } else {
+        AppState.dispatch.updateAsepriteLayer({
+            file,
+            layer: {
+                path: layer,
+                loading: false,
+                compiled: true,
+            },
+        });
+    }
     // alert(`Success! Check ${generated} to categorize your dotnugg files`);
 });
 

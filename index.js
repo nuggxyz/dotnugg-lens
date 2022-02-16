@@ -97,8 +97,13 @@ ipcMain.on('select-files', function (event) {
     }
 });
 
-ipcMain.on('open-to', function (event, path) {
-    shell.openPath(path);
+ipcMain.on('open-to', function (event, path, application) {
+    if (application) {
+        console.log(`open -a "${application}" ${path}`);
+        exec(`open -a "${application}" ${path}`);
+    } else {
+        shell.openPath(path);
+    }
 });
 
 ipcMain.on('verify-file', function (event, file) {});
@@ -145,37 +150,47 @@ function asepritePath() {
     return asepriteLocation;
 }
 
-ipcMain.on('convert-aseprite', async function (event, sourcePath, destPath) {
-    try {
-        if (!sourcePath.endsWith('.aseprite')) {
-            throw new Error('Selected file is not an aseprite file');
+ipcMain.on(
+    'convert-aseprite',
+    async function (event, sourcePath, destPath, layer = '_') {
+        try {
+            if (!sourcePath.endsWith('.aseprite')) {
+                throw new Error('Selected file is not an aseprite file');
+            }
+            let filenames = sourcePath.split('.')[0].split('/');
+            if (
+                fs.existsSync(`${destPath}`) &&
+                !fs.existsSync(
+                    `${destPath}/generated_${filenames[filenames.length - 1]}"`,
+                )
+            ) {
+                exec(
+                    `mkdir "${destPath}/generated_${
+                        filenames[filenames.length - 1]
+                    }"`,
+                );
+            } else if (!fs.existsSync(`${destPath}`)) {
+                throw new Error('Incorrect Art Repo');
+            }
+            exec(
+                `${asepritePath()} -b --script-param source="${sourcePath}" --script-param dest="${destPath}" --script-param layer="${layer}" --script "${
+                    isDev
+                        ? './aseprite2dotnugg.lua'
+                        : path.join(__dirname, '../aseprite2dotnugg.lua')
+                }"`,
+                (error) => {
+                    if (error !== null) {
+                        throw new Error(error);
+                    }
+                    // shell.openPath(destPath + '/generated');
+                    event.reply('script-success', sourcePath, layer);
+                },
+            );
+        } catch (e) {
+            event.reply('script-error', e, sourcePath);
         }
-        if (
-            fs.existsSync(`${destPath}`) &&
-            !fs.existsSync(`${destPath}/generated"`)
-        ) {
-            exec(`mkdir "${destPath}/generated"`);
-        } else if (!fs.existsSync(`${destPath}`)) {
-            throw new Error('Incorrect Art Repo');
-        }
-        exec(
-            `${asepritePath()} -b --script-param source="${sourcePath}" --script-param dest="${destPath}" --script "${
-                isDev
-                    ? 'aseprite2dotnugg.lua'
-                    : path.join(__dirname, '../aseprite2dotnugg.lua')
-            }"`,
-            (error) => {
-                if (error !== null) {
-                    throw new Error(error);
-                }
-                shell.openPath(destPath + '/generated');
-                event.reply('script-success', sourcePath);
-            },
-        );
-    } catch (e) {
-        event.reply('script-error', e, sourcePath);
-    }
-});
+    },
+);
 
 ipcMain.on('open-link', function (event, url) {
     shell.openExternal(url);
