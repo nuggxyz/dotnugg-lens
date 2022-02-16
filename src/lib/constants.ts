@@ -9,4 +9,5 @@ export default {
         'NECK',
         'HOLD',
     ],
+    APP_NAME_VS_CODE: 'Visual Studio Code',
 };

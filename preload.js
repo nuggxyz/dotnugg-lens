@@ -18,8 +18,8 @@ process.once('loaded', () => {
         verifyFile: (path) => {
             ipcRenderer.send('verify-file', path);
         },
-        openTo: (path) => {
-            ipcRenderer.send('open-to', path);
+        openTo: (path, application) => {
+            ipcRenderer.send('open-to', path, application);
         },
         openLink: (url) => {
             ipcRenderer.send('open-link', url);
@@ -30,8 +30,8 @@ process.once('loaded', () => {
         checkOs: () => {
             ipcRenderer.send('check-os');
         },
-        convertAseprite: (sourcePath, destPath) => {
-            ipcRenderer.send('convert-aseprite', sourcePath, destPath);
+        convertAseprite: (sourcePath, destPath, layer) => {
+            ipcRenderer.send('convert-aseprite', sourcePath, destPath, layer);
         },
         listLayers: (path) => {
             ipcRenderer.send('list-layers', path);

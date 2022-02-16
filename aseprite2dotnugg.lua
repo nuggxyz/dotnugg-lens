@@ -1,7 +1,24 @@
 print('aseprite2dotnugg')
+
+local function split(inputstr, sep)
+    if sep == nil then
+            sep = "%s"
+    end
+    local t={}
+    for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
+            table.insert(t, str)
+    end
+    print(t[#t])
+    return t
+end
+
+local selectedLayer = app.params["layer"]
+local pathNames = split(split(app.params["source"], '.')[1], '/')--package.config:sub(1,1))
+
 local sprite = Sprite{ fromFile=app.params["source"] }--app.open(app.params["source"])
 local alphabet = { '.','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z' }
 local usedColors = {}
+
 
 -- Check constraints
 if sprite == nil then
@@ -86,20 +103,22 @@ local function exportFrame(frm)
     end
 
     for i, layer in ipairs(layers) do
-        layer.isVisible = true
-        local img = Image(layer.sprite.spec)
-        img:drawSprite(sprite, frm)
-        usedColors = {}
+        if selectedLayer == "_" or selectedLayer == layer.name then
+            layer.isVisible = true
+            local img = Image(layer.sprite.spec)
+            img:drawSprite(sprite, frm)
+            usedColors = {}
 
-        local f = io.open(app.params["dest"] .. "/generated/" .. "generated." .. i .. "." .. layer.name:gsub("/", "_") .. "_frm_" .. frm .. ".item.nugg", "w")
-        io.output(f)
+            local f = io.open(app.params["dest"] .. "/generated_" .. pathNames[#pathNames] .. "/" .. "generated." .. i .. "." .. layer.name:gsub("/", "_") .. "_frm_" .. frm .. ".item.nugg", "w")
+            io.output(f)
 
-        io.write("@item(INVALID) := {\n")
-        io.write(getData(img, x, y, sprite.width, sprite.height, sprite.palettes[1]))
-        io.write("}\n")
+            io.write("@item(INVALID) := {\n")
+            io.write(getData(img, x, y, sprite.width, sprite.height, sprite.palettes[1]))
+            io.write("}\n")
 
-        io.close(f)
-        layer.isVisible = false
+            io.close(f)
+            layer.isVisible = false
+        end
     end
 end
 
