@@ -165,7 +165,6 @@ class AppState extends NLState<NL.Redux.App.State> {
                 if ('options' in action.payload) {
                     const options = { ...(file as any).options };
                     delete (action.payload as any).options;
-                    console.log(options, action.payload);
 
                     if ('layers' in options) {
                         let found = state.asepriteFiles.find(

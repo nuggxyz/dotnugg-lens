@@ -8,9 +8,11 @@ import {
     IoReload,
     IoTrashBinOutline,
 } from 'react-icons/io5';
+import { SiVisualstudiocode } from 'react-icons/si';
 
 import { isUndefinedOrNullOrStringEmpty, shortenPathName } from '../../../lib';
 import Colors from '../../../lib/colors';
+import constants from '../../../lib/constants';
 import AppState from '../../../state/app';
 import Web3Config from '../../../Web3Config';
 import Button from '../../general/Buttons/Button/Button';
@@ -64,6 +66,27 @@ const ArtRepoHandler: FunctionComponent<Props> = () => {
                         size="small"
                         textStyle={styles.flyoutSelectText}
                         leftIcon={
+                            <SiVisualstudiocode
+                                color={Colors.nuggBlueText}
+                                size={20}
+                                style={styles.flyoutSelectIcon}
+                            />
+                        }
+                        label="Open in VS Code"
+                        onClick={() =>
+                            window.dotnugg.openTo(
+                                artLocation,
+                                constants.APP_NAME_VS_CODE,
+                            )
+                        }
+                    />
+                    <div style={styles.divider} />
+                    <Button
+                        buttonStyle={styles.flyoutSelect}
+                        type="text"
+                        size="small"
+                        textStyle={styles.flyoutSelectText}
+                        leftIcon={
                             <IoReload
                                 color={Colors.nuggBlueText}
                                 size={20}
@@ -80,6 +103,7 @@ const ArtRepoHandler: FunctionComponent<Props> = () => {
                             );
                         }}
                     />
+                    <div style={styles.divider} />
                     <Button
                         buttonStyle={styles.flyoutSelect}
                         type="text"

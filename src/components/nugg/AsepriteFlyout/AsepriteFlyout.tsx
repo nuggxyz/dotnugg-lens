@@ -36,8 +36,8 @@ const AsepriteFlyout: FunctionComponent<Props> = ({
 
     return !isUndefinedOrNullOrArrayEmpty(formattedData) ? (
         <StickyList
-            // style={{ width: '100%' }}
-            styleRight={{ width: '100%' }}
+            style={{ height: '100%' }}
+            styleRight={{ width: '100%', height: '100%' }}
             data={formattedData}
             extraData={[artLocation]}
             TitleRenderItem={AsepriteFile}
