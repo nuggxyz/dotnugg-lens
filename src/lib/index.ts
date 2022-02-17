@@ -270,7 +270,7 @@ export const smartRemove = <T extends { index: number }>(
         if (elem.index === element.index) {
             return acc;
         }
-        if (elem.index > element.index) {
+        if (elem.index >= element.index) {
             elem.index--;
         }
         acc.push(elem);
