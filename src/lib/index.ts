@@ -232,7 +232,7 @@ export const ucFirst = (value: string) => {
     return `${value.charAt(0).toUpperCase()}${value.substring(1)}`;
 };
 
-export const smartInsert = <
+export const smartInsertIndex = <
     T extends {
         index: number;
     },
@@ -307,4 +307,28 @@ export const shortenPathName = (pathName: string) => {
         store.getState().app.os === 'win32' ? '\\' : '/',
     );
     return `${splitPath.first(2).join('/')}/.../${splitPath.last(1)}`;
+};
+
+export const getFileFromPath = (path: string) => {
+    return path.split(store.getState().app.os === 'win32' ? '\\' : '/').last();
+};
+
+export const smartInsert = <T>(list: T[], element: T, field?: keyof T) => {
+    console.log(
+        !list.find((item) =>
+            !isUndefinedOrNullOrStringEmpty(field)
+                ? item[field] === element[field]
+                : item === element,
+        ),
+    );
+    if (
+        !list.find((item) =>
+            !isUndefinedOrNullOrStringEmpty(field)
+                ? item[field] === element[field]
+                : item === element,
+        )
+    ) {
+        return [...list, element];
+    }
+    return [...list];
 };

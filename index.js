@@ -6,13 +6,14 @@ const fs = require('fs');
 const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const isDev = require('electron-is-dev');
-const { dotnugg } = require('@nuggxyz/dotnugg-sdk');
+// const { dotnugg } = require('@nuggxyz/dotnugg-sdk');
 const ethers = require('ethers');
 const fixPath = require('fix-path');
+
 fixPath();
-// const {
-//     dotnugg,
-// } = require('/Users/remymcconnell/Work/dhlabs/nuggxyz/dotnugg-sdk/dist/index.js');
+const {
+    dotnugg,
+} = require('/Users/remymcconnell/Work/dhlabs/nuggxyz/dotnugg-sdk/dist/index.js');
 
 function createWindow() {
     const win = new BrowserWindow({
@@ -116,19 +117,39 @@ ipcMain.on(
     'fetch-compiler-items',
     async function (event, path, address, apiKey) {
         try {
-            await dotnugg.compiler.init();
+            await dotnugg.parser.init('lens');
             const compiler =
-                await dotnugg.compiler.compileDirectoryCheckCacheAndRender(
+                dotnugg.compiler.compileDirectoryCheckCacheAndRender(
                     address,
                     new ethers.providers.InfuraProvider('goerli', apiKey),
                     path,
                 );
 
-            if (compiler.outputByItem) {
+            await compiler.renderer.wait();
+
+            const res = Object.entries(compiler.outputByItemIndex).map(
+                ([key, value]) => {
+                    return {
+                        title: key,
+                        items: Object.values(value).map((item) => {
+                            console.log(compiler.output[item]);
+                            return {
+                                ...compiler.output[item],
+                                svg: compiler.renderer.results[
+                                    compiler.output[item].fileUri
+                                ].data,
+                            };
+                        }),
+                    };
+                },
+            );
+
+            if (compiler.outputByItemIndex) {
                 event.reply(
                     'items-fetched',
-                    compiler.outputByItem,
-                    compiler.render,
+                    res,
+                    // compiler.outputByItemIndex,
+                    compiler.renderer.results,
                 );
             } else {
                 event.reply(
@@ -197,7 +218,7 @@ ipcMain.on('open-link', function (event, url) {
 });
 
 ipcMain.on('clear-cache', function (event, path) {
-    exec(`rm -rf ${path.replaceAll(' ', '\\ ')}/dotnugg**.cache.json`);
+    exec(`rm -rf ${path.replaceAll(' ', '\\ ')}/.dotnugg-cache`);
 });
 
 ipcMain.on('list-layers', function (event, path) {

@@ -105,12 +105,13 @@ interface Array<T> {
     first(count?: number): Array<T>;
     last(count?: number): Array<T>;
     insert<U extends { index: number }>(element: U): Array<U>;
-    toggle<U extends { id: string }>(element: U, field?: keyof U);
+    toggle<U>(element: U, field?: keyof U);
     remove<U extends { index: number }>(element: U): Array<U>;
     replace<U extends { id: string } | object>(
         element: U,
         field?: keyof U,
     ): Array<U>;
+    smartInsert<U>(element: U, field?: keyof U): Array<U>;
 }
 
 namespace NL {

@@ -171,5 +171,5 @@ const rejectedThactions: Middleware<{}, any, Dispatch<any>> =
 export default {
     localStorager,
     rejectedThactions,
-    logger,
+    // logger,
 };

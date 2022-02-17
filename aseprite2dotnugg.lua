@@ -112,7 +112,7 @@ local function exportFrame(frm)
             local f = io.open(app.params["dest"] .. "/generated_" .. pathNames[#pathNames] .. "/" .. "generated." .. i .. "." .. layer.name:gsub("/", "_") .. "_frm_" .. frm .. ".item.nugg", "w")
             io.output(f)
 
-            io.write("@item(INVALID) := {\n")
+            io.write("@item(CHANGE_ME, ".. i ..", .0021) := {\n")
             io.write(getData(img, x, y, sprite.width, sprite.height, sprite.palettes[1]))
             io.write("}\n")
 

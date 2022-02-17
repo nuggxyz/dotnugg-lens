@@ -181,7 +181,7 @@ const RenderItem = ({
         to: {
             height: open ? viewHeight : 0,
             opacity: open ? 1 : 0,
-            y: open ? 0 : 20,
+            y: open ? 0 : -20,
         },
     });
 
