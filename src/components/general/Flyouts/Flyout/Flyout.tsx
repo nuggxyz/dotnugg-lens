@@ -36,9 +36,10 @@ const Flyout: FunctionComponent<PropsWithChildren<Props>> = ({
             position: 'absolute',
             top: 0,
             opacity: 0,
+            y: -5,
         },
-        enter: { opacity: 1, pointerEvents: 'auto' },
-        leave: { opacity: 0, pointerEvents: 'none' },
+        enter: { opacity: 1, pointerEvents: 'auto', y: 0 },
+        leave: { opacity: 0, pointerEvents: 'none', y: -5 },
         config: config.stiff,
     });
 

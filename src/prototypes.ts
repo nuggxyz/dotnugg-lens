@@ -108,7 +108,7 @@ Array.prototype.remove = function <T extends { index: number }>(element: T) {
         if (elem.index === element.index) {
             return acc;
         }
-        if (elem.index > element.index) {
+        if (elem.index >= element.index) {
             elem.index--;
         }
         acc.push(elem);

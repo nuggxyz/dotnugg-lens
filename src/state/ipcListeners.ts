@@ -72,7 +72,7 @@ window.dotnugg.on('script-success', (event, file, layer) => {
         AppState.dispatch.addToastToList({
             duration: 0,
             error: false,
-            id: file,
+            id: layer,
             title: `Success (${layer})`,
             loading: false,
             message: 'Click to configure your .nugg file in VS Code',

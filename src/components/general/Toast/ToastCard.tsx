@@ -36,19 +36,19 @@ const ToastCard: FunctionComponent<Props> = ({ toast }) => {
     useEffect(() => {
         if (close) {
             setHidden(true);
-            let id = setTimeout(
-                () =>
-                    AppState.dispatch.removeToastFromList({
-                        index: toast.index,
-                    }),
-                500,
-            );
-            return () => clearTimeout(id);
-        } else {
-            let id = setTimeout(() => setHidden(false), 500);
+            let id = setTimeout(() => {
+                AppState.dispatch.removeToastFromList({
+                    index: toast.index,
+                });
+            }, 500);
             return () => clearTimeout(id);
         }
-    }, [close, toast]);
+    }, [close]);
+
+    useEffect(() => {
+        let id = setTimeout(() => setHidden(false), 500);
+        return () => clearTimeout(id);
+    }, [toast]);
 
     const style = useMemo(() => {
         return {
@@ -103,24 +103,16 @@ const ToastCard: FunctionComponent<Props> = ({ toast }) => {
             <animated.div
                 style={{
                     opacity: animatedS.opacity.to([0, 1], [1, 0]),
-                    position: 'absolute',
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'space-around',
-                    alignItems: 'center',
+                    ...styles.buttonContainer,
                 }}>
                 <Button
-                    buttonStyle={{ background: 'white' }}
+                    buttonStyle={styles.button}
                     onClick={() => setClose(true)}
                     rightIcon={<IoClose size={30} />}
                 />
                 {toast.action && (
                     <Button
-                        buttonStyle={{
-                            background: 'white',
-                            borderRadius: Layout.borderRadius.large,
-                            padding: '.6rem',
-                        }}
+                        buttonStyle={styles.button}
                         onClick={() => toast.action(setClose)}
                         rightIcon={<IoOpenOutline size={30} />}
                     />

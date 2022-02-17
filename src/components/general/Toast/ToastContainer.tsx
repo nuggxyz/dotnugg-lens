@@ -14,11 +14,9 @@ const ToastContainer: FunctionComponent<Props> = () => {
     const toasts = AppState.select.toasts();
 
     return (
-        <div
-            style={{
-                ...styles.container,
-            }}>
+        <div style={styles.container}>
             <FlipMove
+                style={{ zIndex: 10 }}
                 enterAnimation="none"
                 leaveAnimation="none"
                 easing={Layout.animation}>

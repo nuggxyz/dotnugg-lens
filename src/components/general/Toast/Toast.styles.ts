@@ -63,6 +63,19 @@ const styles = NLStyleSheetCreator({
         fontWeight: 'bold',
         color: Colors.textColor,
     },
+    buttonContainer: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+    },
+    button: {
+        height: '100%',
+        flexGrow: 1,
+        borderRadius: 0,
+    },
 });
 
 export default styles;
