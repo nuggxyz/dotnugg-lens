@@ -9,7 +9,7 @@ import {
 } from 'react-icons/io5';
 import { SiVisualstudiocode } from 'react-icons/si';
 
-import { shortenPathName } from '../../../lib';
+import { getFileFromPath, shortenPathName } from '../../../lib';
 import Colors from '../../../lib/colors';
 import constants from '../../../lib/constants';
 import globalStyles from '../../../lib/globalStyles';
@@ -47,9 +47,7 @@ const AsepriteFile: FunctionComponent<Props> = ({
                     open ? Colors.transparentLightGrey : 'white'
                 }`,
             }}>
-            <Text type="text">
-                {shortenPathName(title.path).split('/').last()}
-            </Text>
+            <Text type="text">{getFileFromPath(title.path)}</Text>
             <div style={{ display: 'flex' }}>
                 <Button
                     buttonStyle={{

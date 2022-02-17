@@ -43,7 +43,9 @@ declare namespace NL.Redux.App {
         index: number;
         id: string;
         loading: boolean;
-        action?: () => void;
+        action?: (
+            setClosed?: React.Dispatch<React.SetStateAction<boolean>>,
+        ) => void;
         callback?: () => void;
     }
 

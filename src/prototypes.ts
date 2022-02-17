@@ -47,21 +47,14 @@ Array.prototype.last = function (count?: number) {
         .reverse();
 };
 
-Array.prototype.toggle = function <T extends { id: string } | string>(
-    element: T,
-    field?: keyof T,
-) {
+Array.prototype.toggle = function <T>(element: T, field?: keyof T) {
     const val = [...this];
     if (isUndefinedOrNullOrArrayEmpty(val)) {
         return [element];
     }
 
     const index = val.findIndex((item: T) =>
-        field
-            ? item[field] === element[field]
-            : typeof element === 'string' || typeof item === 'string'
-            ? item === element
-            : item.id === element.id,
+        field ? item[field] === element[field] : item === element,
     );
 
     if (!isUndefinedOrNullOrNotNumber(index) && index >= 0) {
@@ -145,4 +138,17 @@ Array.prototype.replace = function <T extends { id: string } | object>(
         }
         return acc;
     }, []);
+};
+
+Array.prototype.smartInsert = function <T>(element: T, field?: keyof T) {
+    if (
+        !this.find((item) =>
+            !isUndefinedOrNullOrStringEmpty(field)
+                ? item[field] === element[field]
+                : item === element,
+        )
+    ) {
+        return [...this, element];
+    }
+    return this;
 };

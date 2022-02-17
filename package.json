@@ -24,27 +24,51 @@
         "productName": "dotnuggLens",
         "appId": "com.nuggxyz.dotnuggLens",
         "icon": "./AppIcon/AppIcon.icns",
-        "files": ["./build/**/*", "./index.js", "./preload.js"],
-        "extraResources": ["./aseprite2dotnugg.lua", "./collection.nugg"],
+        "files": [
+            "./build/**/*",
+            "./index.js",
+            "./preload.js"
+        ],
+        "extraResources": [
+            "./aseprite2dotnugg.lua",
+            "./collection.nugg"
+        ],
         "mac": {
             "artifactName": "${productName}-${version}.${ext}",
             "category": "public.app-category.productivity",
-            "target": ["dmg", "zip"]
+            "target": [
+                "dmg",
+                "zip"
+            ]
         },
         "linux": {
             "artifactName": "${productName}-${version}-${arch}.${ext}",
             "maintainer": "xxxx",
-            "target": ["tar.gz", "deb", "rpm"]
+            "target": [
+                "tar.gz",
+                "deb",
+                "rpm"
+            ]
         },
         "win": {
-            "target": ["zip", "dir"]
+            "target": [
+                "zip",
+                "dir"
+            ]
         }
     },
     "eslintConfig": {
-        "extends": ["react-app", "react-app/jest"]
+        "extends": [
+            "react-app",
+            "react-app/jest"
+        ]
     },
     "browserslist": {
-        "production": [">0.2%", "not dead", "not op_mini all"],
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
         "development": [
             "last 1 chrome version",
             "last 1 firefox version",
@@ -113,7 +137,7 @@
     "dependencies": {
         "@ethersproject/providers": "^5.4.5",
         "@loadable/component": "^5.15.2",
-        "@nuggxyz/dotnugg-sdk": "0.1.20",
+        "@nuggxyz/dotnugg-sdk": "0.1.23",
         "@reduxjs/toolkit": "^1.6.1",
         "@web3-react/core": "^6.1.9",
         "@web3-react/network-connector": "^6.1.9",

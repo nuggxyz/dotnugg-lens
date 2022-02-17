@@ -1,6 +1,8 @@
-import { isUndefinedOrNullOrStringEmpty } from '../lib';
+import { getFileFromPath, isUndefinedOrNullOrStringEmpty } from '../lib';
+import constants from '../lib/constants';
 
 import AppState from './app';
+import store from './store';
 
 window.dotnugg.on('file-selected', (event, path) => {
     AppState.dispatch.setArtLocation({
@@ -35,8 +37,26 @@ window.dotnugg.on('script-error', (event, error, file) => {
 });
 
 window.dotnugg.on('script-success', (event, file, layer) => {
+    const state = store.getState().app;
     AppState.dispatch.setMainProcessLoading(false);
+
     if (layer === '_') {
+        AppState.dispatch.addToastToList({
+            duration: 0,
+            error: false,
+            id: file,
+            title: `Success (${getFileFromPath(file)})`,
+            loading: false,
+            message: `Click to configure your .nugg files in VS Code`,
+            index: state.toasts.length,
+            action: (setClose) => {
+                setClose(true);
+                window.dotnugg.openTo(
+                    state.artLocation,
+                    constants.APP_NAME_VS_CODE,
+                );
+            },
+        });
         AppState.dispatch.updateAsepriteFiles({
             path: file,
             loading: false,
@@ -49,6 +69,22 @@ window.dotnugg.on('script-success', (event, file, layer) => {
             },
         });
     } else {
+        AppState.dispatch.addToastToList({
+            duration: 0,
+            error: false,
+            id: file,
+            title: `Success (${layer})`,
+            loading: false,
+            message: 'Click to configure your .nugg file in VS Code',
+            index: state.toasts.length,
+            action: (setClose) => {
+                setClose(true);
+                window.dotnugg.openTo(
+                    state.artLocation,
+                    constants.APP_NAME_VS_CODE,
+                );
+            },
+        });
         AppState.dispatch.updateAsepriteLayer({
             file,
             layer: {

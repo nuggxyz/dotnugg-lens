@@ -1,6 +1,8 @@
 import React, { FunctionComponent } from 'react';
 
+import { isUndefinedOrNullOrNotNumber } from '../../../lib';
 import Colors from '../../../lib/colors';
+import constants from '../../../lib/constants';
 import Button from '../../general/Buttons/Button/Button';
 import Text from '../../general/Texts/Text/Text';
 
@@ -21,15 +23,19 @@ const FeatureRenderItem: FunctionComponent<Props> = ({
 }) => {
     return (
         <Button
-            label={feature}
+            label={
+                !isUndefinedOrNullOrNotNumber(+feature)
+                    ? constants.DOTNUGG_ITEMS[+feature]
+                    : feature
+            }
             textStyle={{
                 color: isSelected ? Colors.nuggRedText : 'white',
             }}
             buttonStyle={{
                 ...styles.featureRenderItemContainer,
-                background: 'transparent' //!isSelected
-                    // ? 'transparent'
-                    // : Colors.transparentWhite,
+                background: 'transparent', //!isSelected
+                // ? 'transparent'
+                // : Colors.transparentWhite,
             }}
             onClick={onClick}
             rightIcon={

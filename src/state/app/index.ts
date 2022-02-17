@@ -5,7 +5,7 @@ import {
     isUndefinedOrNullOrArrayEmpty,
     isUndefinedOrNullOrObjectEmpty,
     isUndefinedOrNullOrStringEmpty,
-    smartInsert,
+    smartInsertIndex,
     smartRemove,
     smartReplace,
 } from '../../lib';
@@ -74,7 +74,7 @@ class AppState extends NLState<NL.Redux.App.State> {
                 action: PayloadAction<NL.Redux.App.Toast>,
             ) => {
                 let temp = state.toasts;
-                state.toasts = smartInsert(temp, action.payload);
+                state.toasts = smartInsertIndex(temp, action.payload);
             },
             removeToastFromList: (
                 state,
@@ -125,36 +125,17 @@ class AppState extends NLState<NL.Redux.App.State> {
                     renderData?: { [_: string]: { data: string } };
                 }>,
             ) => {
-                state.compiledItems = Object.entries(action.payload.items).map(
-                    ([key, value]) => {
-                        return {
-                            title: constants.DOTNUGG_ITEMS[key],
-                            items: Object.values(value).map((item: any) => {
-                                return {
-                                    ...item,
-                                    svg: !isUndefinedOrNullOrObjectEmpty(
-                                        action.payload.renderData[
-                                            item.fileName
-                                        ],
-                                    )
-                                        ? action.payload.renderData[
-                                              item.fileName
-                                          ].data
-                                        : undefined,
-                                };
-                            }),
-                        };
-                    },
-                );
+                state.compiledItems = action.payload.items;
             },
             addToAsepriteFiles: (
                 state,
                 action: PayloadAction<NL.Redux.App.AsepriteFile[]>,
             ) => {
-                state.asepriteFiles = [
-                    ...state.asepriteFiles,
-                    ...action.payload,
-                ];
+                let temp = [...state.asepriteFiles];
+                action.payload.forEach((item) => {
+                    temp = temp.smartInsert(item, 'path');
+                });
+                state.asepriteFiles = temp;
             },
             updateAsepriteFiles: (
                 state,
@@ -198,7 +179,6 @@ class AppState extends NLState<NL.Redux.App.State> {
                 let file = state.asepriteFiles.find(
                     (file) => file.path === action.payload.file,
                 );
-                console.log(file, action.payload);
                 file = {
                     ...file,
                     layers: file.layers.replace(action.payload.layer, 'path'),
