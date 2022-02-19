@@ -24,9 +24,8 @@ export class DotnuggV1Helper extends ContractHelper {
         data: ethers.BigNumber[][],
         base64: boolean,
     ): Promise<string> {
-        return await DotnuggV1Helper.instance['combo(uint256[][],bool)'](
-            data,
-            base64,
-        );
+        return await DotnuggV1Helper.instance
+            .connect(getProvider())
+            ['combo(uint256[][],bool)'](data, base64);
     }
 }

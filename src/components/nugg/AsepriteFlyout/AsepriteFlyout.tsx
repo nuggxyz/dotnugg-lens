@@ -1,7 +1,11 @@
-import React, { FunctionComponent, useMemo } from 'react';
+import React, { FunctionComponent, useEffect, useMemo } from 'react';
 import { IoSync } from 'react-icons/io5';
 
-import { isUndefinedOrNullOrArrayEmpty, shortenPathName } from '../../../lib';
+import {
+    isUndefinedOrNullOrArrayEmpty,
+    saveToLocalStorage,
+    shortenPathName,
+} from '../../../lib';
 import Colors from '../../../lib/colors';
 import Layout from '../../../lib/layout';
 import StickyList from '../../general/List/StickyList';
@@ -32,6 +36,11 @@ const AsepriteFlyout: FunctionComponent<Props> = ({
                   };
               })
             : [];
+    }, [asepriteFiles]);
+
+    useEffect(() => {
+        console.log(asepriteFiles);
+        saveToLocalStorage(asepriteFiles, 'asepriteFiles');
     }, [asepriteFiles]);
 
     return !isUndefinedOrNullOrArrayEmpty(formattedData) ? (

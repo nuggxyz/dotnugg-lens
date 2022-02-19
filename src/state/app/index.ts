@@ -117,24 +117,20 @@ class AppState extends NLState<NL.Redux.App.State> {
             setArtLocation: (state, action: PayloadAction<string>) => {
                 state.artLocation = action.payload;
             },
-            setCompiledItems: (
-                state,
-                action: PayloadAction<{
-                    items: any[];
-                    renderData?: { [_: string]: { data: string } };
-                }>,
-            ) => {
-                state.compiledItems = action.payload.items;
+            setCompiledItems: (state, action: PayloadAction<any[]>) => {
+                state.compiledItems = action.payload;
             },
             addToAsepriteFiles: (
                 state,
                 action: PayloadAction<NL.Redux.App.AsepriteFile[]>,
             ) => {
-                let temp = [...state.asepriteFiles];
-                action.payload.forEach((item) => {
-                    temp = temp.smartInsert(item, 'path');
-                });
-                state.asepriteFiles = temp;
+                if (!isUndefinedOrNullOrArrayEmpty(action.payload)) {
+                    let temp = [...state.asepriteFiles];
+                    action.payload.forEach((item) => {
+                        temp = temp.smartInsert(item, 'path');
+                    });
+                    state.asepriteFiles = temp;
+                }
             },
             updateAsepriteFiles: (
                 state,

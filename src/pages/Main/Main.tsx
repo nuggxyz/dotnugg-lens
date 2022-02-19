@@ -33,9 +33,10 @@ const Main = () => {
         <Dropzone
             onDrop={(files) => {
                 if (!isUndefinedOrNullOrStringEmpty(artLocation)) {
-                    files.forEach((file) => window.dotnugg.listLayers(file));
+                    // files.forEach((file) => window.dotnugg.listLayers(file));
                     AppState.dispatch.addToAsepriteFiles(
                         files.map((file) => {
+                            window.dotnugg.listLayers(file);
                             return {
                                 path: file,
                                 compiled: false,

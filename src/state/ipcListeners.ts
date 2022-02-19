@@ -12,9 +12,9 @@ window.dotnugg.on('file-selected', (event, path) => {
     });
 });
 
-window.dotnugg.on('items-fetched', (event, items, renderData) => {
+window.dotnugg.on('items-fetched', (event, items) => {
     AppState.dispatch.setMainProcessLoading(false);
-    AppState.dispatch.setCompiledItems({ items, renderData });
+    AppState.dispatch.setCompiledItems(items);
 });
 
 window.dotnugg.on('compiler-error', (event, error) => {

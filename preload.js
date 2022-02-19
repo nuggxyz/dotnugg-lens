@@ -36,5 +36,8 @@ process.once('loaded', () => {
         listLayers: (path) => {
             ipcRenderer.send('list-layers', path);
         },
+        getHex: (feature, id, path) => {
+            return ipcRenderer.sendSync('get-hex', feature, id, path);
+        },
     });
 });

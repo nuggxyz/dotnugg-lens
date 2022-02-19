@@ -11,12 +11,16 @@ const ethers = require('ethers');
 const fixPath = require('fix-path');
 
 fixPath();
+
+const APP_NAME = 'lens/main';
 const {
     dotnugg,
 } = require('/Users/remymcconnell/Work/dhlabs/nuggxyz/dotnugg-sdk/dist/index.js');
 
+let win;
+
 function createWindow() {
-    const win = new BrowserWindow({
+    win = new BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
@@ -57,6 +61,8 @@ app.on('activate', () => {
 try {
     require('electron-reloader')(module);
 } catch (_) {}
+
+let watcher;
 
 ipcMain.on('select-files', function (event) {
     if (os.platform() === 'linux' || os.platform() === 'win32') {
@@ -100,8 +106,7 @@ ipcMain.on('select-files', function (event) {
 
 ipcMain.on('open-to', function (event, path, application) {
     if (application) {
-        console.log(`open -a "${application}" ${path}`);
-        exec(`open -a "${application}" ${path}`);
+        exec(`open -a "${application}" ${path.replaceAll(' ', '\\ ')}`);
     } else {
         shell.openPath(path);
     }
@@ -113,50 +118,79 @@ ipcMain.on('check-os', function (event) {
     event.reply('receive-os', os.platform());
 });
 
+ipcMain.on('get-hex', (event, feature, id, path) => {
+    try {
+        const compiler = dotnugg.builder.readFromCache(path, APP_NAME);
+        event.returnValue = compiler.hexArray(feature);
+    } catch (e) {
+        event.returnValue = e;
+    }
+});
+
+const formatAndSend = async (builder, renderer) => {
+    const res = Object.entries(builder.outputByItemIndex).map(
+        ([key, value]) => {
+            return {
+                title: key,
+                items: Object.values(value).map((item) => {
+                    return {
+                        ...builder.output[item],
+                        svg: renderer.results[builder.output[item].fileUri]
+                            .data,
+                    };
+                }),
+            };
+        },
+    );
+    if (res) {
+        win.webContents.send('items-fetched', res);
+    } else {
+        win.webContents.send(
+            'compiler-error',
+            'Error: unknown error while compiling files',
+        );
+    }
+};
+
 ipcMain.on(
     'fetch-compiler-items',
     async function (event, path, address, apiKey) {
         try {
-            await dotnugg.parser.init('lens');
+            const infura = new ethers.providers.InfuraProvider(
+                'goerli',
+                apiKey,
+            );
+            watcher = dotnugg.watcher.watch(
+                APP_NAME,
+                path,
+                address,
+                infura,
+                (fileUri, me) => {
+                    console.log('###################### FILE ', fileUri);
+                },
+                async (fileUri, me) => {
+                    console.log('######## DONE COMPILING ##########', fileUri);
+
+                    await me.renderer.wait();
+                    me.builder.saveToCache(path);
+
+                    formatAndSend(me.builder, me.renderer);
+                },
+            );
+            await dotnugg.parser.init(APP_NAME);
             const compiler =
                 dotnugg.compiler.compileDirectoryCheckCacheAndRender(
                     address,
-                    new ethers.providers.InfuraProvider('goerli', apiKey),
+                    infura,
                     path,
                 );
+            // .saveToCache(path);
 
             await compiler.renderer.wait();
 
-            const res = Object.entries(compiler.outputByItemIndex).map(
-                ([key, value]) => {
-                    return {
-                        title: key,
-                        items: Object.values(value).map((item) => {
-                            console.log(compiler.output[item]);
-                            return {
-                                ...compiler.output[item],
-                                svg: compiler.renderer.results[
-                                    compiler.output[item].fileUri
-                                ].data,
-                            };
-                        }),
-                    };
-                },
-            );
+            compiler.saveToCache(path);
 
-            if (compiler.outputByItemIndex) {
-                event.reply(
-                    'items-fetched',
-                    res,
-                    // compiler.outputByItemIndex,
-                    compiler.renderer.results,
-                );
-            } else {
-                event.reply(
-                    'compiler-error',
-                    'Error: unknown error while compiling files',
-                );
-            }
+            formatAndSend(compiler, compiler.renderer);
         } catch (e) {
             event.reply('compiler-error', e);
         }
