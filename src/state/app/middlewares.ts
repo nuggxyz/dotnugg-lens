@@ -79,7 +79,7 @@ const logger: NL.Redux.Middleware<
             '%cAction',
             'color: #6FAAF7; font-weight: bold',
             action.type,
-            action.payload,
+            // action.payload,
         );
         let fin = next(action);
         // console.log(
@@ -115,6 +115,10 @@ const localStorager: Middleware<{}, any, Dispatch<any>> =
                         console.log('splicing');
                         possibleValue.splice(0, possibleValue.length - 50);
                     }
+                } else if (
+                    !isUndefinedOrNullOrArrayEmpty(_._localStorageValue)
+                ) {
+                    possibleValue = _._localStorageValue;
                 } else {
                     possibleValue = [_._localStorageValue];
                 }
@@ -142,6 +146,8 @@ const localStorager: Middleware<{}, any, Dispatch<any>> =
             let possibleValue = await loadFromLocalStorage(
                 _._localStorageTarget,
             );
+
+            console.log(possibleValue);
             tempAction.payload = possibleValue;
         }
 
@@ -171,5 +177,5 @@ const rejectedThactions: Middleware<{}, any, Dispatch<any>> =
 export default {
     localStorager,
     rejectedThactions,
-    // logger,
+    logger,
 };

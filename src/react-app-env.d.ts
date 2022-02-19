@@ -98,6 +98,7 @@ interface Window {
         ) => void;
         checkOs: () => void;
         listLayers: (path: string) => void;
+        getHex: (feature: number, id: number, path: string) => any; //import('ethers').BigNumber[];
     };
 }
 

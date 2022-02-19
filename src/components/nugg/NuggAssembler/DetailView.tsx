@@ -34,12 +34,22 @@ const DetailView: FunctionComponent<Props> = ({
     const [svg, setSvg] = React.useState('');
     const [loading, setLoading] = useState(false);
     const { height } = AppState.select.dimensions();
+    const artRepo = AppState.select.artLocation();
 
     useEffect(() => {
         if (!isUndefinedOrNullOrArrayEmpty(selectedItems)) {
+            console.log(
+                window.dotnugg.getHex(
+                    selectedItems[0],
+                    selectedItems[0],
+                    artRepo,
+                ),
+            );
             setLoading(true);
             DotnuggV1Helper.renderOnChain(
-                selectedItems.map((item) => item.hex),
+                selectedItems.map((item) =>
+                    window.dotnugg.getHex(item, item, artRepo),
+                ),
                 true,
             )
                 .then((svg) => setSvg(svg))
@@ -47,7 +57,7 @@ const DetailView: FunctionComponent<Props> = ({
                 .finally(() => setLoading(false));
             // scrollRef.current.scrollTo(scrollRef.current.scrollWidth, 0);
         }
-    }, [selectedItems]);
+    }, [selectedItems, artRepo]);
 
     return !isUndefinedOrNullOrArrayEmpty(selectedItems) ? (
         <div style={styles.detailContainer}>

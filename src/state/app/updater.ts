@@ -23,6 +23,7 @@ export default () => {
             !isUndefinedOrNullOrStringEmpty(artLocation) &&
             !isUndefinedOrNullOrStringEmpty(apiKey)
         ) {
+            console.log(artLocation, apiKey)
             AppState.dispatch.setMainProcessLoading(true);
             window.dotnugg.createCompiler(
                 artLocation,
@@ -37,9 +38,11 @@ export default () => {
         window.addEventListener('resize', resizer);
 
         AppState.dispatch.setApiKey({ _localStorageTarget: 'apiKey' });
-
         AppState.dispatch.setArtLocation({
             _localStorageTarget: 'artLocation',
+        });
+        AppState.dispatch.addToAsepriteFiles({
+            _localStorageTarget: 'asepriteFiles',
         });
 
         return () => {
