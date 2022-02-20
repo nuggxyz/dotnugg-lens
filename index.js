@@ -158,8 +158,7 @@ ipcMain.on('check-os', function (event) {
 
 ipcMain.on('get-hex', (event, item, path) => {
     try {
-        const compiler = dotnugg.builder.readFromCache(path, APP_NAME);
-        event.returnValue = compiler.hexArray(item);
+        event.returnValue = watcher.builder.hexArray(item);
     } catch (e) {
         event.returnValue = e;
     }
@@ -173,6 +172,9 @@ ipcMain.on(
                 'goerli',
                 apiKey,
             );
+
+            await dotnugg.parser.init(APP_NAME);
+
             watcher = dotnugg.watcher.watch(
                 APP_NAME,
                 path,
@@ -186,7 +188,6 @@ ipcMain.on(
                     console.log('######## DONE COMPILING ##########', fileUri);
 
                     await me.renderer.wait();
-                    me.builder.saveToCache(path);
 
                     formatAndSend(me.builder, me.renderer);
                 },
@@ -194,20 +195,10 @@ ipcMain.on(
                     win.webContents.send('compiler-error', error);
                 },
             );
-            await dotnugg.parser.init(APP_NAME);
-            const compiler =
-                dotnugg.compiler.compileDirectoryCheckCacheAndRender(
-                    address,
-                    infura,
-                    path,
-                );
-            // .saveToCache(path);
 
-            await compiler.renderer.wait();
+            await watcher.renderer.wait();
 
-            compiler.saveToCache(path);
-
-            formatAndSend(compiler, compiler.renderer);
+            formatAndSend(watcher.builder, watcher.renderer);
         } catch (e) {
             event.reply('compiler-error', `Compilation error: ${e}`);
         }
