@@ -6,7 +6,7 @@ const fs = require('fs');
 const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const isDev = require('electron-is-dev');
-const { dotnugg } = require('@nuggxyz/dotnugg-sdk');
+// const { dotnugg } = require('@nuggxyz/dotnugg-sdk');
 const ethers = require('ethers');
 const fixPath = require('fix-path');
 
@@ -158,8 +158,7 @@ ipcMain.on('check-os', function (event) {
 
 ipcMain.on('get-hex', (event, item, path) => {
     try {
-        const compiler = dotnugg.builder.readFromCache(path, APP_NAME);
-        event.returnValue = compiler.hexArray(item);
+        event.returnValue = watcher.builder.hexArray(item);
     } catch (e) {
         event.returnValue = e;
     }
@@ -173,6 +172,9 @@ ipcMain.on(
                 'goerli',
                 apiKey,
             );
+
+            await dotnugg.parser.init(APP_NAME);
+
             watcher = dotnugg.watcher.watch(
                 APP_NAME,
                 path,
@@ -186,25 +188,14 @@ ipcMain.on(
                     console.log('######## DONE COMPILING ##########', fileUri);
 
                     await me.renderer.wait();
-                    me.builder.saveToCache(path);
 
                     formatAndSend(me.builder, me.renderer);
                 },
             );
-            await dotnugg.parser.init(APP_NAME);
-            const compiler =
-                dotnugg.compiler.compileDirectoryCheckCacheAndRender(
-                    address,
-                    infura,
-                    path,
-                );
-            // .saveToCache(path);
 
-            await compiler.renderer.wait();
+            await watcher.renderer.wait();
 
-            compiler.saveToCache(path);
-
-            formatAndSend(compiler, compiler.renderer);
+            formatAndSend(watcher.builder, watcher.renderer);
         } catch (e) {
             event.reply('compiler-error', e);
         }
@@ -225,8 +216,7 @@ ipcMain.on(
                     `${destPath}/generated_${filenames[filenames.length - 1]}`,
                 )
             ) {
-
-            console.log('------------------ 3 ---------------');
+                console.log('------------------ 3 ---------------');
                 exec(
                     `mkdir "${destPath}/generated_${
                         filenames[filenames.length - 1]
@@ -248,7 +238,7 @@ ipcMain.on(
                         throw new Error(error);
                     }
 
-            console.log('------------------ 5 ---------------');
+                    console.log('------------------ 5 ---------------');
                     // shell.openPath(destPath + '/generated');
                     event.reply('script-success', sourcePath, layer);
                 },
