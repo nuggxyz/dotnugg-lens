@@ -6,13 +6,13 @@ const fs = require('fs');
 const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const isDev = require('electron-is-dev');
-// const { dotnugg } = require('@nuggxyz/dotnugg-sdk');
+const { dotnugg } = require('@nuggxyz/dotnugg-sdk');
 const ethers = require('ethers');
 const fixPath = require('fix-path');
 
-const {
-    dotnugg,
-} = require('/Users/***REMOVED***/Work/***REMOVED***/nuggxyz/dotnugg-sdk/dist/index.js');
+// const {
+//     dotnugg,
+// } = require('/Users/***REMOVED***/Work/***REMOVED***/nuggxyz/dotnugg-sdk/dist/index.js');
 
 fixPath();
 
