@@ -6,13 +6,13 @@ const fs = require('fs');
 const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const isDev = require('electron-is-dev');
-const { dotnugg } = require('@nuggxyz/dotnugg-sdk');
+// const { dotnugg } = require('@nuggxyz/dotnugg-sdk');
 const ethers = require('ethers');
 const fixPath = require('fix-path');
 
-// const {
-//     dotnugg,
-// } = require('/Users/***REMOVED***/Work/***REMOVED***/nuggxyz/dotnugg-sdk/dist/index.js');
+const {
+    dotnugg,
+} = require('/Users/***REMOVED***/Work/***REMOVED***/nuggxyz/dotnugg-sdk/dist/index.js');
 
 fixPath();
 
@@ -190,6 +190,9 @@ ipcMain.on(
 
                     formatAndSend(me.builder, me.renderer);
                 },
+                (error) => {
+                    win.webContents.send('compiler-error', error);
+                },
             );
             await dotnugg.parser.init(APP_NAME);
             const compiler =
@@ -206,7 +209,7 @@ ipcMain.on(
 
             formatAndSend(compiler, compiler.renderer);
         } catch (e) {
-            event.reply('compiler-error', e);
+            event.reply('compiler-error', `Compilation error: ${e}`);
         }
     },
 );
@@ -225,8 +228,7 @@ ipcMain.on(
                     `${destPath}/generated_${filenames[filenames.length - 1]}`,
                 )
             ) {
-
-            console.log('------------------ 3 ---------------');
+                console.log('------------------ 3 ---------------');
                 exec(
                     `mkdir "${destPath}/generated_${
                         filenames[filenames.length - 1]
@@ -248,7 +250,7 @@ ipcMain.on(
                         throw new Error(error);
                     }
 
-            console.log('------------------ 5 ---------------');
+                    console.log('------------------ 5 ---------------');
                     // shell.openPath(destPath + '/generated');
                     event.reply('script-success', sourcePath, layer);
                 },
