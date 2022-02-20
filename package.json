@@ -2,7 +2,7 @@
     "name": "dotnugg-lens",
     "productName": "dotnuggLens",
     "homepage": ".",
-    "version": "0.0.7",
+    "version": "0.1.0",
     "description": "dotnugg desktop application",
     "main": "index.js",
     "author": "@nuggxyz",
@@ -31,7 +31,8 @@
         ],
         "extraResources": [
             "./aseprite2dotnugg.lua",
-            "./collection.nugg"
+            "./collection.nugg",
+            "./lensDefault/**/*.nugg"
         ],
         "mac": {
             "artifactName": "${productName}-${version}.${ext}",
@@ -137,7 +138,7 @@
     "dependencies": {
         "@ethersproject/providers": "^5.4.5",
         "@loadable/component": "^5.15.2",
-        "@nuggxyz/dotnugg-sdk": "0.1.26",
+        "@nuggxyz/dotnugg-sdk": "0.1.29",
         "@reduxjs/toolkit": "^1.6.1",
         "@web3-react/core": "^6.1.9",
         "@web3-react/network-connector": "^6.1.9",

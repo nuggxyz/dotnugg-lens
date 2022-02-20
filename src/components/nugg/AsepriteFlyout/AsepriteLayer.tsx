@@ -54,7 +54,7 @@ const AsepriteLayer: FunctionComponent<Props> = ({
                                     ...item,
                                     loading: false,
                                 },
-                                file: extraData[2][0].path,
+                                file: extraData[2].path,
                             });
                         } else {
                             AppState.dispatch.updateAsepriteLayer({
@@ -62,10 +62,10 @@ const AsepriteLayer: FunctionComponent<Props> = ({
                                     ...item,
                                     loading: true,
                                 },
-                                file: extraData[2][0].path,
+                                file: extraData[2].path,
                             });
                             window.dotnugg.convertAseprite(
-                                extraData[2][0].path,
+                                extraData[2].path,
                                 extraData[0],
                                 item.path,
                             );

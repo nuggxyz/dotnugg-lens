@@ -96,9 +96,10 @@ interface Window {
             destPath: string,
             layer?: string,
         ) => void;
-        checkOs: () => void;
+        checkOs: () => NL.Redux.App.OS;
         listLayers: (path: string) => void;
-        getHex: (feature: number, id: number, path: string) => any; //import('ethers').BigNumber[];
+        getHex: (item: any, path: string) => import('ethers').BigNumber[];
+        getLensDefault: () => string;
     };
 }
 

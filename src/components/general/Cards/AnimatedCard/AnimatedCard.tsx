@@ -2,16 +2,16 @@ import React, { FunctionComponent, useRef, useState } from 'react';
 import { animated, config, useSpring } from 'react-spring';
 
 const calc = (x, y, rect) => [
-    -(y - rect.top - rect.height / 2) / 10,
-    (x - rect.left - rect.width / 2) / 10,
-    1.4,
+    -(y - rect.top - rect.height / 2) / 7,
+    (x - rect.left - rect.width / 2) / 7,
+    1.8,
 ];
 const trans = (x, y, s) =>
     `perspective(600px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`;
 
-const AnimatedCard: FunctionComponent<React.PropsWithChildren<{}>> = ({
-    children,
-}) => {
+const AnimatedCard: FunctionComponent<
+    React.PropsWithChildren<{ disabled?: boolean }>
+> = ({ children, disabled }) => {
     const ref = useRef(null);
     const [xys, set] = useState([0, 0, 1]);
     const props = useSpring({ xys, config: config.molasses });
@@ -22,14 +22,15 @@ const AnimatedCard: FunctionComponent<React.PropsWithChildren<{}>> = ({
                 // width: '100%',
                 // height: '100%',
                 zIndex: 100,
-                // cursor: 'none',
+                cursor: disabled ? 'auto' : 'none',
             }}>
             <animated.div
                 style={{
                     transform: props.xys.to(trans),
                 }}
-                onMouseLeave={() => set([0, 0, 1])}
+                onMouseLeave={() => !disabled && set([0, 0, 1])}
                 onMouseMove={(e) =>
+                    !disabled &&
                     set(
                         calc(
                             e.clientX,

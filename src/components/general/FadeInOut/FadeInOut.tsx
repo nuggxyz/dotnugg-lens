@@ -13,6 +13,7 @@ const FadeInOut: FunctionComponent<PropsWithChildren<Props>> = ({
     children,
 }) => {
     const { opacity } = useSpring({
+        pointerEvents: toggle ? 'auto' : 'none',
         opacity: toggle ? 1 : 0,
         config: config.stiff,
     });

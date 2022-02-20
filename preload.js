@@ -28,7 +28,7 @@ process.once('loaded', () => {
             ipcRenderer.send('clear-cache', path);
         },
         checkOs: () => {
-            ipcRenderer.send('check-os');
+            return ipcRenderer.sendSync('check-os');
         },
         convertAseprite: (sourcePath, destPath, layer) => {
             ipcRenderer.send('convert-aseprite', sourcePath, destPath, layer);
@@ -38,6 +38,9 @@ process.once('loaded', () => {
         },
         getHex: (feature, id, path) => {
             return ipcRenderer.sendSync('get-hex', feature, id, path);
+        },
+        getLensDefault: () => {
+            return ipcRenderer.sendSync('get-lens-default');
         },
     });
 });

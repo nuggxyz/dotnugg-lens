@@ -90,6 +90,8 @@ const styles = NLStyleSheetCreator({
         padding: '.3rem .7rem',
         background: Colors.transparentLightGrey,
         borderRadius: Layout.borderRadius.large,
+        position: 'absolute',
+        top: '-2rem'
     },
 });
 

@@ -142,6 +142,7 @@ const StickyList: FunctionComponent<PropsWithChildren<Props>> = ({
                                         refData.map((item) => item.title),
                                     ],
                                     setCurrent,
+                                    index,
                                 }}
                             />
                         </React.Fragment>
@@ -161,6 +162,7 @@ const RenderItem = ({
     ChildRenderItem,
     extraData,
     setCurrent,
+    index: parentIndex,
 }) => {
     const [open, setOpen] = useState(true);
     // const [ref, isVisible] = useIsVisible();
@@ -184,7 +186,6 @@ const RenderItem = ({
             y: open ? 0 : -20,
         },
     });
-
     return (
         <div id={item.title} ref={item.ref}>
             <div
@@ -209,7 +210,10 @@ const RenderItem = ({
                             <ChildRenderItem
                                 item={childItem}
                                 index={index}
-                                extraData={extraData}
+                                extraData={[
+                                    ...extraData.first(2),
+                                    extraData.last()[parentIndex],
+                                ]}
                             />
                         </React.Fragment>
                     ))}

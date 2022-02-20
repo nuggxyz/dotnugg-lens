@@ -1,0 +1,26 @@
+// This is a dotnugg collection file:
+// - every dotnugg project requires a collection.nugg file
+// - the file can be place anywhere inside the directory, but it must end with collection.nugg
+//
+// Here is where you define your different features, or categories of items, as well as any data that can be applied globally to all items of that feature type.
+// In this collection file we are defining the default layer (or z-index) of each feature
+@collection := {
+    features := {
+        BASE  := {
+            lay := +0
+            exp := { feature: EYES, pointer: +2, yoffset: -1 }
+            exp := { feature: MOUTH, pointer: +3, yoffset: -1 }
+            exp := { feature: BACK, pointer: +0, yoffset: +0 }
+            exp := { feature: HEAD, pointer: +1, yoffset: -3 }
+            exp := { feature: HAIR, pointer: +1, yoffset: -2 }
+            exp := { feature: NECK, pointer: +4, yoffset: +0 }
+        }
+        EYES  := { layer: +5 }
+        MOUTH := { layer: +2 }
+        HAIR  := { layer: +3 }
+        HEAD  := { layer: +4 }
+        BACK  := { layer: -3 }
+        NECK  := { layer: +1 }
+        HOLD  := { layer: +6 }
+    }
+}

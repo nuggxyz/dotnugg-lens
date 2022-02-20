@@ -1,0 +1,52 @@
+// This is a dotnugg item file:
+// - this file can be place anywhere inside the directory, but it must end with item.nugg
+// - the following are required arguments: @item([feature], [id], [weight])
+//    - [feature]: the feature type of the item. Must be one of the features defined in the collection.nugg file
+//    - [id]: the unique id of the item. Note, the id is unique within the scope of its feature, meaning you can have BACK 1 as well as EYES 1
+//    - [weight]: the likelihood of this item being selected in favor of others
+//
+// Here is where you define what the item will look like.
+// The colors are mapped to letters, which are used to draw out the image in the "versions" section.
+// The zindex value, or layer, defines which color will be placed above others. It can be a positive or negative integer, or "+D" which uses the default value for this feature defined in the collection file
+// The versions define the actual image as well as how we should assemble it. There can be more than one version of a specific item.
+// The anchor defines the point that will be used as a reference when merging this item with another
+
+@item(HAIR,2,.0021) := {
+    colors := {
+        a := { zindex: +D, rgba: "rgba(252,240,22,255)" }
+        b := { zindex: +D, rgba: "rgba(255,252,150,255)" }
+        c := { zindex: +D, rgba: "rgba(249,207,66,255)" }
+    }
+    versions := {
+        0 := {
+            anchor := { x: 12, y: 8 }
+            receiver := { feature: HEAD, x: 11, y: 3 }
+            data := {
+                ......aaaaaaaa........
+                ....aaaaaaaaaaaa......
+                ...aaaaaaaaaaaaaa.....
+                ..aaaaaaaaaaaaaaaaa...
+                .aaaaaaaaaaaaabbaaaaa.
+                .aaaaaaaaaaaabaaaaaaa.
+                .aaaaaaaaaaaabaabaaaaa
+                .baaaaaaaaaaababaaabaa
+                abacaaaa..a.aaab.aabaa
+                aaaaa.a...........abab
+                aaaac.............aaab
+                aaaac..............aab
+                aaaa...............aab
+                ababa...............ab
+                aacaa...............ab
+                baaba..............bab
+                bbaab..............ccb
+                .bbaa.............bcbb
+                ..bbc..............ac.
+                ...ba..............cc.
+                ...acc............cc..
+                ....ac................
+                ....ac................
+                ....acc...............
+            }
+        }
+    }
+}

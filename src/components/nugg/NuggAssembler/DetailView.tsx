@@ -5,7 +5,12 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import { IoClose } from 'react-icons/io5';
+import {
+    IoCheckmarkCircle,
+    IoCheckmarkCircleOutline,
+    IoClose,
+    IoEllipseOutline,
+} from 'react-icons/io5';
 
 import { DotnuggV1Helper } from '../../../contracts/DotnuggHelper';
 import {
@@ -30,6 +35,7 @@ const DetailView: FunctionComponent<Props> = ({
     selectedItems,
     setSelectedItems,
 }) => {
+    const [isAnimated, setIsAnimated] = useState(true);
     const scrollRef = useRef<HTMLDivElement>();
     const [svg, setSvg] = React.useState('');
     const [loading, setLoading] = useState(false);
@@ -38,17 +44,10 @@ const DetailView: FunctionComponent<Props> = ({
 
     useEffect(() => {
         if (!isUndefinedOrNullOrArrayEmpty(selectedItems)) {
-            console.log(
-                window.dotnugg.getHex(
-                    selectedItems[0],
-                    selectedItems[0],
-                    artRepo,
-                ),
-            );
             setLoading(true);
             DotnuggV1Helper.renderOnChain(
                 selectedItems.map((item) =>
-                    window.dotnugg.getHex(item, item, artRepo),
+                    window.dotnugg.getHex(item, artRepo),
                 ),
                 true,
             )
@@ -70,24 +69,38 @@ const DetailView: FunctionComponent<Props> = ({
                     alignItems: 'center',
                     display: 'flex',
                 }}>
-                {!isUndefinedOrNullOrStringEmpty(svg) && (
-                    <div
-                        style={{
-                            position: 'fixed',
-                        }}>
-                        <AnimatedCard>
-                            <img
-                                src={svg}
-                                style={{
-                                    height: height / 2.1,
-                                    // width: '350px',
-                                }}
-                            />
-                        </AnimatedCard>
-                    </div>
-                )}
+                {!isUndefinedOrNullOrStringEmpty(svg) &&
+                    // (isAnimated ? (
+                        <div
+                            style={{
+                                position: 'fixed',
+                            }}>
+                            <AnimatedCard disabled={!isAnimated}>
+                                <img
+                                    src={svg}
+                                    style={{
+                                        height: height / 2.1,
+                                        // width: '350px',
+                                    }}
+                                />
+                            </AnimatedCard>
+                        </div>
+                    // ) : (
+                    //     <div
+                    //         style={{
+                    //             position: 'fixed',
+                    //         }}>
+                    //         <img
+                    //             src={svg}
+                    //             style={{
+                    //                 height: height / 2.1,
+                    //                 // width: '350px',
+                    //             }}
+                    //         />
+                    //     </div>
+                    }
             </div>
-            <div>
+            <div style={{ position: 'relative' }}>
                 <FadeInOut toggle={loading}>
                     <div style={styles.detailLoading}>
                         <Text
@@ -99,6 +112,34 @@ const DetailView: FunctionComponent<Props> = ({
                             Combining on-chain
                         </Text>
                         <Loader color="white" />
+                    </div>
+                </FadeInOut>
+                <FadeInOut toggle={!loading}>
+                    <div style={styles.detailLoading}>
+                        <Button
+                            hoverStyle={{ filter: 'brightness(.9)' }}
+                            buttonStyle={{
+                                background: 'transparent',
+                                padding: '0',
+                            }}
+                            type="text"
+                            textStyle={{
+                                color: 'white',
+                                marginRight: '.5rem',
+                            }}
+                            label="Zoom"
+                            onClick={() => setIsAnimated(!isAnimated)}
+                            rightIcon={
+                                isAnimated ? (
+                                    <IoCheckmarkCircle
+                                        color="white"
+                                        size={20}
+                                    />
+                                ) : (
+                                    <IoEllipseOutline color="white" size={20} />
+                                )
+                            }
+                        />
                     </div>
                 </FadeInOut>
                 <div ref={scrollRef} style={styles.detailSelectedItems}>

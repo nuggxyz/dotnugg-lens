@@ -115,7 +115,11 @@ class AppState extends NLState<NL.Redux.App.State> {
                 state.apiKey = action.payload;
             },
             setArtLocation: (state, action: PayloadAction<string>) => {
-                state.artLocation = action.payload;
+                state.artLocation = !isUndefinedOrNullOrStringEmpty(
+                    action.payload,
+                )
+                    ? action.payload
+                    : window.dotnugg.getLensDefault();
             },
             setCompiledItems: (state, action: PayloadAction<any[]>) => {
                 state.compiledItems = action.payload;

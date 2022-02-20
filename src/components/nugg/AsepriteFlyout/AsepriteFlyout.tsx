@@ -39,7 +39,6 @@ const AsepriteFlyout: FunctionComponent<Props> = ({
     }, [asepriteFiles]);
 
     useEffect(() => {
-        console.log(asepriteFiles);
         saveToLocalStorage(asepriteFiles, 'asepriteFiles');
     }, [asepriteFiles]);
 
