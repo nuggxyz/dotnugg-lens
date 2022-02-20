@@ -13,7 +13,7 @@ const App: FunctionComponent<Props> = () => {
     const apiKey = AppState.select.apiKey();
 
     React.useEffect(() => {
-        window.dotnugg.checkOs();
+        AppState.dispatch.setOS(window.dotnugg.checkOs());
     }, []);
 
     return (

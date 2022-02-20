@@ -23,7 +23,6 @@ export default () => {
             !isUndefinedOrNullOrStringEmpty(artLocation) &&
             !isUndefinedOrNullOrStringEmpty(apiKey)
         ) {
-            console.log(artLocation, apiKey)
             AppState.dispatch.setMainProcessLoading(true);
             window.dotnugg.createCompiler(
                 artLocation,

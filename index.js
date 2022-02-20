@@ -10,16 +10,20 @@ const isDev = require('electron-is-dev');
 const ethers = require('ethers');
 const fixPath = require('fix-path');
 
-fixPath();
-
-const APP_NAME = 'lens/main';
 const {
     dotnugg,
 } = require('/Users/remymcconnell/Work/dhlabs/nuggxyz/dotnugg-sdk/dist/index.js');
 
-let win;
+fixPath();
 
-function createWindow() {
+const APP_NAME = 'lens/main';
+const DEFAULT = 'lensDefault';
+let win;
+let watcher;
+
+// FUNCTIONS
+
+const createWindow = () => {
     win = new BrowserWindow({
         width: 800,
         height: 600,
@@ -40,92 +44,15 @@ function createWindow() {
     if (isDev) {
         win.webContents.openDevTools();
     }
-}
-app.on('ready', () => {
-    createWindow();
-    autoUpdater.checkForUpdatesAndNotify();
-});
+};
 
-app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-        app.quit();
+const asepritePath = () => {
+    let asepriteLocation = '/Applications/Aseprite.app/Contents/MacOS/aseprite';
+    if (os.platform() === 'win32') {
+        asepriteLocation = 'C:\\Program Files\\Aseprite\\Aseprite.exe';
     }
-});
-
-app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-        createWindow();
-    }
-});
-
-try {
-    require('electron-reloader')(module);
-} catch (_) {}
-
-let watcher;
-
-ipcMain.on('select-files', function (event) {
-    if (os.platform() === 'linux' || os.platform() === 'win32') {
-        dialog
-            .showOpenDialog({
-                properties: ['openFile'],
-            })
-            .then(({ filePaths }) => {
-                if (filePaths) event.reply('file-selected', filePaths[0]);
-                else event.reply('file-error');
-            });
-    } else {
-        dialog
-            .showOpenDialog({
-                properties: ['openDirectory'],
-            })
-            .then(({ filePaths }) => {
-                if (filePaths) {
-                    event.reply('file-selected', filePaths[0]);
-                    fs.readdir(filePaths[0], function (err, list) {
-                        if (err) throw err;
-                        for (var i = 0; i < list.length; i++) {
-                            if (path.extname(list[i]) === 'collection.nugg') {
-                                console.log(list[i]);
-                                return;
-                            }
-                        }
-                        console.log(filePaths[0]);
-                        exec(
-                            `cat "${
-                                isDev
-                                    ? 'collection.nugg'
-                                    : path.join(__dirname, '../collection.nugg')
-                            }" >> "${filePaths[0]}/collection.nugg"`,
-                        );
-                    });
-                } else event.reply('file-error');
-            });
-    }
-});
-
-ipcMain.on('open-to', function (event, path, application) {
-    if (application) {
-        exec(`open -a "${application}" ${path.replaceAll(' ', '\\ ')}`);
-    } else {
-        shell.openPath(path);
-    }
-});
-
-ipcMain.on('verify-file', function (event, file) {});
-
-ipcMain.on('check-os', function (event) {
-    event.reply('receive-os', os.platform());
-});
-
-ipcMain.on('get-hex', (event, feature, id, path) => {
-    try {
-        const compiler = dotnugg.builder.readFromCache(path, APP_NAME);
-        event.returnValue = compiler.hexArray(feature);
-    } catch (e) {
-        event.returnValue = e;
-    }
-});
+    return asepriteLocation;
+};
 
 const formatAndSend = async (builder, renderer) => {
     const res = Object.entries(builder.outputByItemIndex).map(
@@ -152,6 +79,92 @@ const formatAndSend = async (builder, renderer) => {
     }
 };
 
+app.on('ready', () => {
+    createWindow();
+    autoUpdater.checkForUpdatesAndNotify();
+});
+
+app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+        app.quit();
+    }
+});
+
+app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+        createWindow();
+    }
+});
+
+try {
+    require('electron-reloader')(module);
+} catch (_) {}
+
+ipcMain.on('select-files', (event) => {
+    if (os.platform() === 'linux' || os.platform() === 'win32') {
+        dialog
+            .showOpenDialog({
+                properties: ['openFile'],
+            })
+            .then(({ filePaths }) => {
+                if (filePaths) event.reply('file-selected', filePaths[0]);
+                else event.reply('file-error');
+            });
+    } else {
+        dialog
+            .showOpenDialog({
+                properties: ['openDirectory'],
+            })
+            .then(({ filePaths }) => {
+                if (filePaths) {
+                    event.reply('file-selected', filePaths[0]);
+                    fs.readdir(filePaths[0], (err, list) => {
+                        if (err) throw err;
+                        for (var i = 0; i < list.length; i++) {
+                            if (path.extname(list[i]) === 'collection.nugg') {
+                                console.log(list[i]);
+                                return;
+                            }
+                        }
+                        exec(
+                            `cat "${
+                                isDev
+                                    ? 'lentsDefault/collection.nugg'
+                                    : path.join(
+                                          __dirname,
+                                          '../lensDefault/collection.nugg',
+                                      )
+                            }" >> "${filePaths[0]}/collection.nugg"`,
+                        );
+                    });
+                } else {
+                    event.reply('file-error');
+                }
+            });
+    }
+});
+
+ipcMain.on('open-to', function (event, path, application) {
+    if (application) {
+        exec(`open -a "${application}" ${path.replaceAll(' ', '\\ ')}`);
+    } else {
+        shell.openPath(path);
+    }
+});
+
+ipcMain.on('check-os', function (event) {
+    event.returnValue = os.platform();
+});
+
+ipcMain.on('get-hex', (event, item, path) => {
+    try {
+        const compiler = dotnugg.builder.readFromCache(path, APP_NAME);
+        event.returnValue = compiler.hexArray(item);
+    } catch (e) {
+        event.returnValue = e;
+    }
+});
+
 ipcMain.on(
     'fetch-compiler-items',
     async function (event, path, address, apiKey) {
@@ -167,6 +180,7 @@ ipcMain.on(
                 infura,
                 (fileUri, me) => {
                     console.log('###################### FILE ', fileUri);
+                    win.webContents.send('main-loading');
                 },
                 async (fileUri, me) => {
                     console.log('######## DONE COMPILING ##########', fileUri);
@@ -197,14 +211,6 @@ ipcMain.on(
     },
 );
 
-function asepritePath() {
-    let asepriteLocation = '/Applications/Aseprite.app/Contents/MacOS/aseprite';
-    if (os.platform() === 'win32') {
-        asepriteLocation = 'C:\\Program Files\\Aseprite\\Aseprite.exe';
-    }
-    return asepriteLocation;
-}
-
 ipcMain.on(
     'convert-aseprite',
     async function (event, sourcePath, destPath, layer = '_') {
@@ -216,9 +222,11 @@ ipcMain.on(
             if (
                 fs.existsSync(`${destPath}`) &&
                 !fs.existsSync(
-                    `${destPath}/generated_${filenames[filenames.length - 1]}"`,
+                    `${destPath}/generated_${filenames[filenames.length - 1]}`,
                 )
             ) {
+
+            console.log('------------------ 3 ---------------');
                 exec(
                     `mkdir "${destPath}/generated_${
                         filenames[filenames.length - 1]
@@ -227,6 +235,8 @@ ipcMain.on(
             } else if (!fs.existsSync(`${destPath}`)) {
                 throw new Error('Incorrect Art Repo');
             }
+
+            console.log('------------------ 4 ---------------');
             exec(
                 `${asepritePath()} -b --script-param source="${sourcePath}" --script-param dest="${destPath}" --script-param layer="${layer}" --script "${
                     isDev
@@ -237,26 +247,30 @@ ipcMain.on(
                     if (error !== null) {
                         throw new Error(error);
                     }
+
+            console.log('------------------ 5 ---------------');
                     // shell.openPath(destPath + '/generated');
                     event.reply('script-success', sourcePath, layer);
                 },
             );
+
+            console.log('------------------ 6b---------------');
         } catch (e) {
             event.reply('script-error', e, sourcePath);
         }
     },
 );
 
-ipcMain.on('open-link', function (event, url) {
+ipcMain.on('open-link', (event, url) => {
     shell.openExternal(url);
 });
 
-ipcMain.on('clear-cache', function (event, path) {
+ipcMain.on('clear-cache', (event, path) => {
     exec(`rm -rf ${path.replaceAll(' ', '\\ ')}/.dotnugg-cache`);
 });
 
-ipcMain.on('list-layers', function (event, path) {
-    const yo = exec(
+ipcMain.on('list-layers', (event, path) => {
+    exec(
         `${asepritePath()} -b --all-layers --list-layers "${path}"`,
         (error, stdout, stderr) => {
             if (error !== null) {
@@ -265,4 +279,8 @@ ipcMain.on('list-layers', function (event, path) {
             event.reply('layers', path, stdout);
         },
     );
+});
+
+ipcMain.on('get-lens-default', (event) => {
+    event.returnValue = path.join(__dirname, isDev ? '' : '../', DEFAULT);
 });

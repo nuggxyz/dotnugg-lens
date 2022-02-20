@@ -44,7 +44,7 @@ window.dotnugg.on('script-success', (event, file, layer) => {
         AppState.dispatch.addToastToList({
             duration: 0,
             error: false,
-            id: file,
+            id: `${file}-${state.toasts.length}`,
             title: `Success (${getFileFromPath(file)})`,
             loading: false,
             message: `Click to configure your .nugg files in VS Code`,
@@ -72,7 +72,7 @@ window.dotnugg.on('script-success', (event, file, layer) => {
         AppState.dispatch.addToastToList({
             duration: 0,
             error: false,
-            id: layer,
+            id: `${layer}-${state.toasts.length}`,
             title: `Success (${layer})`,
             loading: false,
             message: 'Click to configure your .nugg file in VS Code',
@@ -97,10 +97,6 @@ window.dotnugg.on('script-success', (event, file, layer) => {
     // alert(`Success! Check ${generated} to categorize your dotnugg files`);
 });
 
-window.dotnugg.on('receive-os', (event, os) => {
-    AppState.dispatch.setOS(os);
-});
-
 window.dotnugg.on('layers', (event, path, layers) => {
     AppState.dispatch.updateAsepriteFiles({
         path,
@@ -115,4 +111,8 @@ window.dotnugg.on('layers', (event, path, layers) => {
             return accumulator;
         }, []),
     });
+});
+
+window.dotnugg.on('main-loading', (event) => {
+    AppState.dispatch.setMainProcessLoading(true);
 });

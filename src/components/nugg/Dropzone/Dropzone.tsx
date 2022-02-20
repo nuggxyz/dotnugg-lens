@@ -87,7 +87,7 @@ const Dropzone: FunctionComponent<Props> = ({ onDrop, children, style }) => {
     });
 
     return (
-        <div ref={ref} draggable style={styles.container}>
+        <div ref={ref} style={styles.container}>
             <Text textStyle={textStyle}>Drop your .aseprite files here</Text>
             <animated.div style={containerStyle} />
             {children}

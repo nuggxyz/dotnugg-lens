@@ -146,8 +146,6 @@ const localStorager: Middleware<{}, any, Dispatch<any>> =
             let possibleValue = await loadFromLocalStorage(
                 _._localStorageTarget,
             );
-
-            console.log(possibleValue);
             tempAction.payload = possibleValue;
         }
 
@@ -177,5 +175,5 @@ const rejectedThactions: Middleware<{}, any, Dispatch<any>> =
 export default {
     localStorager,
     rejectedThactions,
-    logger,
+    // logger,
 };
