@@ -53,6 +53,7 @@ class AppState extends NLState<NL.Redux.App.State> {
             artLocation: '',
             compiledItems: [],
             mainProcessLoading: false,
+            isZoomOn: false,
         });
     }
 
@@ -60,6 +61,9 @@ class AppState extends NLState<NL.Redux.App.State> {
         name: this._name,
         initialState: this._initialState,
         reducers: {
+            setIsZoomOn: (state, action: PayloadAction<boolean>) => {
+                state.isZoomOn = action.payload;
+            },
             setMainProcessLoading: (state, action: PayloadAction<boolean>) => {
                 state.mainProcessLoading = action.payload;
             },

@@ -43,6 +43,9 @@ export default () => {
         AppState.dispatch.addToAsepriteFiles({
             _localStorageTarget: 'asepriteFiles',
         });
+        AppState.dispatch.setIsZoomOn({
+            _localStorageTarget: 'zoom',
+        });
 
         return () => {
             window.removeEventListener('resize', resizer);

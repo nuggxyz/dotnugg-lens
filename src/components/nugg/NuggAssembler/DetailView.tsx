@@ -35,10 +35,10 @@ const DetailView: FunctionComponent<Props> = ({
     selectedItems,
     setSelectedItems,
 }) => {
-    const [isAnimated, setIsAnimated] = useState(true);
     const scrollRef = useRef<HTMLDivElement>();
     const [svg, setSvg] = React.useState('');
     const [loading, setLoading] = useState(false);
+    const isZoomOn = AppState.select.isZoomOn();
     const { height } = AppState.select.dimensions();
     const artRepo = AppState.select.artLocation();
 
@@ -69,36 +69,21 @@ const DetailView: FunctionComponent<Props> = ({
                     alignItems: 'center',
                     display: 'flex',
                 }}>
-                {!isUndefinedOrNullOrStringEmpty(svg) &&
-                    // (isAnimated ? (
-                        <div
-                            style={{
-                                position: 'fixed',
-                            }}>
-                            <AnimatedCard disabled={!isAnimated}>
-                                <img
-                                    src={svg}
-                                    style={{
-                                        height: height / 2.1,
-                                        // width: '350px',
-                                    }}
-                                />
-                            </AnimatedCard>
-                        </div>
-                    // ) : (
-                    //     <div
-                    //         style={{
-                    //             position: 'fixed',
-                    //         }}>
-                    //         <img
-                    //             src={svg}
-                    //             style={{
-                    //                 height: height / 2.1,
-                    //                 // width: '350px',
-                    //             }}
-                    //         />
-                    //     </div>
-                    }
+                {!isUndefinedOrNullOrStringEmpty(svg) && (
+                    <div
+                        style={{
+                            position: 'fixed',
+                        }}>
+                        <AnimatedCard disabled={!isZoomOn}>
+                            <img
+                                src={svg}
+                                style={{
+                                    height: height / 2.1,
+                                }}
+                            />
+                        </AnimatedCard>
+                    </div>
+                )}
             </div>
             <div style={{ position: 'relative' }}>
                 <FadeInOut toggle={loading}>
@@ -128,9 +113,15 @@ const DetailView: FunctionComponent<Props> = ({
                                 marginRight: '.5rem',
                             }}
                             label="Zoom"
-                            onClick={() => setIsAnimated(!isAnimated)}
+                            onClick={() =>
+                                AppState.dispatch.setIsZoomOn({
+                                    _localStorageValue: !isZoomOn,
+                                    _localStorageTarget: 'zoom',
+                                    _localStorageExpectedType: 'unique',
+                                })
+                            }
                             rightIcon={
-                                isAnimated ? (
+                                isZoomOn ? (
                                     <IoCheckmarkCircle
                                         color="white"
                                         size={20}
