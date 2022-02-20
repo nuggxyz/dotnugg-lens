@@ -13,6 +13,7 @@ declare namespace NL.Redux.App {
         artLocation: string;
         compiledItems: any[];
         mainProcessLoading: boolean;
+        isZoomOn: boolean;
     }
 
     type AsepriteFile = {
