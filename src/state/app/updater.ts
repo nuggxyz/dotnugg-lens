@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
+import { batch } from 'react-redux';
 
 import {
     isUndefinedOrNullOrStringEmpty,
@@ -32,19 +33,21 @@ export default () => {
         }
     }, [artLocation, apiKey]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         resizer();
         window.addEventListener('resize', resizer);
 
-        AppState.dispatch.setApiKey({ _localStorageTarget: 'apiKey' });
-        AppState.dispatch.setArtLocation({
-            _localStorageTarget: 'artLocation',
-        });
-        AppState.dispatch.addToAsepriteFiles({
-            _localStorageTarget: 'asepriteFiles',
-        });
-        AppState.dispatch.setIsZoomOn({
-            _localStorageTarget: 'zoom',
+        batch(() => {
+            AppState.dispatch.setApiKey({ _localStorageTarget: 'apiKey' });
+            AppState.dispatch.setArtLocation({
+                _localStorageTarget: 'artLocation',
+            });
+            AppState.dispatch.addToAsepriteFiles({
+                _localStorageTarget: 'asepriteFiles',
+            });
+            AppState.dispatch.setIsZoomOn({
+                _localStorageTarget: 'zoom',
+            });
         });
 
         return () => {
