@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from 'react';
 
 import Layout from '../../lib/layout';
+import AppState from '../../state/app';
 import InteractiveText from '../general/Texts/InteractiveText/InteractiveText';
 import Text from '../general/Texts/Text/Text';
 
@@ -22,9 +23,11 @@ const UseOurs: FunctionComponent<Props> = () => {
                 style={{ marginLeft: '.3rem', marginTop: '.37rem' }}
                 styleText={{ fontFamily: Layout.font.inter.bold }}
                 action={() =>
-                    window.dotnugg.openLink(
-                        'https://github.com/nuggxyz/nuggft-art/releases/tag/v0.0.1',
-                    )
+                    AppState.dispatch.setArtLocation({
+                        _localStorageValue: '',
+                        _localStorageTarget: 'artLocation',
+                        _localStorageExpectedType: 'unique',
+                    })
                 }>
                 ours
             </InteractiveText>

@@ -15,7 +15,7 @@ import Colors from '../../lib/colors';
 import Dropzone from '../../components/nugg/Dropzone/Dropzone';
 import ArtRepoHandler from '../../components/nugg/ArtRepoHandler/ArtRepoHandler';
 import NuggAssembler from '../../components/nugg/NuggAssembler/NuggAssembler';
-import Flyout from '../../components/general/Flyouts/Flyout/Flyout';
+import Flyout from '../../components/general/Flyout/Flyout';
 import AsepriteFlyout from '../../components/nugg/AsepriteFlyout/AsepriteFlyout';
 import FadeInOut from '../../components/general/FadeInOut/FadeInOut';
 import Loader from '../../components/general/Loader/Loader';

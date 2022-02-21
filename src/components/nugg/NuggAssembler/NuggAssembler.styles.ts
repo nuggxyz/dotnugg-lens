@@ -7,10 +7,12 @@ const styles = NLStyleSheetCreator({
     container: {
         boxShadow: `${Layout.boxShadow.prefix} ${Colors.shadows.nuggPink}`,
         borderRadius: Layout.borderRadius.medium,
+        border: 'none',
         overflow: 'hidden',
         background: Colors.gradient3Transparent,
-        height: '70%',
-        position: 'absolute'
+        height: '75%',
+        width: '90%',
+        position: 'absolute',
     },
     left: {
         justifyContent: 'space-around',
@@ -55,13 +57,13 @@ const styles = NLStyleSheetCreator({
         justifyContent: 'space-between',
         display: 'flex',
         flexDirection: 'column',
-        width: '500px',
+        height: '100%',
+        // minWidth: '500px',
     },
     detailSelectedItems: {
         display: 'flex',
-        width: '500px',
+        // minWidth: '500px',
         overflow: 'scroll',
-        // background: Colors.transparentWhite,
         padding: '0rem .25rem',
     },
     detailSelectedItem: {
@@ -91,7 +93,8 @@ const styles = NLStyleSheetCreator({
         background: Colors.transparentLightGrey,
         borderRadius: Layout.borderRadius.large,
         position: 'absolute',
-        top: '-2rem'
+        top: '-2rem',
+        zIndex: 100,
     },
 });
 

@@ -21,6 +21,9 @@ process.once('loaded', () => {
         openTo: (path, application) => {
             ipcRenderer.send('open-to', path, application);
         },
+        openToVSCode: (path) => {
+            ipcRenderer.send('open-to-vscode', path);
+        },
         openLink: (url) => {
             ipcRenderer.send('open-link', url);
         },

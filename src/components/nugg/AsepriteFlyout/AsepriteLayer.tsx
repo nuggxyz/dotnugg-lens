@@ -8,7 +8,7 @@ import {
     IoSync,
 } from 'react-icons/io5';
 
-import { shortenPathName } from '../../../lib';
+import { getFileFromPath } from '../../../lib';
 import Colors from '../../../lib/colors';
 import Layout from '../../../lib/layout';
 import AppState from '../../../state/app';
@@ -36,9 +36,7 @@ const AsepriteLayer: FunctionComponent<Props> = ({
                 alignItems: 'center',
                 justifyContent: 'space-between',
             }}>
-            <Text type="text">
-                {shortenPathName(item.path).split('/').last()}
-            </Text>
+            <Text type="text">{getFileFromPath(item.path)}</Text>
             <div style={{ display: 'flex' }}>
                 <Button
                     buttonStyle={{

@@ -51,10 +51,7 @@ window.dotnugg.on('script-success', (event, file, layer) => {
             index: state.toasts.length,
             action: (setClose) => {
                 setClose(true);
-                window.dotnugg.openTo(
-                    state.artLocation,
-                    constants.APP_NAME_VS_CODE,
-                );
+                window.dotnugg.openToVSCode(state.artLocation);
             },
         });
         AppState.dispatch.updateAsepriteFiles({
@@ -79,10 +76,7 @@ window.dotnugg.on('script-success', (event, file, layer) => {
             index: state.toasts.length,
             action: (setClose) => {
                 setClose(true);
-                window.dotnugg.openTo(
-                    state.artLocation,
-                    constants.APP_NAME_VS_CODE,
-                );
+                window.dotnugg.openToVSCode(state.artLocation);
             },
         });
         AppState.dispatch.updateAsepriteLayer({
@@ -98,6 +92,7 @@ window.dotnugg.on('script-success', (event, file, layer) => {
 });
 
 window.dotnugg.on('layers', (event, path, layers) => {
+    console.log(layers)
     AppState.dispatch.updateAsepriteFiles({
         path,
         layers: layers.split('\n').reduce((accumulator, layer) => {
