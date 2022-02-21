@@ -58,6 +58,20 @@ const DetailView: FunctionComponent<Props> = ({
         }
     }, [selectedItems, artRepo]);
 
+    useEffect(() => {
+        if (scrollRef.current) {
+            const current = scrollRef.current;
+            const listener = (evt) => {
+                console.log(evt.deltaY);
+                current.scrollLeft += evt.deltaY;
+            };
+            current.addEventListener('wheel', listener);
+            return () => {
+                current.removeEventListener('wheel', listener);
+            };
+        }
+    }, [scrollRef.current]);
+
     return !isUndefinedOrNullOrArrayEmpty(selectedItems) ? (
         <div style={styles.detailContainer}>
             <div

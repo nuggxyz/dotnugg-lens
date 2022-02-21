@@ -302,15 +302,21 @@ export const toGwei = (num: string): ethers.BigNumber => {
     return ethers.utils.parseUnits(num, 'gwei');
 };
 
+export const fileDelimiter = () =>
+    store.getState().app.os === 'win32' ? '\\' : '/';
+
 export const shortenPathName = (pathName: string) => {
-    const splitPath = pathName.split(
-        store.getState().app.os === 'win32' ? '\\' : '/',
-    );
-    return `${splitPath.first(2).join('/')}/.../${splitPath.last(1)}`;
+    const delimiter = fileDelimiter();
+    const splitPath = pathName.split(fileDelimiter());
+    return `${splitPath
+        .first(2)
+        .join(delimiter)}${delimiter}...${delimiter}${splitPath
+        .last(2)
+        .join(delimiter)}`;
 };
 
 export const getFileFromPath = (path: string) => {
-    return path.split(store.getState().app.os === 'win32' ? '\\' : '/').last();
+    return path.split(fileDelimiter()).last();
 };
 
 export const smartInsert = <T>(list: T[], element: T, field?: keyof T) => {

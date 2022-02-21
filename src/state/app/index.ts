@@ -156,12 +156,14 @@ class AppState extends NLState<NL.Redux.App.State> {
                         );
                         file = {
                             ...file,
-                            layers: found.layers.map((layer) => {
-                                return {
-                                    ...layer,
-                                    ...options.layers,
-                                };
-                            }),
+                            layers: !isUndefinedOrNullOrArrayEmpty(found.layers)
+                                ? found.layers.map((layer) => {
+                                      return {
+                                          ...layer,
+                                          ...options.layers,
+                                      };
+                                  })
+                                : [],
                         };
                     }
                 }

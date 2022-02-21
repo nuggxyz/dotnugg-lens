@@ -9,7 +9,11 @@ import {
 } from 'react-icons/io5';
 import { SiVisualstudiocode } from 'react-icons/si';
 
-import { getFileFromPath, shortenPathName } from '../../../lib';
+import {
+    getFileFromPath,
+    isUndefinedOrNullOrNotFunction,
+    shortenPathName,
+} from '../../../lib';
 import Colors from '../../../lib/colors';
 import constants from '../../../lib/constants';
 import globalStyles from '../../../lib/globalStyles';
@@ -32,7 +36,7 @@ const AsepriteFile: FunctionComponent<Props> = ({
     open,
 }) => {
     useLayoutEffect(() => {
-        setOpen(false);
+        setOpen && setOpen(false);
     }, []);
     return (
         <div
@@ -49,24 +53,26 @@ const AsepriteFile: FunctionComponent<Props> = ({
             }}>
             <Text type="text">{getFileFromPath(title.path)}</Text>
             <div style={{ display: 'flex' }}>
-                <Button
-                    buttonStyle={{
-                        background: Colors.nuggBlueTransparent,
-                        borderRadius: Layout.borderRadius.large,
-                        padding: '.5rem',
-                        marginLeft: '.5rem',
-                    }}
-                    onClick={() => {
-                        setOpen(!open);
-                    }}
-                    rightIcon={
-                        open ? (
-                            <IoChevronUp color={Colors.nuggBlueText} />
-                        ) : (
-                            <IoChevronDown color={Colors.nuggBlueText} />
-                        )
-                    }
-                />
+                {!isUndefinedOrNullOrNotFunction(setOpen) && (
+                    <Button
+                        buttonStyle={{
+                            background: Colors.nuggBlueTransparent,
+                            borderRadius: Layout.borderRadius.large,
+                            padding: '.5rem',
+                            marginLeft: '.5rem',
+                        }}
+                        onClick={() => {
+                            setOpen(!open);
+                        }}
+                        rightIcon={
+                            open ? (
+                                <IoChevronUp color={Colors.nuggBlueText} />
+                            ) : (
+                                <IoChevronDown color={Colors.nuggBlueText} />
+                            )
+                        }
+                    />
+                )}
                 {/* <Button
                     buttonStyle={{
                         background: Colors.nuggBlueTransparent,

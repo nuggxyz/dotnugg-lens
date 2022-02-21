@@ -88,6 +88,7 @@ interface Window {
         ) => void;
         send: (eventName: string) => void;
         openTo: (path: string, application?: string) => void;
+        openToVSCode: (path: string) => void;
         clearCache: (path: string) => void;
         openLink: (url: string) => void;
         selectFiles: () => void;

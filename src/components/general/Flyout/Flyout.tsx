@@ -5,7 +5,7 @@ import React, {
 } from 'react';
 import { animated, config, useTransition } from 'react-spring';
 
-import useOnHover from '../../../../hooks/useOnHover';
+import useOnHover from '../../../hooks/useOnHover';
 
 import styles from './Flyout.styles';
 

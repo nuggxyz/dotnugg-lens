@@ -2,7 +2,7 @@
     "name": "dotnugg-lens",
     "productName": "dotnuggLens",
     "homepage": ".",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "description": "dotnugg desktop application",
     "main": "index.js",
     "author": "@nuggxyz",
@@ -34,7 +34,7 @@
         "mac": {
             "artifactName": "${productName}-${version}.${ext}",
             "category": "public.app-category.productivity",
-            "target": ["dmg", "zip"]
+            "target": ["dmg"]
         },
         "linux": {
             "artifactName": "${productName}-${version}-${arch}.${ext}",
@@ -42,7 +42,7 @@
             "target": ["tar.gz", "deb", "rpm"]
         },
         "win": {
-            "target": ["zip", "dir"]
+            "target": ["nsis"]
         }
     },
     "eslintConfig": {
