@@ -14,7 +14,10 @@ import { animated, config, SpringProps, useSpring } from 'react-spring';
 import useIsVisible from '../../../hooks/useIsVisible';
 import useMeasure from '../../../hooks/useMeasure';
 import usePrevious from '../../../hooks/usePrevious';
-import { isUndefinedOrNullOrArrayEmpty } from '../../../lib';
+import {
+    isUndefinedOrNullOrArrayEmpty,
+    isUndefinedOrNullOrNotArray,
+} from '../../../lib';
 
 import { ListRenderItemProps } from './List';
 import styles from './List.styles';
@@ -39,6 +42,7 @@ type Props = {
     styleLeft?: CSSProperties;
     styleRight?: CSSProperties;
     Children?: FunctionComponent<any>;
+    showEmptyGroups?: boolean;
 };
 
 const StickyList: FunctionComponent<PropsWithChildren<Props>> = ({
@@ -51,6 +55,7 @@ const StickyList: FunctionComponent<PropsWithChildren<Props>> = ({
     styleLeft,
     styleRight,
     children,
+    showEmptyGroups = false,
     ...props
 }) => {
     const refData = useMemo(
@@ -93,7 +98,7 @@ const StickyList: FunctionComponent<PropsWithChildren<Props>> = ({
                                                     .top +
                                                 listRef.current.scrollTop -
                                                 listRef.current.offsetHeight /
-                                                    4.7,
+                                                    6.02,
                                         })
                                     }
                                     isSelected={!current.includes(item.title)}
@@ -125,11 +130,13 @@ const StickyList: FunctionComponent<PropsWithChildren<Props>> = ({
                 style={{
                     height: '100%',
                     overflow: 'scroll',
+                    flexGrow: 1,
                     ...styleRight,
                 }}
                 ref={listRef}>
                 {refData.map((item, index) =>
-                    refData[index].items && refData[index].items.length > 0 ? (
+                    !isUndefinedOrNullOrNotArray(refData[index].items) &&
+                    refData[index].items.length > (showEmptyGroups ? -1 : 0) ? (
                         <React.Fragment key={`list-${index}`}>
                             <RenderItem
                                 {...{
@@ -149,7 +156,20 @@ const StickyList: FunctionComponent<PropsWithChildren<Props>> = ({
                     ) : null,
                 )}
             </div>
-            {children && children}
+            {children && (
+                <div
+                    style={{
+                        position: 'relative',
+                        flexGrow: 1,
+                        height: '100%',
+                        justifyContent: 'space-between',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        width: '40%',
+                    }}>
+                    {children}
+                </div>
+            )}
         </animated.div>
     );
 };
@@ -187,15 +207,19 @@ const RenderItem = ({
         },
     });
     return (
-        <div id={item.title} ref={item.ref}>
+        <div id={JSON.stringify(item.title)} ref={item.ref}>
             <div
                 // ref={ref}
                 style={styles.sticky}>
                 <TitleRenderItem
                     title={item.title}
-                    setOpen={setOpen}
+                    setOpen={
+                        !isUndefinedOrNullOrArrayEmpty(item.items)
+                            ? setOpen
+                            : undefined
+                    }
                     extraData={extraData}
-                    open={open}
+                    open={!isUndefinedOrNullOrArrayEmpty(item.items) && open}
                 />
             </div>
             <animated.div

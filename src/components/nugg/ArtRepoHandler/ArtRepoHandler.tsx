@@ -16,7 +16,7 @@ import constants from '../../../lib/constants';
 import AppState from '../../../state/app';
 import Web3Config from '../../../Web3Config';
 import Button from '../../general/Buttons/Button/Button';
-import Flyout from '../../general/Flyouts/Flyout/Flyout';
+import Flyout from '../../general/Flyout/Flyout';
 import InteractiveText from '../../general/Texts/InteractiveText/InteractiveText';
 import Text from '../../general/Texts/Text/Text';
 
@@ -73,12 +73,7 @@ const ArtRepoHandler: FunctionComponent<Props> = () => {
                             />
                         }
                         label="Open in VS Code"
-                        onClick={() =>
-                            window.dotnugg.openTo(
-                                artLocation,
-                                constants.APP_NAME_VS_CODE,
-                            )
-                        }
+                        onClick={() => window.dotnugg.openToVSCode(artLocation)}
                     />
                     <div style={styles.divider} />
                     <Button

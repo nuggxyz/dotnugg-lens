@@ -2,7 +2,7 @@ import React, { FunctionComponent, useMemo } from 'react';
 import { IoDocument } from 'react-icons/io5';
 
 import { DotnuggV1Helper } from '../../../contracts/DotnuggHelper';
-import { isUndefinedOrNullOrObjectEmpty } from '../../../lib';
+import { getFileFromPath, isUndefinedOrNullOrObjectEmpty } from '../../../lib';
 import Text from '../../general/Texts/Text/Text';
 import Colors from '../../../lib/colors';
 import Button from '../../general/Buttons/Button/Button';
@@ -44,7 +44,7 @@ const ChildRenderItem: FunctionComponent<Props> = ({
                             color: Colors.transparentDarkGrey,
                             marginLeft: '.5rem',
                         }}>
-                        {item.fileName}
+                        {getFileFromPath(item.fileName)}
                     </Text>
                 </div>
             }

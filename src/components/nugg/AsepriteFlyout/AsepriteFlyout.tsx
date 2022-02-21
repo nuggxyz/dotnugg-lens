@@ -32,7 +32,7 @@ const AsepriteFlyout: FunctionComponent<Props> = ({
                           compiled: file.compiled,
                           loading: file.loading,
                       },
-                      items: file.layers,
+                      items: file.layers ? file.layers : [],
                   };
               })
             : [];
@@ -50,6 +50,7 @@ const AsepriteFlyout: FunctionComponent<Props> = ({
             extraData={[artLocation]}
             TitleRenderItem={AsepriteFile}
             ChildRenderItem={AsepriteLayer}
+            showEmptyGroups
         />
     ) : (
         // <>
