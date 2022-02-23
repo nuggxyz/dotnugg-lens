@@ -21,7 +21,7 @@ const UseOurs: FunctionComponent<Props> = () => {
             <InteractiveText
                 type="text"
                 style={{ marginLeft: '.3rem', marginTop: '.37rem' }}
-                styleText={{ fontFamily: Layout.font.inter.bold }}
+                styleText={{ fontFamily: Layout.font.sf.bold }}
                 action={() =>
                     AppState.dispatch.setArtLocation({
                         _localStorageValue: '',

@@ -5,11 +5,11 @@ import Colors from '../../../../lib/colors';
 
 const styles = NLStyleSheetCreator({
     title: {
-        fontFamily: Layout.font.montserrat.bold,
+        fontFamily: Layout.font.sf.bold,
         // color: Colors.textColor,
     },
     text: {
-        fontFamily: Layout.font.inter.regular,
+        fontFamily: Layout.font.sf.regular,
         // color: Colors.textColor,
     },
     code: {

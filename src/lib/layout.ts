@@ -25,17 +25,11 @@ const Layout = {
         prefix: '0 6px 10px',
     },
     font: {
-        inter: {
-            light: 'Inter',
-            regular: 'Inter',
-            bold: 'Inter-SemiBold',
-            semibold: 'Inter-SemiBold',
-        },
-        montserrat: {
-            light: 'Montserrat',
-            regular: 'Montserrat',
-            bold: 'Montserrat',
-            semibold: 'Montserrat',
+        sf: {
+            light: 'SFProRounded-Light',
+            regular: 'SFProRounded-Regular',
+            bold: 'SFProRounded-Bold',
+            semibold: 'SFProRounded-Semibold',
         },
         code: {
             light: 'SF-Mono',

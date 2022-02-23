@@ -59,7 +59,7 @@ const styles = NLStyleSheetCreator({
         opacity: 0,
     },
     text: {
-        fontFamily: Layout.font.inter.bold,
+        fontFamily: Layout.font.sf.bold,
         fontWeight: 'bold',
         color: Colors.textColor,
     },
