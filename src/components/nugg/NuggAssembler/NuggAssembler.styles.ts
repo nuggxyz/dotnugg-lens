@@ -94,7 +94,7 @@ const styles = NLStyleSheetCreator({
         borderRadius: Layout.borderRadius.large,
         position: 'absolute',
         top: '-2rem',
-        zIndex: 100,
+        zIndex: 5,
     },
 });
 
