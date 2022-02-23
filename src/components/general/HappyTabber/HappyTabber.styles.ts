@@ -33,12 +33,12 @@ const styles = NLStyleSheetCreator({
         cursor: 'pointer',
         zIndex: 5,
     },
-    headerTextBold: { fontWeight: 'bold', fontFamily: Layout.font.inter.bold },
+    headerTextBold: { fontWeight: 'bold', fontFamily: Layout.font.sf.bold },
     headerText: {
-        fontFamily: Layout.font.inter.regular,
+        fontFamily: Layout.font.sf.regular,
     },
     headerTextMobile: {
-        fontFamily: Layout.font.inter.regular,
+        fontFamily: Layout.font.sf.regular,
         textShadow: `0 0 20px ${Colors.textColor}`,
     },
     body: {
