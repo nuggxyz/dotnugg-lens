@@ -301,26 +301,26 @@ ipcMain.on(
                 if (!sourcePath.endsWith('.aseprite')) {
                     throw new Error('Selected file is not an aseprite file');
                 }
-                let filenames = sourcePath.split('.')[0].split(pathDelimiter());
-                if (
-                    fs.existsSync(`${destPath}`) &&
-                    !fs.existsSync(
-                        `${destPath}${pathDelimiter()}generated_${
-                            filenames[filenames.length - 1]
-                        }`,
-                    )
-                ) {
-                    exec(
-                        `mkdir "${destPath}${pathDelimiter()}generated_${
-                            filenames[filenames.length - 1]
-                        }"`,
-                    );
-                } else if (!fs.existsSync(`${destPath}`)) {
+                if (!fs.existsSync(`${destPath}`)) {
                     throw new Error('Incorrect Art Repo');
                 }
+                const filenames = sourcePath
+                    .split('.')[0]
+                    .split(pathDelimiter());
+                const dir = `generated_${filenames[filenames.length - 1]}`;
+                const base = `${destPath}${pathDelimiter()}${dir}`;
+                const count = fs
+                    .readdirSync(destPath, { withFileTypes: true })
+                    .filter(
+                        (entry) =>
+                            entry.isDirectory() && entry.name.includes(dir),
+                    ).length;
+                exec(`mkdir "${base}_${count + 1}"`);
 
                 exec(
-                    `${asepritePath()} -b --script-param source="${sourcePath}" --script-param dest="${destPath}" --script-param layer="${layer}" --script "${
+                    `${asepritePath()} -b --script-param source="${sourcePath}" --script-param dest="${base}_${
+                        count + 1
+                    }" --script-param layer="${layer}" --script "${
                         isDev
                             ? `.${pathDelimiter()}aseprite2dotnugg.lua`
                             : path.join(
