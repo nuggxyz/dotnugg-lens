@@ -109,7 +109,7 @@ local function exportFrame(frm)
             img:drawSprite(sprite, frm)
             usedColors = {}
 
-            local f = io.open(app.params["dest"] .. "/generated_" .. pathNames[#pathNames] .. "/" .. "generated." .. i .. "." .. layer.name:gsub("/", "_") .. "_frm_" .. frm .. ".item.nugg", "w")
+            local f = io.open(app.params["dest"] .. "/" .. "generated." .. i .. "." .. layer.name:gsub("/", "_") .. "_frm_" .. frm .. ".item.nugg", "w")
             io.output(f)
 
             io.write("// This is a dotnugg item file:\n")
