@@ -28,6 +28,8 @@ import FadeInOut from '../../general/FadeInOut/FadeInOut';
 import Loader from '../../general/Loader/Loader';
 import Text from '../../general/Texts/Text/Text';
 import usePrevious from '../../../hooks/usePrevious';
+import constants from '../../../lib/constants';
+import Label from '../../general/Label/Label';
 
 import styles from './NuggAssembler.styles';
 
@@ -70,7 +72,7 @@ const DetailView: FunctionComponent<Props> = ({
                 // scrollRef.current.scrollTo(scrollRef.current.scrollWidth, 0);
             }
         }
-    }, [liveSelectedItems, artRepo, setLoading]);
+    }, [liveSelectedItems, artRepo, setLoading, prev]);
 
     useEffect(() => {
         refresh();
@@ -102,19 +104,12 @@ const DetailView: FunctionComponent<Props> = ({
                     display: 'flex',
                 }}>
                 {!isUndefinedOrNullOrStringEmpty(svg) && (
-                    <div
+                    <img
+                        src={svg}
                         style={{
-                            position: 'fixed',
-                        }}>
-                        <AnimatedCard disabled={!isZoomOn}>
-                            <img
-                                src={svg}
-                                style={{
-                                    height: height / 2.1,
-                                }}
-                            />
-                        </AnimatedCard>
-                    </div>
+                            width: '90%',
+                        }}
+                    />
                 )}
             </div>
             <div style={{ position: 'relative' }}>
@@ -187,7 +182,13 @@ const DetailView: FunctionComponent<Props> = ({
                 <div ref={scrollRef} style={styles.detailSelectedItems}>
                     {liveSelectedItems.map((item, index) => (
                         <div
-                            style={styles.detailSelectedItem}
+                            style={{
+                                ...styles.detailSelectedItem,
+                                width: 150,
+                                alignItems: 'center',
+                                display: 'flex',
+                                justifyContent: 'center',
+                            }}
                             key={`item-${index}`}>
                             <Button
                                 buttonStyle={styles.detailSelectedItemClose}
@@ -215,28 +216,39 @@ const DetailView: FunctionComponent<Props> = ({
                             <img
                                 src={item.svg}
                                 style={{
-                                    height: '150px',
-                                    width: '150px',
+                                    height: '80%',
                                 }}
                             />
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    ...styles.detailSelectedItemId,
+                                    top: undefined,
+                                    bottom: ' .5rem',
+                                    right: undefined,
+                                }}>
+                                <Label
+                                    type="text"
+                                    size="small"
+                                    textStyle={{
+                                        color: Colors.transparentDarkGrey,
+                                        // marginLeft: '.5rem',
+                                        fontSize: '10px',
+                                        fontWeight: 'bold',
+                                    }}
+                                    text={
+                                        constants.DOTNUGG_ITEMS[item.feature] +
+                                        ' ' +
+                                        item.id
+                                    }></Label>
+                            </div>
                         </div>
                     ))}
                 </div>
             </div>
         </div>
-    ) : (
-        <div
-            style={{
-                ...styles.detailContainer,
-                ...styles.detailEmptyContainer,
-            }}>
-            <Text
-                type="text"
-                textStyle={{ color: 'white', textAlign: 'center' }}>
-                Select some items to combine together
-            </Text>
-        </div>
-    );
+    ) : null;
 };
 
 export default DetailView;
