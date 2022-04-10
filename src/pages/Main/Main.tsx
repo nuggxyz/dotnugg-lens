@@ -43,7 +43,7 @@ const Main = () => {
         });
         return [
             {
-                title: 'Recently Viewed',
+                title: 'RECENT',
                 items: items.sort((a, b) => (a.time > b.time ? -1 : 1)),
             },
             ...compiledItems,
