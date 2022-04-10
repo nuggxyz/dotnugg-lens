@@ -8,16 +8,23 @@ import Colors from '../../../lib/colors';
 import Button from '../../general/Buttons/Button/Button';
 import Loader from '../../general/Loader/Loader';
 import { Item } from '../../../state/ipcListeners';
+import AppState from '../../../state/app';
 
 import styles from './NuggAssembler.styles';
 
-type Props = { item: Item['items'][number]; extraData: any[]; index: number };
+type Props = {
+    item: Item['items'][number];
+    extraData: any[];
+    index: number;
+};
 
 const ChildRenderItem: FunctionComponent<Props> = ({
     item,
     extraData,
     index,
 }) => {
+    const liveItem = AppState.hook.useCompiledItem(item.fileUri);
+
     const isSelected = useMemo(() => {
         return !isUndefinedOrNullOrObjectEmpty(
             extraData[0].find(
@@ -53,20 +60,23 @@ const ChildRenderItem: FunctionComponent<Props> = ({
                 extraData[1]((items) => {
                     // item = { ...item, svg: item.svg };
 
-                    console.log(items);
                     const ok = items.filter((x) => x.feature !== item.feature);
 
                     ok.push(item);
 
                     ok.sort((a, b) => a.feature - b.feature);
 
+                    // @ts-ignore - only recents have a time
+                    if (!item.time)
+                        AppState.dispatch.addRecent({ fileUri: item.fileUri });
+
                     return ok;
                 });
             }}
             rightIcon={
-                item.svg ? (
+                liveItem?.svg || item.svg ? (
                     <img
-                        src={item.svg}
+                        src={liveItem?.svg || item.svg}
                         style={{
                             height: '150px',
                             width: '150px',

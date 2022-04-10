@@ -25,9 +25,30 @@ import styles from './Main.styles';
 
 const Main = () => {
     const compiledItems = AppState.select.compiledItems();
+    const recents = AppState.select.recents();
+
     const artLocation = AppState.select.artLocation();
     const asepriteFiles = AppState.select.asepriteFiles();
     const loading = AppState.select.mainProcessLoading();
+
+    const recentAndCompiled = React.useMemo(() => {
+        const items: (typeof compiledItems[number]['items'][number] & {
+            time: number;
+        })[] = [];
+        compiledItems.forEach((x) => {
+            x.items.forEach((y) => {
+                const t = recents.find((z) => z.fileUri === y.fileUri);
+                if (t) items.push({ ...y, time: t.time });
+            });
+        });
+        return [
+            {
+                title: 'Recently Viewed',
+                items: items.sort((a, b) => (a.time > b.time ? -1 : 1)),
+            },
+            ...compiledItems,
+        ];
+    }, [recents, compiledItems]);
 
     return (
         <Dropzone
@@ -133,7 +154,7 @@ const Main = () => {
                 </div>
             )}
             {!isUndefinedOrNullOrStringEmpty(artLocation) && (
-                <NuggAssembler data={compiledItems} />
+                <NuggAssembler data={recentAndCompiled} />
             )}
         </Dropzone>
     );

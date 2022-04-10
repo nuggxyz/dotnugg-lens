@@ -114,7 +114,10 @@ const NuggAssembler: FunctionComponent<Props> = ({ data }) => {
                 TitleRenderItem={TitleRenderItem}
                 FeatureRenderItem={FeatureRenderItem}
                 extraData={[selectedItems, setSelectedItems]}>
-                <DetailView {...{ selectedItems, setSelectedItems }} />
+                <DetailView
+                    selectedItems={selectedItems}
+                    setSelectedItems={setSelectedItems}
+                />
             </StickyList>
         ),
     );

@@ -27,6 +27,7 @@ import AnimatedCard from '../../general/Cards/AnimatedCard/AnimatedCard';
 import FadeInOut from '../../general/FadeInOut/FadeInOut';
 import Loader from '../../general/Loader/Loader';
 import Text from '../../general/Texts/Text/Text';
+import usePrevious from '../../../hooks/usePrevious';
 
 import styles from './NuggAssembler.styles';
 
@@ -46,26 +47,34 @@ const DetailView: FunctionComponent<Props> = ({
     const { height } = AppState.select.dimensions();
     const artRepo = AppState.select.artLocation();
 
+    const liveSelectedItems = AppState.hook.useCompiledItems(
+        selectedItems.map((x) => x.fileUri),
+    );
+
+    const prev = usePrevious(liveSelectedItems);
+
     const refresh = React.useCallback(() => {
-        if (!isUndefinedOrNullOrArrayEmpty(selectedItems)) {
-            setLoading(true);
-            DotnuggV1Helper.renderOnChain(
-                selectedItems.map((item) =>
-                    window.dotnugg.getHex(item, artRepo),
-                ),
-                true,
-            )
-                .then((svg) => setSvg(svg))
-                .catch((e) => alert(e))
-                .finally(() => setLoading(false));
-            // scrollRef.current.scrollTo(scrollRef.current.scrollWidth, 0);
+        if (!isUndefinedOrNullOrArrayEmpty(liveSelectedItems)) {
+            if (JSON.stringify(prev) !== JSON.stringify(liveSelectedItems)) {
+                setLoading(true);
+                console.log({ liveSelectedItems });
+                DotnuggV1Helper.renderOnChain(
+                    liveSelectedItems.map((item) =>
+                        window.dotnugg.getHex(item, artRepo),
+                    ),
+                    true,
+                )
+                    .then((svg) => setSvg(svg))
+                    .catch((e) => alert(e))
+                    .finally(() => setLoading(false));
+                // scrollRef.current.scrollTo(scrollRef.current.scrollWidth, 0);
+            }
         }
-    }, [selectedItems, artRepo]);
+    }, [liveSelectedItems, artRepo, setLoading]);
 
     useEffect(() => {
         refresh();
-        console.log('freshhhhh');
-    }, [selectedItems, artRepo, refresh]);
+    }, [liveSelectedItems, refresh]);
 
     useEffect(() => {
         if (scrollRef.current) {
@@ -176,7 +185,7 @@ const DetailView: FunctionComponent<Props> = ({
                     </div>
                 </FadeInOut>
                 <div ref={scrollRef} style={styles.detailSelectedItems}>
-                    {selectedItems.map((item, index) => (
+                    {liveSelectedItems.map((item, index) => (
                         <div
                             style={styles.detailSelectedItem}
                             key={`item-${index}`}>
