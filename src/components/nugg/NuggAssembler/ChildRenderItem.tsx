@@ -7,10 +7,11 @@ import Text from '../../general/Texts/Text/Text';
 import Colors from '../../../lib/colors';
 import Button from '../../general/Buttons/Button/Button';
 import Loader from '../../general/Loader/Loader';
+import { Item } from '../../../state/ipcListeners';
 
 import styles from './NuggAssembler.styles';
 
-type Props = { item: any; extraData: any[]; index: number };
+type Props = { item: Item['items'][number]; extraData: any[]; index: number };
 
 const ChildRenderItem: FunctionComponent<Props> = ({
     item,
@@ -51,9 +52,15 @@ const ChildRenderItem: FunctionComponent<Props> = ({
             onClick={() => {
                 extraData[1]((items) => {
                     // item = { ...item, svg: item.svg };
-                    return items
-                        .toggle(item, 'fileName')
-                        .sort((a, b) => a.feature - b.feature);
+
+                    console.log(items);
+                    const ok = items.filter((x) => x.feature !== item.feature);
+
+                    ok.push(item);
+
+                    ok.sort((a, b) => a.feature - b.feature);
+
+                    return ok;
                 });
             }}
             rightIcon={

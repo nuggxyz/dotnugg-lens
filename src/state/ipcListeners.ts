@@ -1,8 +1,17 @@
+import { dotnugg } from '@nuggxyz/dotnugg-sdk';
+import { Builder } from '@nuggxyz/dotnugg-sdk/dist/builder';
+import { Output } from '@nuggxyz/dotnugg-sdk/dist/builder/types/BuilderTypes';
+
 import { getFileFromPath, isUndefinedOrNullOrStringEmpty } from '../lib';
 import constants from '../lib/constants';
 
 import AppState from './app';
 import store from './store';
+
+export type Item = {
+    title: string;
+    items: (Output & { svg: string; title: string | undefined })[];
+};
 
 window.dotnugg.on('file-selected', (event, path) => {
     AppState.dispatch.setArtLocation({
@@ -12,7 +21,7 @@ window.dotnugg.on('file-selected', (event, path) => {
     });
 });
 
-window.dotnugg.on('items-fetched', (event, items) => {
+window.dotnugg.on('items-fetched', (event, items: Item[]) => {
     AppState.dispatch.setMainProcessLoading(false);
     AppState.dispatch.setCompiledItems(items);
 });
@@ -92,7 +101,7 @@ window.dotnugg.on('script-success', (event, file, layer) => {
 });
 
 window.dotnugg.on('layers', (event, path, layers) => {
-    console.log(layers)
+    console.log(layers);
     AppState.dispatch.updateAsepriteFiles({
         path,
         layers: layers.split('\n').reduce((accumulator, layer) => {

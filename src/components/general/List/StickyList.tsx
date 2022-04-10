@@ -9,7 +9,7 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import { animated, config, SpringProps, useSpring } from 'react-spring';
+import { animated, config, SpringProps, useSpring } from '@react-spring/web';
 
 import useIsVisible from '../../../hooks/useIsVisible';
 import useMeasure from '../../../hooks/useMeasure';
@@ -22,8 +22,8 @@ import {
 import { ListRenderItemProps } from './List';
 import styles from './List.styles';
 
-type Props = {
-    data: { title: any; items: any[] }[];
+type Props<T> = {
+    data: T[];
     ChildRenderItem: FunctionComponent<ListRenderItemProps<any>>;
     TitleRenderItem: FunctionComponent<{
         title: any;
@@ -43,9 +43,10 @@ type Props = {
     styleRight?: CSSProperties;
     Children?: FunctionComponent<any>;
     showEmptyGroups?: boolean;
+    children?: any;
 };
 
-const StickyList: FunctionComponent<PropsWithChildren<Props>> = ({
+const StickyList = <T extends unknown>({
     data,
     ChildRenderItem,
     TitleRenderItem,
@@ -57,11 +58,12 @@ const StickyList: FunctionComponent<PropsWithChildren<Props>> = ({
     children,
     showEmptyGroups = false,
     ...props
-}) => {
+}: Props<T>) => {
     const refData = useMemo(
         () =>
             data.map((item) => {
                 return {
+                    // @ts-ignore
                     ...item,
                     ref: React.createRef<HTMLDivElement>(),
                 };

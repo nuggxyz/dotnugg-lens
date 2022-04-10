@@ -1667,20 +1667,20 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@nuggxyz/dotnugg-grammar@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@nuggxyz/dotnugg-grammar/-/dotnugg-grammar-0.2.1.tgz#d760d4ebe0805fc56b29db227d566c8933d49aec"
-  integrity sha512-c7SfmFKVH1dhdCqB/FHKeibJAtpF0VYyBTLSr6m0fM67v0uCpdFPKTvPb7nOsY280xBBh04hVvaiblnvAAkIPw==
+"@nuggxyz/dotnugg-grammar@^0.2.4":
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/@nuggxyz/dotnugg-grammar/-/dotnugg-grammar-0.2.4.tgz#7bad06a426c13a1ec306159c0c491bfbaabde6e6"
+  integrity sha512-6zf4olYNSeYUTfu7+cTavUQIY9Yn8n2hVgXrXI/Lnxgyxof4n2e4BGc9bvi8/hFz3Lee/3o2SGqEKYt+RPWpjA==
 
-"@nuggxyz/dotnugg-sdk@0.1.31":
-  version "0.1.31"
-  resolved "https://registry.yarnpkg.com/@nuggxyz/dotnugg-sdk/-/dotnugg-sdk-0.1.31.tgz#433fa57dc0cb7fa41a93767e28389df6174d72b7"
-  integrity sha512-s0syBN/aObj06b6NnmiwsehLY6YP2Jxl5aM0FzzoT8ayFwNN2dW2AMDG4Eu470Md/DR86w39lN97YCtqOi6CyA==
+"@nuggxyz/dotnugg-sdk@^0.1.37":
+  version "0.1.37"
+  resolved "https://registry.yarnpkg.com/@nuggxyz/dotnugg-sdk/-/dotnugg-sdk-0.1.37.tgz#653f05f517f24f72a7e60e1522becaf7b85c9e2d"
+  integrity sha512-LRZib5wcXlVZVji7e77MR8YojlruGhCQ/XMm5yVXIRoqYiz/YQh6bWHngkm3Lf6jSljN4oM0TpLWHKOLon2Aew==
   dependencies:
     "@ethersproject/abi" "^5.0.0"
     "@ethersproject/bytes" "^5.0.0"
     "@ethersproject/providers" "^5.0.0"
-    "@nuggxyz/dotnugg-grammar" "^0.2.1"
+    "@nuggxyz/dotnugg-grammar" "^0.2.4"
     chokidar "^3.5.3"
     color-parse "^1.4.2"
     ethers "^5.5.4"
@@ -2367,6 +2367,13 @@
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/@types/tapable/-/tapable-1.0.8.tgz#b94a4391c85666c7b73299fd3ad79d4faa435310"
   integrity sha512-ipixuVrh2OdNmauvtT51o3d8z12p6LtFW9in7U79der/kwejjdNchQC5UMn5u/KxNoM7VHHOs/l8KS8uHxhODQ==
+
+"@types/tapable@^2.2.2":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@types/tapable/-/tapable-2.2.2.tgz#1d324b524190954a5700d86b6328bfc57e1fda48"
+  integrity sha512-ujqOVJEeLcwpDVJPnp/k3u1UXmTKq5urJq9fO8aUKg8Vlel5RNOFbVKEfqfh6wGfF/M+HiTJlBJMLC1aDfyf0Q==
+  dependencies:
+    tapable "^2.2.0"
 
 "@types/trusted-types@^2.0.2":
   version "2.0.2"

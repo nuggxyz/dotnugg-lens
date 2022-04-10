@@ -11,13 +11,17 @@ import {
     IoClose,
     IoEllipseOutline,
 } from 'react-icons/io5';
+import { SiVisualstudiocode } from 'react-icons/si';
+import { IoSync } from 'react-icons/io5';
 
 import { DotnuggV1Helper } from '../../../contracts/DotnuggHelper';
 import {
     isUndefinedOrNullOrArrayEmpty,
     isUndefinedOrNullOrStringEmpty,
 } from '../../../lib';
+import Colors from '../../../lib/colors';
 import AppState from '../../../state/app';
+import { Item } from '../../../state/ipcListeners';
 import Button from '../../general/Buttons/Button/Button';
 import AnimatedCard from '../../general/Cards/AnimatedCard/AnimatedCard';
 import FadeInOut from '../../general/FadeInOut/FadeInOut';
@@ -27,7 +31,7 @@ import Text from '../../general/Texts/Text/Text';
 import styles from './NuggAssembler.styles';
 
 type Props = {
-    selectedItems: any[];
+    selectedItems: Item['items'][number][];
     setSelectedItems: React.Dispatch<SetStateAction<any>>;
 };
 
@@ -42,7 +46,7 @@ const DetailView: FunctionComponent<Props> = ({
     const { height } = AppState.select.dimensions();
     const artRepo = AppState.select.artLocation();
 
-    useEffect(() => {
+    const refresh = React.useCallback(() => {
         if (!isUndefinedOrNullOrArrayEmpty(selectedItems)) {
             setLoading(true);
             DotnuggV1Helper.renderOnChain(
@@ -57,6 +61,11 @@ const DetailView: FunctionComponent<Props> = ({
             // scrollRef.current.scrollTo(scrollRef.current.scrollWidth, 0);
         }
     }, [selectedItems, artRepo]);
+
+    useEffect(() => {
+        refresh();
+        console.log('freshhhhh');
+    }, [selectedItems, artRepo, refresh]);
 
     useEffect(() => {
         if (scrollRef.current) {
@@ -113,7 +122,7 @@ const DetailView: FunctionComponent<Props> = ({
                         <Loader color="white" />
                     </div>
                 </FadeInOut>
-                <FadeInOut toggle={!loading}>
+                {/* <FadeInOut toggle={!loading}>
                     <div style={styles.detailLoading}>
                         <Button
                             hoverStyle={{ filter: 'brightness(.9)' }}
@@ -146,6 +155,25 @@ const DetailView: FunctionComponent<Props> = ({
                             }
                         />
                     </div>
+                </FadeInOut> */}
+                <FadeInOut toggle={!loading}>
+                    <div style={styles.detailLoading}>
+                        <Button
+                            hoverStyle={{ filter: 'brightness(.9)' }}
+                            buttonStyle={{
+                                background: 'transparent',
+                                padding: '0',
+                            }}
+                            type="text"
+                            textStyle={{
+                                color: 'white',
+                                marginRight: '.5rem',
+                            }}
+                            label="Refresh"
+                            onClick={() => refresh()}
+                            rightIcon={<IoSync color="white" size={20} />}
+                        />
+                    </div>
                 </FadeInOut>
                 <div ref={scrollRef} style={styles.detailSelectedItems}>
                     {selectedItems.map((item, index) => (
@@ -159,6 +187,20 @@ const DetailView: FunctionComponent<Props> = ({
                                     setSelectedItems((items) =>
                                         items.toggle(item, 'fileName'),
                                     )
+                                }
+                            />
+                            <Button
+                                buttonStyle={styles.detailSelectedVsCode}
+                                type="text"
+                                size="small"
+                                leftIcon={
+                                    <SiVisualstudiocode
+                                        color={Colors.nuggBlueText}
+                                        size={20}
+                                    />
+                                }
+                                onClick={() =>
+                                    window.dotnugg.openToVSCode(item.fileUri)
                                 }
                             />
                             <img
