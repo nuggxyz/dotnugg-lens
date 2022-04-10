@@ -99,7 +99,14 @@ interface Window {
         ) => void;
         checkOs: () => NL.Redux.App.OS;
         listLayers: (path: string) => void;
-        getHex: (item: any, path: string) => import('ethers').BigNumber[];
+        getHex: (
+            item: import('./state/ipcListeners').Item['items'][number],
+            path: string,
+        ) => import('ethers').BigNumber[];
+        getLiveHex: (
+            item: import('./state/ipcListeners').Item['items'][number],
+            path: string,
+        ) => import('ethers').BigNumber[];
         getLensDefault: () => string;
     };
 }
