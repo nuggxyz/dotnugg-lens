@@ -60,10 +60,21 @@ const DetailView: FunctionComponent<Props> = ({
             if (JSON.stringify(prev) !== JSON.stringify(liveSelectedItems)) {
                 setLoading(true);
                 console.log({ liveSelectedItems });
+                const tmp = liveSelectedItems;
                 DotnuggV1Helper.renderOnChain(
-                    liveSelectedItems.map((item) =>
-                        window.dotnugg.getHex(item, artRepo),
-                    ),
+                    [
+                        ...tmp
+                            .sort((a, b) => (a.feature < b.feature ? -1 : 1))
+                            .map((item) =>
+                                window.dotnugg.getHex(item, artRepo),
+                            ),
+                        ///////// bad ////////
+                        // [],
+                        // [],
+                        ///////// good ////////
+                        // [],
+                        // [],
+                    ],
                     true,
                 )
                     .then((svg) => setSvg(svg))
@@ -179,12 +190,20 @@ const DetailView: FunctionComponent<Props> = ({
                         />
                     </div>
                 </FadeInOut>
-                <div ref={scrollRef} style={styles.detailSelectedItems}>
+                <div
+                    ref={scrollRef}
+                    style={{
+                        ...styles.detailSelectedItems,
+                        marginRight: '30px',
+                        width: '100%',
+                        justifyContent: 'space-around',
+                        flexWrap: 'wrap',
+                    }}>
                     {liveSelectedItems.map((item, index) => (
                         <div
                             style={{
                                 ...styles.detailSelectedItem,
-                                width: 150,
+                                minWidth: 120,
                                 alignItems: 'center',
                                 display: 'flex',
                                 justifyContent: 'center',
@@ -192,7 +211,7 @@ const DetailView: FunctionComponent<Props> = ({
                             key={`item-${index}`}>
                             <Button
                                 buttonStyle={styles.detailSelectedItemClose}
-                                rightIcon={<IoClose />}
+                                rightIcon={<IoClose size={15} />}
                                 onClick={() =>
                                     setSelectedItems((items) =>
                                         items.toggle(item, 'fileName'),
@@ -206,7 +225,7 @@ const DetailView: FunctionComponent<Props> = ({
                                 leftIcon={
                                     <SiVisualstudiocode
                                         color={Colors.nuggBlueText}
-                                        size={20}
+                                        size={15}
                                     />
                                 }
                                 onClick={() =>
@@ -216,7 +235,7 @@ const DetailView: FunctionComponent<Props> = ({
                             <img
                                 src={item.svg}
                                 style={{
-                                    height: '80%',
+                                    height: '55%',
                                 }}
                             />
                             <div
@@ -224,9 +243,9 @@ const DetailView: FunctionComponent<Props> = ({
                                     display: 'flex',
                                     alignItems: 'center',
                                     ...styles.detailSelectedItemId,
-                                    top: undefined,
-                                    bottom: ' .5rem',
-                                    right: undefined,
+                                    // top: '.4rem',
+                                    // bottom: ' .3rem',
+                                    // right: undefined,
                                 }}>
                                 <Label
                                     type="text"
@@ -242,6 +261,35 @@ const DetailView: FunctionComponent<Props> = ({
                                         ' ' +
                                         item.id
                                     }></Label>
+                            </div>
+                            <div
+                                style={{
+                                    position: 'absolute',
+                                    bottom: 5,
+                                    right: 2,
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    width: '100%',
+                                    justifyContent: 'center',
+                                    alignItems: 'end',
+                                    textAlign: 'center',
+                                }}>
+                                <Text
+                                    textStyle={{
+                                        fontSize: 14,
+                                        textAlign: 'center',
+                                        marginRight: '2px',
+                                    }}>
+                                    {(item.percentWeight * 10000).toFixed(0)}
+                                </Text>
+                                <Text
+                                    textStyle={{
+                                        fontSize: 10,
+                                        textAlign: 'center',
+                                        marginBottom: 1,
+                                    }}>
+                                    {' / 10k'}
+                                </Text>
                             </div>
                         </div>
                     ))}

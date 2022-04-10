@@ -58,7 +58,7 @@ const styles = NLStyleSheetCreator({
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
-        minWidth: '500px',
+        width: '400px',
     },
     detailSelectedItems: {
         display: 'flex',
@@ -83,7 +83,8 @@ const styles = NLStyleSheetCreator({
         borderRadius: Layout.borderRadius.large,
         position: 'absolute',
         top: '.5rem',
-        right: '.5rem',
+        left: '.5rem',
+        zIndex: 1000,
     },
     detailSelectedItemId: {
         padding: '.3rem',
@@ -97,8 +98,9 @@ const styles = NLStyleSheetCreator({
         padding: '.3rem',
         borderRadius: Layout.borderRadius.large,
         position: 'absolute',
-        top: '.5rem',
+        top: '2.3rem',
         left: '.5rem',
+        zIndex: 1000,
     },
     detailEmptyContainer: {
         display: 'flex',
