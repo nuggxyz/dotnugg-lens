@@ -2,7 +2,7 @@ import store from './state/store';
 
 export default class Web3Config {
     static CHAIN = 4;
-    static DOTNUGG_V1 = '0x7492cfad3e9bd1d46d92159b0b42a8a40303d13d';
+    static DOTNUGG_V1 = '0x4fd859c35f5bd594a4c9ac3bccb6cbf9badef02c';
     static INFURA_KEY = 'a1625b39cf0047febd415f9b37d8c931';
 
     static getUrls(key?: string) {
