@@ -230,7 +230,15 @@ const RenderItem = ({
                     height: open && previous === open ? 'auto' : height,
                     overflow: 'hidden',
                 }}>
-                <animated.div style={{ opacity, y }} ref={ref}>
+                <animated.div
+                    style={{
+                        opacity,
+                        y,
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        justifyContent: 'space-around',
+                    }}
+                    ref={ref}>
                     {item.items.map((childItem, index) => (
                         <React.Fragment key={`child-${index}`}>
                             <ChildRenderItem
