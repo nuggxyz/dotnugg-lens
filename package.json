@@ -2,7 +2,7 @@
     "name": "dotnugg-lens",
     "productName": "dotnuggLens",
     "homepage": ".",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "description": "dotnugg desktop application",
     "main": "index.js",
     "author": "@nuggxyz",
@@ -25,7 +25,11 @@
         "appId": "com.nuggxyz.dotnuggLens",
         "icon": "./AppIcon/AppIcon.icns",
         "copyright": "Copyright © 2022 @nuggxyz",
-        "files": ["./build/**/*", "./index.js", "./preload.js"],
+        "files": [
+            "./build/**/*",
+            "./index.js",
+            "./preload.js"
+        ],
         "extraResources": [
             "./aseprite2dotnugg.lua",
             "./collection.nugg",
@@ -34,22 +38,37 @@
         "mac": {
             "artifactName": "${productName}-${version}.${ext}",
             "category": "public.app-category.productivity",
-            "target": ["dmg"]
+            "target": [
+                "dmg"
+            ]
         },
         "linux": {
             "artifactName": "${productName}-${version}-${arch}.${ext}",
             "maintainer": "xxxx",
-            "target": ["tar.gz", "deb", "rpm"]
+            "target": [
+                "tar.gz",
+                "deb",
+                "rpm"
+            ]
         },
         "win": {
-            "target": ["nsis"]
+            "target": [
+                "nsis"
+            ]
         }
     },
     "eslintConfig": {
-        "extends": ["react-app", "react-app/jest"]
+        "extends": [
+            "react-app",
+            "react-app/jest"
+        ]
     },
     "browserslist": {
-        "production": [">0.2%", "not dead", "not op_mini all"],
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
         "development": [
             "last 1 chrome version",
             "last 1 firefox version",
@@ -72,6 +91,7 @@
         "@types/mocha": "^9.0.0",
         "@types/node": "^16.4.10",
         "@types/react-helmet": "^6.1.4",
+        "@types/tapable": "^2.2.2",
         "@types/ua-parser-js": "^0.7.36",
         "@types/websocket": "^1.0.4",
         "@typescript-eslint/eslint-plugin": "^5.7.0",
@@ -118,7 +138,7 @@
     "dependencies": {
         "@ethersproject/providers": "^5.4.5",
         "@loadable/component": "^5.15.2",
-        "@nuggxyz/dotnugg-sdk": "0.1.31",
+        "@nuggxyz/dotnugg-sdk": "^0.1.37",
         "@reduxjs/toolkit": "^1.6.1",
         "@web3-react/core": "^6.1.9",
         "@web3-react/network-connector": "^6.1.9",

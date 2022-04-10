@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useMemo } from 'react';
-import { animated, config, useTransition } from 'react-spring';
+import { animated, config, useTransition } from '@react-spring/web';
+import useEffect from 'react';
 
 import {
     isUndefinedOrNullOrArrayEmpty,
@@ -11,6 +12,7 @@ import StickyList from '../../general/List/StickyList';
 import InteractiveText from '../../general/Texts/InteractiveText/InteractiveText';
 import Text from '../../general/Texts/Text/Text';
 import UseOurs from '../UseOurs';
+import { Item } from '../../../state/ipcListeners';
 
 import ChildRenderItem from './ChildRenderItem';
 import DetailView from './DetailView';
@@ -18,10 +20,12 @@ import FeatureRenderItem from './FeatureRenderItem';
 import styles from './NuggAssembler.styles';
 import TitleRenderItem from './TitleRenderItem';
 
-type Props = { data: { title: string; items: any[] }[] };
+type Props = { data: Item[] };
 
 const NuggAssembler: FunctionComponent<Props> = ({ data }) => {
-    const [selectedItems, setSelectedItems] = React.useState([]);
+    const [selectedItems, setSelectedItems] = React.useState<
+        Item['items'][number][]
+    >([]);
 
     const isEmpty = useMemo(() => {
         return (
@@ -29,6 +33,37 @@ const NuggAssembler: FunctionComponent<Props> = ({ data }) => {
             data.every((item) => isUndefinedOrNullOrArrayEmpty(item.items))
         );
     }, [data]);
+
+    React.useEffect(() => {
+        selectedItems.forEach((x) => {
+            data.forEach((a) => {
+                a.items.forEach((b) => {
+                    if (b.fileUri === x.fileUri) {
+                        const tmp = selectedItems;
+
+                        tmp[tmp.findIndex((y) => y.fileUri === x.fileUri)] = b;
+
+                        setSelectedItems(tmp);
+                    }
+                });
+            });
+        });
+        // setSelectedItems((items) => {
+        //     console.log({ data, items });
+        //     items.forEach((x) => {
+        //         data.forEach((a) => {
+        //             a.items.forEach((b) => {
+        //                 if (b.fileUri === x.fileUri) {
+        //                     console.log(b.fileUri, x.fileUri);
+
+        //                     x = b;
+        //                 }
+        //             });
+        //         });
+        //     });
+        //     return items;
+        // });
+    }, [data, selectedItems]);
 
     const transition = useTransition(data.length, {
         from: { opacity: 0 },
@@ -70,7 +105,7 @@ const NuggAssembler: FunctionComponent<Props> = ({ data }) => {
             </animated.div>
         ) : (
             <StickyList
-                //@ts-ignore
+                // @ts-ignore
                 style={{ ...styles.container, opacity }}
                 styleLeft={styles.left}
                 styleRight={styles.right}

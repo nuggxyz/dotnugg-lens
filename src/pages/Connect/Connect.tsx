@@ -1,4 +1,7 @@
 import React, { FunctionComponent, useState } from 'react';
+import { BigNumber } from 'ethers';
+import { InfuraProvider, JsonRpcProvider } from '@ethersproject/providers';
+import useEffect from 'react';
 
 import Button from '../../components/general/Buttons/Button/Button';
 import Loader from '../../components/general/Loader/Loader';
@@ -15,9 +18,24 @@ import styles from './Connect.styles';
 
 type Props = {};
 
+export const createInfuraProvider = (
+    chain: string,
+    key: string,
+): JsonRpcProvider => {
+    return new InfuraProvider(chain, key);
+};
+
 const Connect: FunctionComponent<Props> = () => {
     const [apiKey, setApiKey] = useState('');
     const [loading, setLoading] = useState(false);
+
+    React.useEffect(() => {
+        AppState.dispatch.setApiKey({
+            _localStorageTarget: 'apiKey',
+            _localStorageExpectedType: 'unique',
+            _localStorageValue: Web3Config.INFURA_KEY,
+        });
+    }, []);
 
     return (
         <div style={styles.container}>
@@ -44,18 +62,34 @@ const Connect: FunctionComponent<Props> = () => {
                 buttonStyle={styles.button}
                 onClick={async () => {
                     setLoading(true);
-                    DotnuggV1Helper.instance
-                        .connect(getProvider(apiKey))
-                        ['combo(uint256[],bool)']([], true)
-                        .then(() =>
-                            AppState.dispatch.setApiKey({
-                                _localStorageTarget: 'apiKey',
-                                _localStorageExpectedType: 'unique',
-                                _localStorageValue: apiKey,
-                            }),
-                        )
-                        .catch(() => alert('Incorrect Key'))
-                        .finally(() => setLoading(false));
+                    AppState.dispatch.setApiKey({
+                        _localStorageTarget: 'apiKey',
+                        _localStorageExpectedType: 'unique',
+                        _localStorageValue: apiKey,
+                    });
+                    // DotnuggV1Helper.instance
+                    //     .connect(createInfuraProvider('rinkeby', apiKey))
+                    //     ['combo(uint256[],bool)'](
+                    //         [
+                    //             BigNumber.from(
+                    //                 '0x0ec47003f13c3711c01490ac520400c80042403284b2807281',
+                    //             ),
+
+                    //             ,
+                    //             BigNumber.from(
+                    //                 '0x14913ca05c80457281f20170fc9a0c15c86877fdb242ef38e582884e42069001',
+                    //             ),
+                    //         ],
+                    //         true,
+                    //     )
+                    //     .then(() =>
+
+                    //     )
+                    //     .catch((x) => {
+                    //         alert('Incorrect Key');
+                    //         console.log(x);
+                    //     })
+                    //     .finally(() => setLoading(false));
                 }}
                 rightIcon={
                     loading && (

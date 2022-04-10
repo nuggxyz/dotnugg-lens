@@ -79,6 +79,13 @@ const styles = NLStyleSheetCreator({
         top: '.5rem',
         right: '.5rem',
     },
+    detailSelectedVsCode: {
+        padding: '.3rem',
+        borderRadius: Layout.borderRadius.large,
+        position: 'absolute',
+        top: '.5rem',
+        left: '.5rem',
+    },
     detailEmptyContainer: {
         display: 'flex',
         alignItems: 'center',

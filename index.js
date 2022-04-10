@@ -260,7 +260,7 @@ ipcMain.on('get-hex', (event, item, path) => {
 
 ipcMain.on('fetch-compiler-items', async (event, path, address, apiKey) => {
     try {
-        const infura = new ethers.providers.InfuraProvider('goerli', apiKey);
+        const infura = new ethers.providers.InfuraProvider('rinkeby', apiKey);
 
         await dotnugg.parser.init(APP_NAME);
 

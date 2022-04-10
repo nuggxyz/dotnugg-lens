@@ -11,7 +11,7 @@ declare namespace NL.Redux.App {
         apiKey: string;
         asepriteFiles: AsepriteFile[];
         artLocation: string;
-        compiledItems: any[];
+        compiledItems: import('../ipcListeners').Item[];
         mainProcessLoading: boolean;
         isZoomOn: boolean;
     }

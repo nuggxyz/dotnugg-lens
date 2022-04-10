@@ -11,6 +11,7 @@ import {
 } from '../../lib';
 import constants from '../../lib/constants';
 import Layout from '../../lib/layout';
+import { Item } from '../ipcListeners';
 import { NLState } from '../NLState';
 import store from '../store';
 
@@ -125,7 +126,7 @@ class AppState extends NLState<NL.Redux.App.State> {
                     ? action.payload
                     : window.dotnugg.getLensDefault();
             },
-            setCompiledItems: (state, action: PayloadAction<any[]>) => {
+            setCompiledItems: (state, action: PayloadAction<Item[]>) => {
                 state.compiledItems = action.payload;
             },
             addToAsepriteFiles: (
