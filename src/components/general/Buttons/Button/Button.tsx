@@ -34,7 +34,8 @@ const Button: FunctionComponent<ButtonProps> = ({
     const style = useMemo(() => {
         return {
             ...styles.button,
-            filter: hover ? 'brightness(.8)' : 'brightness(1)',
+            ...(hover && !disabled ? { filter: 'brightness(.8)' } : {}),
+            ...(disabled ? { opacity: '0.3' } : {}),
             cursor: disabled ? 'not-allowed' : 'pointer',
             ...buttonStyle,
             ...(hover && hoverStyle),
