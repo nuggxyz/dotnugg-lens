@@ -25,6 +25,8 @@ const STATE_NAME = 'app';
 class AppState extends NLState<NL.Redux.App.State> {
     declare static _instance: AppState;
 
+    declare static hook: typeof hooks;
+
     declare static actions: typeof this.instance._slice.actions;
     declare static reducer: typeof this.instance._slice.reducer;
     declare static select: ApplyFuncToChildren<
@@ -53,6 +55,7 @@ class AppState extends NLState<NL.Redux.App.State> {
             asepriteFiles: [],
             artLocation: '',
             compiledItems: [],
+            recents: [],
             mainProcessLoading: false,
             isZoomOn: false,
         });
@@ -73,6 +76,19 @@ class AppState extends NLState<NL.Redux.App.State> {
                 action: PayloadAction<{ height: number; width: number }>,
             ) => {
                 state.dimensions = action.payload;
+            },
+            addRecent: (state, action: PayloadAction<{ fileUri: string }>) => {
+                const tmp = state.recents.filter(
+                    (x) => x.fileUri !== action.payload.fileUri,
+                );
+
+                state.recents = [
+                    {
+                        time: new Date().getTime(),
+                        fileUri: action.payload.fileUri,
+                    },
+                    ...tmp,
+                ];
             },
             addToastToList: (
                 state,
