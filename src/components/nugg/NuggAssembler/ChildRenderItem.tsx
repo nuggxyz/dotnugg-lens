@@ -9,6 +9,8 @@ import Button from '../../general/Buttons/Button/Button';
 import Loader from '../../general/Loader/Loader';
 import { Item } from '../../../state/ipcListeners';
 import AppState from '../../../state/app';
+import constants from '../../../lib/constants';
+import Label from '../../general/Label/Label';
 
 import styles from './NuggAssembler.styles';
 
@@ -40,20 +42,35 @@ const ChildRenderItem: FunctionComponent<Props> = ({
                 background: isSelected
                     ? Colors.nuggBlueTransparent
                     : 'transparent',
-                ...styles.childRenderItem,
+                ...styles.detailChildrenderItem,
+                width: '150px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'space-between',
             }}
             leftIcon={
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <IoDocument size={25} color={Colors.transparentDarkGrey} />
-                    <Text
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        ...styles.detailSelectedItemId,
+                    }}>
+                    {/* <IoDocument size={25} color={Colors.transparentDarkGrey} /> */}
+                    <Label
                         type="text"
                         size="small"
                         textStyle={{
                             color: Colors.transparentDarkGrey,
-                            marginLeft: '.5rem',
-                        }}>
-                        {getFileFromPath(item.fileName)}
-                    </Text>
+                            // marginLeft: '.5rem',
+                            fontSize: '10px',
+                            fontWeight: 'bold',
+                        }}
+                        text={
+                            constants.DOTNUGG_ITEMS[item.feature] +
+                            ' ' +
+                            item.id
+                        }></Label>
                 </div>
             }
             onClick={() => {
@@ -78,8 +95,8 @@ const ChildRenderItem: FunctionComponent<Props> = ({
                     <img
                         src={liveItem?.svg || item.svg}
                         style={{
-                            height: '150px',
-                            width: '150px',
+                            // height: '150px',
+                            width: '90%',
                         }}
                     />
                 ) : (

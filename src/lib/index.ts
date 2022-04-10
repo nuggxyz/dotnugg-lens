@@ -316,7 +316,7 @@ export const shortenPathName = (pathName: string) => {
 };
 
 export const getFileFromPath = (path: string) => {
-    return path.split(fileDelimiter()).last();
+    return path.split(fileDelimiter()).last() as unknown as string;
 };
 
 export const smartInsert = <T>(list: T[], element: T, field?: keyof T) => {
