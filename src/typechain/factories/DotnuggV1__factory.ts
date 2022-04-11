@@ -53,50 +53,7 @@ const _abi = [
         type: "uint256[]",
       },
     ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256[]",
-        name: "read",
-        type: "uint256[]",
-      },
-    ],
-    name: "calc",
-    outputs: [
-      {
-        internalType: "uint256[]",
-        name: "",
-        type: "uint256[]",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256[]",
-        name: "reads",
-        type: "uint256[]",
-      },
-      {
-        internalType: "bool",
-        name: "base64",
-        type: "bool",
-      },
-    ],
-    name: "combo",
-    outputs: [
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
-      },
-    ],
-    stateMutability: "view",
+    stateMutability: "pure",
     type: "function",
   },
   {
@@ -118,44 +75,6 @@ const _abi = [
         internalType: "string",
         name: "",
         type: "string",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "input",
-        type: "uint256",
-      },
-    ],
-    name: "decodeProof",
-    outputs: [
-      {
-        internalType: "uint16[16]",
-        name: "res",
-        type: "uint16[16]",
-      },
-    ],
-    stateMutability: "pure",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "proof",
-        type: "uint256",
-      },
-    ],
-    name: "decodeProofCore",
-    outputs: [
-      {
-        internalType: "uint8[8]",
-        name: "res",
-        type: "uint8[8]",
       },
     ],
     stateMutability: "pure",
@@ -194,44 +113,6 @@ const _abi = [
         internalType: "bytes",
         name: "res",
         type: "bytes",
-      },
-    ],
-    stateMutability: "pure",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint8[8]",
-        name: "ids",
-        type: "uint8[8]",
-      },
-    ],
-    name: "encodeProof",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "proof",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "pure",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint16[16]",
-        name: "ids",
-        type: "uint16[16]",
-      },
-    ],
-    name: "encodeProof",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "proof",
-        type: "uint256",
       },
     ],
     stateMutability: "pure",
@@ -307,9 +188,9 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "uint256",
-        name: "proof",
-        type: "uint256",
+        internalType: "uint8[8]",
+        name: "ids",
+        type: "uint8[8]",
       },
       {
         internalType: "bool",
@@ -331,25 +212,20 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "uint8[8]",
-        name: "ids",
-        type: "uint8[8]",
-      },
-      {
-        internalType: "bool",
-        name: "base64",
-        type: "bool",
+        internalType: "uint256[][]",
+        name: "files",
+        type: "uint256[][]",
       },
     ],
-    name: "exec",
+    name: "execute",
     outputs: [
       {
-        internalType: "string",
-        name: "",
-        type: "string",
+        internalType: "uint256[]",
+        name: "res",
+        type: "uint256[]",
       },
     ],
-    stateMutability: "view",
+    stateMutability: "pure",
     type: "function",
   },
   {
@@ -419,33 +295,9 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "uint16",
-        name: "itemId",
-        type: "uint16",
-      },
-      {
-        internalType: "string[8]",
-        name: "labels",
-        type: "string[8]",
-      },
-    ],
-    name: "parseItemIdAsString",
-    outputs: [
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
-      },
-    ],
-    stateMutability: "pure",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "proof",
-        type: "uint256",
+        internalType: "uint8[8]",
+        name: "ids",
+        type: "uint8[8]",
       },
       {
         internalType: "string[8]",
@@ -553,6 +405,30 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "uint256[][][]",
+        name: "reads",
+        type: "uint256[][][]",
+      },
+      {
+        internalType: "bool",
+        name: "base64",
+        type: "bool",
+      },
+    ],
+    name: "supersize",
+    outputs: [
+      {
+        internalType: "string[]",
+        name: "res",
+        type: "string[]",
+      },
+    ],
+    stateMutability: "pure",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "uint256[]",
         name: "calculated",
         type: "uint256[]",
@@ -567,26 +443,7 @@ const _abi = [
     outputs: [
       {
         internalType: "string",
-        name: "",
-        type: "string",
-      },
-    ],
-    stateMutability: "pure",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256[]",
-        name: "calculated",
-        type: "uint256[]",
-      },
-    ],
-    name: "svg",
-    outputs: [
-      {
-        internalType: "string",
-        name: "",
+        name: "res",
         type: "string",
       },
     ],
@@ -599,24 +456,6 @@ const _abi = [
         internalType: "bytes[]",
         name: "data",
         type: "bytes[]",
-      },
-    ],
-    name: "write",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes",
-        name: "data",
-        type: "bytes",
-      },
-      {
-        internalType: "uint8",
-        name: "feature",
-        type: "uint8",
       },
     ],
     name: "write",
