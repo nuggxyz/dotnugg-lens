@@ -21,24 +21,22 @@ export interface DotnuggV1Interface extends utils.Interface {
   contractName: "DotnuggV1";
   functions: {
     "calc(uint256[][])": FunctionFragment;
-    "combo(uint256[],bool)": FunctionFragment;
-    "decodeProof(uint256)": FunctionFragment;
-    "decodeProofCore(uint256)": FunctionFragment;
+    "combo(uint256[][],bool)": FunctionFragment;
     "encodeJsonAsBase64(bytes)": FunctionFragment;
     "encodeJsonAsUtf8(bytes)": FunctionFragment;
-    "encodeProof(uint8[8])": FunctionFragment;
     "encodeSvgAsBase64(bytes)": FunctionFragment;
     "encodeSvgAsUtf8(bytes)": FunctionFragment;
     "exec(uint8,uint8,bool)": FunctionFragment;
+    "execute(uint256[][])": FunctionFragment;
     "factory()": FunctionFragment;
     "init(bytes[])": FunctionFragment;
     "lengthOf(uint8)": FunctionFragment;
     "locationOf(uint8)": FunctionFragment;
-    "parseItemIdAsString(uint16,string[8])": FunctionFragment;
-    "props(uint256,string[8])": FunctionFragment;
+    "props(uint8[8],string[8])": FunctionFragment;
     "randOf(uint8,uint256)": FunctionFragment;
     "read(uint8,uint8)": FunctionFragment;
     "register(bytes[])": FunctionFragment;
+    "supersize(uint256[][][],bool)": FunctionFragment;
     "svg(uint256[],bool)": FunctionFragment;
     "write(bytes[])": FunctionFragment;
   };
@@ -49,15 +47,7 @@ export interface DotnuggV1Interface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "combo",
-    values: [BigNumberish[], boolean]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "decodeProof",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "decodeProofCore",
-    values: [BigNumberish]
+    values: [BigNumberish[][], boolean]
   ): string;
   encodeFunctionData(
     functionFragment: "encodeJsonAsBase64",
@@ -66,10 +56,6 @@ export interface DotnuggV1Interface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "encodeJsonAsUtf8",
     values: [BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "encodeProof",
-    values: [BigNumberish[]]
   ): string;
   encodeFunctionData(
     functionFragment: "encodeSvgAsBase64",
@@ -83,6 +69,10 @@ export interface DotnuggV1Interface extends utils.Interface {
     functionFragment: "exec",
     values: [BigNumberish, BigNumberish, boolean]
   ): string;
+  encodeFunctionData(
+    functionFragment: "execute",
+    values: [BigNumberish[][]]
+  ): string;
   encodeFunctionData(functionFragment: "factory", values?: undefined): string;
   encodeFunctionData(functionFragment: "init", values: [BytesLike[]]): string;
   encodeFunctionData(
@@ -94,12 +84,8 @@ export interface DotnuggV1Interface extends utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "parseItemIdAsString",
-    values: [BigNumberish, string[]]
-  ): string;
-  encodeFunctionData(
     functionFragment: "props",
-    values: [BigNumberish, string[]]
+    values: [BigNumberish[], string[]]
   ): string;
   encodeFunctionData(
     functionFragment: "randOf",
@@ -114,6 +100,10 @@ export interface DotnuggV1Interface extends utils.Interface {
     values: [BytesLike[]]
   ): string;
   encodeFunctionData(
+    functionFragment: "supersize",
+    values: [BigNumberish[][][], boolean]
+  ): string;
+  encodeFunctionData(
     functionFragment: "svg",
     values: [BigNumberish[], boolean]
   ): string;
@@ -122,23 +112,11 @@ export interface DotnuggV1Interface extends utils.Interface {
   decodeFunctionResult(functionFragment: "calc", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "combo", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "decodeProof",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "decodeProofCore",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "encodeJsonAsBase64",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "encodeJsonAsUtf8",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "encodeProof",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -150,18 +128,16 @@ export interface DotnuggV1Interface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "exec", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "execute", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "factory", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "init", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "lengthOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "locationOf", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "parseItemIdAsString",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "props", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "randOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "read", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "register", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "supersize", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "svg", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "write", data: BytesLike): Result;
 
@@ -207,37 +183,16 @@ export interface DotnuggV1 extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    "calc(uint256[][])"(
+    calc(
       reads: BigNumberish[][],
       overrides?: CallOverrides
     ): Promise<[BigNumber[]]>;
 
-    "calc(uint256[])"(
-      read: BigNumberish[],
-      overrides?: CallOverrides
-    ): Promise<[BigNumber[]]>;
-
-    "combo(uint256[],bool)"(
-      reads: BigNumberish[],
-      base64: boolean,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
-
-    "combo(uint256[][],bool)"(
+    combo(
       reads: BigNumberish[][],
       base64: boolean,
       overrides?: CallOverrides
     ): Promise<[string]>;
-
-    decodeProof(
-      input: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[number[]] & { res: number[] }>;
-
-    decodeProofCore(
-      proof: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[number[]] & { res: number[] }>;
 
     encodeJsonAsBase64(
       input: BytesLike,
@@ -248,16 +203,6 @@ export interface DotnuggV1 extends BaseContract {
       input: BytesLike,
       overrides?: CallOverrides
     ): Promise<[string] & { res: string }>;
-
-    "encodeProof(uint8[8])"(
-      ids: BigNumberish[],
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { proof: BigNumber }>;
-
-    "encodeProof(uint16[16])"(
-      ids: BigNumberish[],
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { proof: BigNumber }>;
 
     encodeSvgAsBase64(
       input: BytesLike,
@@ -276,17 +221,16 @@ export interface DotnuggV1 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
-    "exec(uint256,bool)"(
-      proof: BigNumberish,
-      base64: boolean,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
-
     "exec(uint8[8],bool)"(
       ids: BigNumberish[],
       base64: boolean,
       overrides?: CallOverrides
     ): Promise<[string]>;
+
+    execute(
+      files: BigNumberish[][],
+      overrides?: CallOverrides
+    ): Promise<[BigNumber[]] & { res: BigNumber[] }>;
 
     factory(overrides?: CallOverrides): Promise<[string]>;
 
@@ -305,14 +249,8 @@ export interface DotnuggV1 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string] & { res: string }>;
 
-    parseItemIdAsString(
-      itemId: BigNumberish,
-      labels: string[],
-      overrides?: CallOverrides
-    ): Promise<[string]>;
-
     props(
-      proof: BigNumberish,
+      ids: BigNumberish[],
       labels: string[],
       overrides?: CallOverrides
     ): Promise<[string]>;
@@ -339,60 +277,34 @@ export interface DotnuggV1 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    "svg(uint256[],bool)"(
+    supersize(
+      reads: BigNumberish[][][],
+      base64: boolean,
+      overrides?: CallOverrides
+    ): Promise<[string[]] & { res: string[] }>;
+
+    svg(
       calculated: BigNumberish[],
       base64: boolean,
       overrides?: CallOverrides
-    ): Promise<[string]>;
+    ): Promise<[string] & { res: string }>;
 
-    "svg(uint256[])"(
-      calculated: BigNumberish[],
-      overrides?: CallOverrides
-    ): Promise<[string]>;
-
-    "write(bytes[])"(
+    write(
       data: BytesLike[],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    "write(bytes,uint8)"(
-      data: BytesLike,
-      feature: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
 
-  "calc(uint256[][])"(
+  calc(
     reads: BigNumberish[][],
     overrides?: CallOverrides
   ): Promise<BigNumber[]>;
 
-  "calc(uint256[])"(
-    read: BigNumberish[],
-    overrides?: CallOverrides
-  ): Promise<BigNumber[]>;
-
-  "combo(uint256[],bool)"(
-    reads: BigNumberish[],
-    base64: boolean,
-    overrides?: CallOverrides
-  ): Promise<string>;
-
-  "combo(uint256[][],bool)"(
+  combo(
     reads: BigNumberish[][],
     base64: boolean,
     overrides?: CallOverrides
   ): Promise<string>;
-
-  decodeProof(
-    input: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<number[]>;
-
-  decodeProofCore(
-    proof: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<number[]>;
 
   encodeJsonAsBase64(
     input: BytesLike,
@@ -403,16 +315,6 @@ export interface DotnuggV1 extends BaseContract {
     input: BytesLike,
     overrides?: CallOverrides
   ): Promise<string>;
-
-  "encodeProof(uint8[8])"(
-    ids: BigNumberish[],
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
-  "encodeProof(uint16[16])"(
-    ids: BigNumberish[],
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
 
   encodeSvgAsBase64(
     input: BytesLike,
@@ -428,17 +330,16 @@ export interface DotnuggV1 extends BaseContract {
     overrides?: CallOverrides
   ): Promise<string>;
 
-  "exec(uint256,bool)"(
-    proof: BigNumberish,
-    base64: boolean,
-    overrides?: CallOverrides
-  ): Promise<string>;
-
   "exec(uint8[8],bool)"(
     ids: BigNumberish[],
     base64: boolean,
     overrides?: CallOverrides
   ): Promise<string>;
+
+  execute(
+    files: BigNumberish[][],
+    overrides?: CallOverrides
+  ): Promise<BigNumber[]>;
 
   factory(overrides?: CallOverrides): Promise<string>;
 
@@ -451,14 +352,8 @@ export interface DotnuggV1 extends BaseContract {
 
   locationOf(feature: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
-  parseItemIdAsString(
-    itemId: BigNumberish,
-    labels: string[],
-    overrides?: CallOverrides
-  ): Promise<string>;
-
   props(
-    proof: BigNumberish,
+    ids: BigNumberish[],
     labels: string[],
     overrides?: CallOverrides
   ): Promise<string>;
@@ -485,60 +380,34 @@ export interface DotnuggV1 extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  "svg(uint256[],bool)"(
+  supersize(
+    reads: BigNumberish[][][],
+    base64: boolean,
+    overrides?: CallOverrides
+  ): Promise<string[]>;
+
+  svg(
     calculated: BigNumberish[],
     base64: boolean,
     overrides?: CallOverrides
   ): Promise<string>;
 
-  "svg(uint256[])"(
-    calculated: BigNumberish[],
-    overrides?: CallOverrides
-  ): Promise<string>;
-
-  "write(bytes[])"(
+  write(
     data: BytesLike[],
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  "write(bytes,uint8)"(
-    data: BytesLike,
-    feature: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   callStatic: {
-    "calc(uint256[][])"(
+    calc(
       reads: BigNumberish[][],
       overrides?: CallOverrides
     ): Promise<BigNumber[]>;
 
-    "calc(uint256[])"(
-      read: BigNumberish[],
-      overrides?: CallOverrides
-    ): Promise<BigNumber[]>;
-
-    "combo(uint256[],bool)"(
-      reads: BigNumberish[],
-      base64: boolean,
-      overrides?: CallOverrides
-    ): Promise<string>;
-
-    "combo(uint256[][],bool)"(
+    combo(
       reads: BigNumberish[][],
       base64: boolean,
       overrides?: CallOverrides
     ): Promise<string>;
-
-    decodeProof(
-      input: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<number[]>;
-
-    decodeProofCore(
-      proof: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<number[]>;
 
     encodeJsonAsBase64(
       input: BytesLike,
@@ -549,16 +418,6 @@ export interface DotnuggV1 extends BaseContract {
       input: BytesLike,
       overrides?: CallOverrides
     ): Promise<string>;
-
-    "encodeProof(uint8[8])"(
-      ids: BigNumberish[],
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "encodeProof(uint16[16])"(
-      ids: BigNumberish[],
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
 
     encodeSvgAsBase64(
       input: BytesLike,
@@ -577,17 +436,16 @@ export interface DotnuggV1 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<string>;
 
-    "exec(uint256,bool)"(
-      proof: BigNumberish,
-      base64: boolean,
-      overrides?: CallOverrides
-    ): Promise<string>;
-
     "exec(uint8[8],bool)"(
       ids: BigNumberish[],
       base64: boolean,
       overrides?: CallOverrides
     ): Promise<string>;
+
+    execute(
+      files: BigNumberish[][],
+      overrides?: CallOverrides
+    ): Promise<BigNumber[]>;
 
     factory(overrides?: CallOverrides): Promise<string>;
 
@@ -600,14 +458,8 @@ export interface DotnuggV1 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<string>;
 
-    parseItemIdAsString(
-      itemId: BigNumberish,
-      labels: string[],
-      overrides?: CallOverrides
-    ): Promise<string>;
-
     props(
-      proof: BigNumberish,
+      ids: BigNumberish[],
       labels: string[],
       overrides?: CallOverrides
     ): Promise<string>;
@@ -631,27 +483,19 @@ export interface DotnuggV1 extends BaseContract {
 
     register(input: BytesLike[], overrides?: CallOverrides): Promise<string>;
 
-    "svg(uint256[],bool)"(
+    supersize(
+      reads: BigNumberish[][][],
+      base64: boolean,
+      overrides?: CallOverrides
+    ): Promise<string[]>;
+
+    svg(
       calculated: BigNumberish[],
       base64: boolean,
       overrides?: CallOverrides
     ): Promise<string>;
 
-    "svg(uint256[])"(
-      calculated: BigNumberish[],
-      overrides?: CallOverrides
-    ): Promise<string>;
-
-    "write(bytes[])"(
-      data: BytesLike[],
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    "write(bytes,uint8)"(
-      data: BytesLike,
-      feature: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    write(data: BytesLike[], overrides?: CallOverrides): Promise<void>;
   };
 
   filters: {
@@ -664,35 +508,14 @@ export interface DotnuggV1 extends BaseContract {
   };
 
   estimateGas: {
-    "calc(uint256[][])"(
+    calc(
       reads: BigNumberish[][],
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    "calc(uint256[])"(
-      read: BigNumberish[],
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "combo(uint256[],bool)"(
-      reads: BigNumberish[],
-      base64: boolean,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "combo(uint256[][],bool)"(
+    combo(
       reads: BigNumberish[][],
       base64: boolean,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    decodeProof(
-      input: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    decodeProofCore(
-      proof: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -703,16 +526,6 @@ export interface DotnuggV1 extends BaseContract {
 
     encodeJsonAsUtf8(
       input: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "encodeProof(uint8[8])"(
-      ids: BigNumberish[],
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "encodeProof(uint16[16])"(
-      ids: BigNumberish[],
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -733,15 +546,14 @@ export interface DotnuggV1 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    "exec(uint256,bool)"(
-      proof: BigNumberish,
+    "exec(uint8[8],bool)"(
+      ids: BigNumberish[],
       base64: boolean,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    "exec(uint8[8],bool)"(
-      ids: BigNumberish[],
-      base64: boolean,
+    execute(
+      files: BigNumberish[][],
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -762,14 +574,8 @@ export interface DotnuggV1 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    parseItemIdAsString(
-      itemId: BigNumberish,
-      labels: string[],
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     props(
-      proof: BigNumberish,
+      ids: BigNumberish[],
       labels: string[],
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -796,59 +602,33 @@ export interface DotnuggV1 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    "svg(uint256[],bool)"(
+    supersize(
+      reads: BigNumberish[][][],
+      base64: boolean,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    svg(
       calculated: BigNumberish[],
       base64: boolean,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    "svg(uint256[])"(
-      calculated: BigNumberish[],
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "write(bytes[])"(
+    write(
       data: BytesLike[],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    "write(bytes,uint8)"(
-      data: BytesLike,
-      feature: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    "calc(uint256[][])"(
+    calc(
       reads: BigNumberish[][],
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    "calc(uint256[])"(
-      read: BigNumberish[],
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "combo(uint256[],bool)"(
-      reads: BigNumberish[],
-      base64: boolean,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "combo(uint256[][],bool)"(
+    combo(
       reads: BigNumberish[][],
       base64: boolean,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    decodeProof(
-      input: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    decodeProofCore(
-      proof: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -859,16 +639,6 @@ export interface DotnuggV1 extends BaseContract {
 
     encodeJsonAsUtf8(
       input: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "encodeProof(uint8[8])"(
-      ids: BigNumberish[],
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "encodeProof(uint16[16])"(
-      ids: BigNumberish[],
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -889,15 +659,14 @@ export interface DotnuggV1 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    "exec(uint256,bool)"(
-      proof: BigNumberish,
+    "exec(uint8[8],bool)"(
+      ids: BigNumberish[],
       base64: boolean,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    "exec(uint8[8],bool)"(
-      ids: BigNumberish[],
-      base64: boolean,
+    execute(
+      files: BigNumberish[][],
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -918,14 +687,8 @@ export interface DotnuggV1 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    parseItemIdAsString(
-      itemId: BigNumberish,
-      labels: string[],
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     props(
-      proof: BigNumberish,
+      ids: BigNumberish[],
       labels: string[],
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
@@ -952,25 +715,20 @@ export interface DotnuggV1 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    "svg(uint256[],bool)"(
+    supersize(
+      reads: BigNumberish[][][],
+      base64: boolean,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    svg(
       calculated: BigNumberish[],
       base64: boolean,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    "svg(uint256[])"(
-      calculated: BigNumberish[],
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "write(bytes[])"(
+    write(
       data: BytesLike[],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    "write(bytes,uint8)"(
-      data: BytesLike,
-      feature: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };

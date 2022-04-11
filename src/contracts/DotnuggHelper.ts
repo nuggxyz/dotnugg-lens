@@ -28,4 +28,13 @@ export class DotnuggV1Helper extends ContractHelper {
             .connect(getProvider())
             ['combo(uint256[][],bool)'](data, base64);
     }
+
+    public static async bulkRenderOnChain(
+        data: ethers.BigNumber[][][],
+        base64: boolean,
+    ): Promise<string> {
+        return await DotnuggV1Helper.instance
+            .connect(getProvider())
+            ['supersize(uint256[][][],bool)'](data, base64);
+    }
 }
