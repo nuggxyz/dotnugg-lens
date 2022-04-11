@@ -1672,10 +1672,10 @@
   resolved "https://registry.yarnpkg.com/@nuggxyz/dotnugg-grammar/-/dotnugg-grammar-0.2.4.tgz#7bad06a426c13a1ec306159c0c491bfbaabde6e6"
   integrity sha512-6zf4olYNSeYUTfu7+cTavUQIY9Yn8n2hVgXrXI/Lnxgyxof4n2e4BGc9bvi8/hFz3Lee/3o2SGqEKYt+RPWpjA==
 
-"@nuggxyz/dotnugg-sdk@^0.1.37":
-  version "0.1.37"
-  resolved "https://registry.yarnpkg.com/@nuggxyz/dotnugg-sdk/-/dotnugg-sdk-0.1.37.tgz#653f05f517f24f72a7e60e1522becaf7b85c9e2d"
-  integrity sha512-LRZib5wcXlVZVji7e77MR8YojlruGhCQ/XMm5yVXIRoqYiz/YQh6bWHngkm3Lf6jSljN4oM0TpLWHKOLon2Aew==
+"@nuggxyz/dotnugg-sdk@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@nuggxyz/dotnugg-sdk/-/dotnugg-sdk-0.2.2.tgz#43fe92b97df3b349ffe7aecf3d95113aa042bc2c"
+  integrity sha512-xoDatIzIT17BOPZNxa+yq5zpyxpOHPtEnlf3A5usfceW77DYlW9lrIMjFEXCd9KxGDehUoYnh+Asn+PMcqLHng==
   dependencies:
     "@ethersproject/abi" "^5.0.0"
     "@ethersproject/bytes" "^5.0.0"

@@ -2,7 +2,7 @@
     "name": "dotnugg-lens",
     "productName": "dotnuggLens",
     "homepage": ".",
-    "version": "0.1.9",
+    "version": "0.1.10",
     "description": "dotnugg desktop application",
     "main": "index.js",
     "author": "@nuggxyz",
@@ -138,7 +138,7 @@
     "dependencies": {
         "@ethersproject/providers": "^5.4.5",
         "@loadable/component": "^5.15.2",
-        "@nuggxyz/dotnugg-sdk": "^0.1.37",
+        "@nuggxyz/dotnugg-sdk": "^0.2.2",
         "@reduxjs/toolkit": "^1.6.1",
         "@web3-react/core": "^6.1.9",
         "@web3-react/network-connector": "^6.1.9",
