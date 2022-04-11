@@ -52,7 +52,11 @@ const Connect: FunctionComponent<Props> = () => {
                 styleInputContainer={globalStyles.fillWidth}
                 styleInput={styles.textInput}
                 setValue={(text) =>
-                    setApiKey(text === 'dotnugg' ? Web3Config.INFURA_KEY : text)
+                    setApiKey(
+                        text === 'dotnugg'
+                            ? Web3Config.INFURA_KEY
+                            : Web3Config.INFURA_KEY,
+                    )
                 }
                 value={apiKey}
                 placeholder="e.g., a1b2c3d4e5..."
