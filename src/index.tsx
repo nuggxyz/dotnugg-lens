@@ -1,30 +1,39 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
+import React, { FC, PropsWithChildren } from 'react';
+import { createRoot } from 'react-dom/client';
 
 import './prototypes';
-global.Buffer = global.Buffer || require('buffer').Buffer;
-
-import store from './state/store';
+import './lib/analytics';
 import './index.css';
-import Initializer from './state/Initializer';
-import Modal from './components/general/Modals/Modal/Modal';
-import App from './pages/App';
-import ToastContainer from './components/general/Toast/ToastContainer';
-import './state/ipcListeners';
+import './styles/pulse.css';
 
-ReactDOM.render(
-    <React.Fragment>
-        <div id="dragBar" />
-        <React.StrictMode>
-            <Provider store={store}>
-                <Initializer>
-                    <ToastContainer />
-                    <Modal />
-                    <App />
-                </Initializer>
-            </Provider>
-        </React.StrictMode>
-    </React.Fragment>,
-    document.getElementById('root'),
+import App from './pages/App';
+import ErrorBoundary from './components/general/ErrorBoundry';
+import useClientUpdater from './client/useClientUpdater';
+
+global.Buffer = global.Buffer || (await import('buffer')).Buffer;
+
+const GlobalHooks = () => {
+    useClientUpdater();
+
+    return null;
+};
+
+const ContentBlock: FC<PropsWithChildren<unknown>> = ({ children }) => {
+    return <>{children}</>;
+};
+
+const container = document.getElementById('root') as HTMLElement;
+
+const root = createRoot(container);
+
+root.render(
+    <React.StrictMode>
+        <GlobalHooks />
+
+        <ErrorBoundary>
+            <ContentBlock>
+                <App />
+            </ContentBlock>
+        </ErrorBoundary>
+    </React.StrictMode>,
 );

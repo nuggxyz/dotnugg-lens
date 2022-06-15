@@ -1,15 +1,14 @@
-import { NLStyleSheetCreator } from '../../../lib';
-import Colors from '../../../lib/colors';
-import globalStyles from '../../../lib/globalStyles';
-import Layout from '../../../lib/layout';
+import lib from '@src/lib';
+import globalStyles from '@src/lib/globalStyles';
+import Layout from '@src/lib/layout';
 
-const styles = NLStyleSheetCreator({
+const styles = lib.layout.NLStyleSheetCreator({
     container: {
-        boxShadow: `${Layout.boxShadow.prefix} ${Colors.shadows.nuggPink}`,
+        boxShadow: `${Layout.boxShadow.prefix} ${lib.layout.boxShadow.basic}`,
         borderRadius: Layout.borderRadius.medium,
         border: 'none',
         overflow: 'hidden',
-        background: Colors.gradient3Transparent,
+        background: lib.colors.gradient3Transparent,
         height: '75%',
         width: '90%',
         position: 'absolute',
@@ -19,15 +18,15 @@ const styles = NLStyleSheetCreator({
         alignItems: 'center',
         display: 'flex',
         flexDirection: 'column',
-        // background: Colors.transparentWhite,
+        // background: lib.colors.transparentWhite,
     },
     right: {
-        background: Colors.gradient3,
+        background: lib.colors.gradient3,
     },
     titleRenderItemContainer: {
         padding: '.5rem 2rem',
         ...globalStyles.backdropFilter,
-        background: Colors.transparentLightGrey,
+        background: lib.colors.transparentLightGrey,
         textAlign: 'center',
     },
     titleRenderItemText: {
@@ -41,8 +40,8 @@ const styles = NLStyleSheetCreator({
         justifyContent: 'space-between',
     },
     featureRenderItemBadge: {
-        color: Colors.nuggRedText,
-        background: Colors.transparentWhite,
+        color: lib.colors.nuggRedText,
+        background: lib.colors.transparentWhite,
         padding: '.4rem .8rem',
         borderRadius: Layout.borderRadius.large,
         marginLeft: '1rem',
@@ -69,13 +68,13 @@ const styles = NLStyleSheetCreator({
     detailSelectedItem: {
         position: 'relative',
         margin: '.5rem .25rem',
-        background: Colors.transparentWhite,
+        background: lib.colors.transparentWhite,
         borderRadius: Layout.borderRadius.medium,
     },
     detailChildrenderItem: {
         position: 'relative',
         margin: '.5rem .25rem',
-        background: Colors.transparentWhite,
+        background: lib.colors.transparentWhite,
         borderRadius: Layout.borderRadius.medium,
     },
     detailSelectedItemClose: {
@@ -113,7 +112,7 @@ const styles = NLStyleSheetCreator({
         alignItems: 'center',
         justifyContent: 'center',
         padding: '.3rem .7rem',
-        background: Colors.transparentLightGrey,
+        background: lib.colors.transparentLightGrey,
         borderRadius: Layout.borderRadius.large,
         position: 'absolute',
         top: '-2rem',

@@ -1,6 +1,5 @@
-import { NLStyleSheetCreator } from '../../lib';
-import Colors from '../../lib/colors';
-import Layout from '../../lib/layout';
+import Layout from '@src/lib/layout';
+import lib, { NLStyleSheetCreator } from '@src/lib';
 
 const styles = NLStyleSheetCreator({
     container: {
@@ -8,9 +7,9 @@ const styles = NLStyleSheetCreator({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        background: Colors.gradient3,
+        background: lib.colors.gradient3,
         borderRadius: Layout.borderRadius.largish,
-        boxShadow: `${Layout.boxShadow.prefix} ${Colors.shadows.nuggPink}`,
+        boxShadow: `${Layout.boxShadow.prefix} ${lib.layout.boxShadow.dark}`,
         padding: '1.5rem',
         width: '350px',
     },
@@ -19,14 +18,14 @@ const styles = NLStyleSheetCreator({
         marginBottom: '1.5rem',
     },
     text: {
-        color: Colors.textColor,
+        color: lib.colors.textColor,
         margin: '0rem .5rem 1.5rem .5rem',
         textAlign: 'center',
     },
     textInput: {
         textAlign: 'left',
         width: '100%',
-        background: Colors.transparentLightGrey,
+        background: lib.colors.transparentLightGrey,
         padding: '.5rem .7rem',
         margin: '0rem .5rem',
         borderRadius: Layout.borderRadius.smallish,
@@ -37,7 +36,7 @@ const styles = NLStyleSheetCreator({
         width: '100%',
         marginTop: '1rem',
         padding: '.3rem 1rem',
-        color: Colors.nuggRedText,
+        color: lib.colors.nuggRedText,
     },
     loader: {
         position: 'absolute',

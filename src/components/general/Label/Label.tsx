@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 
-import Text, { TextProps } from '../Texts/Text/Text';
+import Text, { TextProps } from '@src/components/general/Texts/Text/Text';
 
 import styles from './Label.styles';
 
@@ -22,7 +22,8 @@ const Label: FunctionComponent<Props> = ({
                 ...styles.container,
                 ...(basic ? styles.basic : {}),
                 ...containerStyles,
-            }}>
+            }}
+        >
             <Text textStyle={styles.text} {...props}>
                 {text}
             </Text>

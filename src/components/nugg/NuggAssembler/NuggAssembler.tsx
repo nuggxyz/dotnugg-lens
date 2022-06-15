@@ -1,18 +1,13 @@
 import React, { FunctionComponent, useMemo } from 'react';
 import { animated, config, useTransition } from '@react-spring/web';
-import useEffect from 'react';
 
-import {
-    isUndefinedOrNullOrArrayEmpty,
-    isUndefinedOrNullOrObjectEmpty,
-} from '../../../lib';
-import Colors from '../../../lib/colors';
-import Layout from '../../../lib/layout';
-import StickyList from '../../general/List/StickyList';
-import InteractiveText from '../../general/Texts/InteractiveText/InteractiveText';
-import Text from '../../general/Texts/Text/Text';
-import UseOurs from '../UseOurs';
-import { Item } from '../../../state/ipcListeners';
+import { isUndefinedOrNullOrArrayEmpty } from '@src/lib';
+import Colors from '@src/lib/colors';
+import Layout from '@src/lib/layout';
+import StickyList from '@src/components/general/List/StickyList';
+import Text from '@src/components/general/Texts/Text/Text';
+import UseOurs from '@src/components/nugg/UseOurs';
+import { Item } from '@src/client/compiled';
 
 import ChildRenderItem from './ChildRenderItem';
 import DetailView from './DetailView';
@@ -23,9 +18,7 @@ import TitleRenderItem from './TitleRenderItem';
 type Props = { data: Item[] };
 
 const NuggAssembler: FunctionComponent<Props> = ({ data }) => {
-    const [selectedItems, setSelectedItems] = React.useState<
-        Item['items'][number][]
-    >([]);
+    const [selectedItems, setSelectedItems] = React.useState<Item['items'][number][]>([]);
 
     const isEmpty = useMemo(() => {
         return (
@@ -72,7 +65,7 @@ const NuggAssembler: FunctionComponent<Props> = ({ data }) => {
         config: config.default,
     });
 
-    return transition(({ opacity }, length) =>
+    return transition(({ opacity }) =>
         isEmpty ? (
             <animated.div
                 style={{
@@ -80,14 +73,16 @@ const NuggAssembler: FunctionComponent<Props> = ({ data }) => {
                     textAlign: 'center',
                     justifyContent: 'center',
                     opacity,
-                }}>
+                }}
+            >
                 <Text
                     textStyle={{
                         display: 'flex',
                         alignItems: 'center',
                         textAlign: 'center',
                     }}
-                    type="text">
+                    type="text"
+                >
                     Add some
                     <Text
                         type="code"
@@ -96,7 +91,8 @@ const NuggAssembler: FunctionComponent<Props> = ({ data }) => {
                             borderRadius: Layout.borderRadius.smallish,
                             margin: '0rem .2rem',
                             padding: '.2rem .3rem',
-                        }}>
+                        }}
+                    >
                         .nugg
                     </Text>
                     files to your Art Directory
@@ -113,11 +109,10 @@ const NuggAssembler: FunctionComponent<Props> = ({ data }) => {
                 ChildRenderItem={ChildRenderItem}
                 TitleRenderItem={TitleRenderItem}
                 FeatureRenderItem={FeatureRenderItem}
-                extraData={[selectedItems, setSelectedItems]}>
-                <DetailView
-                    selectedItems={selectedItems}
-                    setSelectedItems={setSelectedItems}
-                />
+                extraData={undefined}
+                // extraData={[selectedItems, setSelectedItems]}
+            >
+                <DetailView selectedItems={selectedItems} setSelectedItems={setSelectedItems} />
             </StickyList>
         ),
     );

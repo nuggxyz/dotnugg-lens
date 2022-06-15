@@ -1,21 +1,14 @@
-import { UseSpringProps } from '@react-spring/core';
-import { animated } from '@react-spring/web';
-import React, {
-    CSSProperties,
-    FunctionComponent,
-    SetStateAction,
-    useEffect,
-    useRef,
-} from 'react';
+import { UseSpringProps, animated } from '@react-spring/web';
+import React, { CSSProperties, FunctionComponent, SetStateAction, useEffect, useRef } from 'react';
 
-import Text from '../../Texts/Text/Text';
+import Text from '@src/components/general/Texts/Text/Text';
 
 import styles from './TextInput.styles';
 
 export interface TextInputProps {
     label?: string;
     value: string;
-    setValue: React.Dispatch<SetStateAction<string>> | any;
+    setValue: React.Dispatch<SetStateAction<string>> | ((value: string) => void);
     disabled?: boolean;
     warning?: string;
     style?: React.CSSProperties | UseSpringProps;
@@ -35,6 +28,12 @@ export interface TextInputProps {
     className?: string;
     styleLabel?: CSSProperties;
     shouldFocus?: boolean;
+    triggerFocus?: boolean;
+    onFocus?: () => void;
+    onClick?: React.DOMAttributes<HTMLTextAreaElement | HTMLInputElement>['onClick'];
+    // https://stackoverflow.com/a/53803282
+    restrictToNumbers?: boolean;
+    // restrictToNumbersWithDecimal?: boolean;
 }
 
 const TextInput: FunctionComponent<TextInputProps> = ({
@@ -60,6 +59,11 @@ const TextInput: FunctionComponent<TextInputProps> = ({
     className,
     styleLabel,
     shouldFocus,
+    onFocus,
+    onClick,
+    restrictToNumbers,
+    triggerFocus,
+    // restrictToNumbersWithDecimal,
 }) => {
     const inputStyle = {
         ...styles.textInput,
@@ -68,11 +72,13 @@ const TextInput: FunctionComponent<TextInputProps> = ({
         ...styleInput,
     };
 
-    const headingStyle = {
-        ...styles.headingContainer,
-        ...(label && styles.marginTop),
-        ...styleHeading,
-    };
+    const headingStyle = label
+        ? {
+              ...styles.headingContainer,
+              ...(label && styles.marginTop),
+              ...styleHeading,
+          }
+        : {};
 
     const containerStyle = {
         ...styles.container,
@@ -95,6 +101,12 @@ const TextInput: FunctionComponent<TextInputProps> = ({
         }
     }, [ref, shouldFocus]);
 
+    useEffect(() => {
+        if (ref.current && triggerFocus) {
+            ref.current.focus();
+        }
+    }, [ref, triggerFocus]);
+
     return (
         <animated.div style={containerStyle}>
             <div style={headingStyle}>
@@ -102,63 +114,64 @@ const TextInput: FunctionComponent<TextInputProps> = ({
                     textStyle={{
                         ...styles.headingText,
                         ...styleLabel,
-                    }}>
+                    }}
+                >
                     {label}
                 </Text>
                 {warning && (
                     <span style={styles.warningContainer}>
-                        <Text
-                            type="text"
-                            size="smaller"
-                            textStyle={styles.warningText}>
+                        <Text type="text" size="smaller" textStyle={styles.warningText}>
                             {warning}
                         </Text>
                     </span>
                 )}
             </div>
-            {leftToggles &&
-                leftToggles.map((Toggle, index) => (
-                    <div key={index}>{Toggle}</div>
-                ))}
+            {leftToggles && leftToggles.map((Toggle) => <div key={Toggle.key}>{Toggle}</div>)}
             <animated.div style={subContainerStyle}>
                 {multi ? (
                     <textarea
-                        //@ts-ignore
+                        // @ts-ignore
                         ref={ref}
                         className={className}
                         placeholder={placeholder}
                         style={inputStyle}
                         value={value}
-                        onChange={(
-                            value: React.ChangeEvent<HTMLTextAreaElement>,
-                        ) => {
-                            setValue(value.target.value);
+                        onChange={(v: React.ChangeEvent<HTMLTextAreaElement>) => {
+                            setValue(v.target.value);
                         }}
                         disabled={disabled}
+                        onFocus={onFocus}
+                        onClick={onClick}
                     />
                 ) : (
                     <input
-                        //@ts-ignore
+                        // @ts-ignore
                         ref={ref}
                         className={className}
                         placeholder={placeholder}
                         type={type}
                         style={inputStyle}
                         value={value}
-                        onChange={(
-                            value: React.ChangeEvent<HTMLInputElement>,
-                        ) => {
-                            setValue(value.target.value);
+                        onChange={(v: React.ChangeEvent<HTMLInputElement>) => {
+                            setValue(v.target.value);
                         }}
-                        pattern={pattern}
+                        pattern={!pattern || pattern === '' ? undefined : pattern}
                         disabled={disabled}
-                        inputMode={inputMode}
+                        inputMode={restrictToNumbers ? 'numeric' : inputMode}
+                        onFocus={onFocus}
+                        onClick={onClick}
+                        onKeyPress={
+                            restrictToNumbers
+                                ? (event) => {
+                                      if (!/[0-9]/.test(event.key)) {
+                                          event.preventDefault();
+                                      }
+                                  }
+                                : undefined
+                        }
                     />
                 )}
-                {rightToggles &&
-                    rightToggles.map((Toggle, index) => (
-                        <div key={index}>{Toggle}</div>
-                    ))}
+                {rightToggles && rightToggles.map((Toggle) => <div key={Toggle.key}>{Toggle}</div>)}
             </animated.div>
         </animated.div>
     );

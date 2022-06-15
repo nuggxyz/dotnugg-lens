@@ -1,13 +1,12 @@
 import React, { FunctionComponent } from 'react';
 
-import Layout from '../../lib/layout';
-import AppState from '../../state/app';
-import InteractiveText from '../general/Texts/InteractiveText/InteractiveText';
-import Text from '../general/Texts/Text/Text';
+import InteractiveText from '@src/components/general/Texts/InteractiveText/InteractiveText';
+import Text from '@src/components/general/Texts/Text/Text';
+import lib from '@src/lib';
+import client from '@src/client/index';
 
-type Props = {};
-
-const UseOurs: FunctionComponent<Props> = () => {
+const UseOurs: FunctionComponent<unknown> = () => {
+    const updateArtDir = client.keys.useUpdateArtDir();
     return (
         <Text
             textStyle={{
@@ -16,19 +15,15 @@ const UseOurs: FunctionComponent<Props> = () => {
                 textAlign: 'center',
                 justifyContent: 'center',
             }}
-            type="text">
+            type="text"
+        >
             or use
             <InteractiveText
                 type="text"
                 style={{ marginLeft: '.3rem', marginTop: '.37rem' }}
-                styleText={{ fontFamily: Layout.font.sf.bold }}
-                action={() =>
-                    AppState.dispatch.setArtLocation({
-                        _localStorageValue: '',
-                        _localStorageTarget: 'artLocation',
-                        _localStorageExpectedType: 'unique',
-                    })
-                }>
+                styleText={{ fontFamily: lib.layout.fontFamily.rounded }}
+                action={() => updateArtDir('')}
+            >
                 ours
             </InteractiveText>
         </Text>

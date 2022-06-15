@@ -1,19 +1,17 @@
-import FontSize from '../../../../lib/fontSize';
-import { NLStyleSheetCreator } from '../../../../lib';
-import Layout from '../../../../lib/layout';
-import Colors from '../../../../lib/colors';
+import FontSize from '@src/lib/fontSize';
+import lib, { NLStyleSheetCreator } from '@src/lib';
 
 const styles = NLStyleSheetCreator({
     title: {
-        fontFamily: Layout.font.sf.bold,
+        fontFamily: lib.layout.fontFamily.monospace,
         // color: Colors.textColor,
     },
     text: {
-        fontFamily: Layout.font.sf.regular,
+        fontFamily: lib.layout.fontFamily.monospace,
         // color: Colors.textColor,
     },
     code: {
-        fontFamily: Layout.font.code.regular,
+        fontFamily: lib.layout.fontFamily.monospace,
     },
     light: {
         fontWeight: 'lighter',

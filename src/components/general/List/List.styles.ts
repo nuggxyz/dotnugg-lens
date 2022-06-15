@@ -1,9 +1,7 @@
-import Colors from '../../../lib/colors';
-import FontSize from '../../../lib/fontSize';
-import Layout from '../../../lib/layout';
-import { NLStyleSheetCreator } from '../../../lib/index';
+import lib from '@src/lib';
+import globalStyles from '@src/lib/globalStyles';
 
-const styles = NLStyleSheetCreator({
+const styles = lib.layout.NLStyleSheetCreator({
     container: {
         display: 'flex',
         flexDirection: 'column',
@@ -20,14 +18,14 @@ const styles = NLStyleSheetCreator({
         paddingTop: '1rem',
     },
     border: {
-        border: `1px solid ${Colors.darkerGray}`,
+        border: `1px solid ${lib.colors.darkerGray}`,
         borderRadius: '.3rem',
     },
     horizontal: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap',
+        // justifyContent: 'space-between',
+        // flexWrap: 'wrap',
     },
     separator: {
         height: '1px',
@@ -39,15 +37,20 @@ const styles = NLStyleSheetCreator({
         justifyContent: 'space-between',
         marginBottom: '.5rem',
     },
+    title: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     sticky: {
         position: 'sticky',
         top: 0,
         zIndex: 1,
     },
-    // noItems: {
-    //     fontFamily: Layout.font.sf.bold,
-    //     fontSize: FontSize.h5,
-    // },
+    noItems: {
+        // ...globalStyles.fillWidth,
+        ...globalStyles.centered,
+    },
 });
 
 export default styles;

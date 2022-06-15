@@ -1,6 +1,6 @@
-import { NLStyleSheetCreator } from './index';
+import lib from './index';
 
-const globalStyles = NLStyleSheetCreator({
+const globalStyles = lib.layout.NLStyleSheetCreator({
     absoluteFill: {
         position: 'absolute',
         width: '100%',
@@ -15,18 +15,36 @@ const globalStyles = NLStyleSheetCreator({
     centered: {
         display: 'flex',
         justifyContent: 'center',
-        alignContent: 'center',
+        alignItems: 'center',
+        textAlign: 'center',
+    },
+    centeredSpaceBetween: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
     backdropFilter: {
         backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
     },
-    centerFlex: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'column',
+    firefoxBlur: {
+        filter: 'blur(20px)',
     },
-});
+    listNugg: {
+        height: '80px',
+        width: '80px',
+    },
+    textWhite: {
+        color: 'white',
+    },
+    textBlack: {
+        color: 'black',
+    },
+    textBlue: {
+        color: lib.colors.nuggBlueText,
+    },
+    textRed: {
+        color: lib.colors.nuggRedText,
+    },
+} as const);
 
 export default globalStyles;

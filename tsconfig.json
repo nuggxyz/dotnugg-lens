@@ -1,22 +1,29 @@
 {
     "compilerOptions": {
         "jsx": "react",
-        "target": "esNext",
-        "lib": ["dom", "dom.iterable", "esnext"],
+        "target": "es2021",
+        "lib": ["dom", "dom.iterable", "esnext", "WebWorker"],
         "allowJs": true,
         "skipLibCheck": true,
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
-        "strict": false,
         "forceConsistentCasingInFileNames": true,
         "noFallthroughCasesInSwitch": true,
         "module": "esNext",
         "moduleResolution": "node",
         "resolveJsonModule": true,
         "isolatedModules": true,
-        "noEmit": true
-        // "baseUrl": "."
+        "noEmit": true,
+        "baseUrl": ".",
+        "plugins": [{ "name": "typescript-plugin-css-modules" }],
+
+        "paths": {
+            "@src/*": ["src/*"]
+        },
+        // "exactOptionalPropertyTypes": true,
+        "types": ["node", "jest"],
+        "strict": true
     },
-    "include": ["src", "test.ts", "index.d.ts"],
-    "exclude": ["node_modules", "config"]
+    "include": ["src"],
+    "exclude": ["node_modules"]
 }
