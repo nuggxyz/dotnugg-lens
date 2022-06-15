@@ -1,6 +1,6 @@
-import { NLStyleSheetCreator } from '../../../lib';
-import Colors from '../../../lib/colors';
-import globalStyles from '../../../lib/globalStyles';
+import { NLStyleSheetCreator } from '@src/lib';
+import Colors from '@src/lib/colors';
+import globalStyles from '@src/lib/globalStyles';
 
 const styles = NLStyleSheetCreator({
     container: {

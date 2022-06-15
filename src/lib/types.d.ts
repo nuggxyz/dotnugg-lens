@@ -16,9 +16,7 @@ type ApplyDispatchToChildren<T> = {
         : (
               payload:
                   | AnyElementOf<Parameters<T[E]>>
-                  | NL.Redux.LocalStoragePayload<
-                        AnyElementOf<Parameters<T[E]>>
-                    >,
+                  | NL.Redux.LocalStoragePayload<AnyElementOf<Parameters<T[E]>>>,
           ) => import('react').Dispatch<T[E]>;
 };
 
@@ -27,3 +25,5 @@ type NLStyleSheet = ApplyToChildren<React.CSSProperties>;
 type Dictionary<T> = {
     [_: string]: T;
 };
+
+type RecursiveRequired<T> = { [K in keyof T]: Required<T[K]> };

@@ -1,41 +1,26 @@
 import React, { FunctionComponent, useState } from 'react';
-import { BigNumber } from 'ethers';
 import { InfuraProvider, JsonRpcProvider } from '@ethersproject/providers';
-import useEffect from 'react';
 
-import Button from '../../components/general/Buttons/Button/Button';
-import Loader from '../../components/general/Loader/Loader';
-import TextInput from '../../components/general/TextInputs/TextInput/TextInput';
-import Text from '../../components/general/Texts/Text/Text';
-import { getProvider } from '../../config';
-import { DotnuggV1Helper } from '../../contracts/DotnuggHelper';
-import Colors from '../../lib/colors';
-import globalStyles from '../../lib/globalStyles';
-import AppState from '../../state/app';
-import Web3Config from '../../Web3Config';
+import Loader from '@src/components/general/Loader/Loader';
+import Text from '@src/components/general/Texts/Text/Text';
+import globalStyles from '@src/lib/globalStyles';
+import Button from '@src/components/general/Buttons/Button/Button';
+import TextInput from '@src/components/general/TextInputs/TextInput/TextInput';
+import web3 from '@src/web3';
+import client from '@src/client';
+import lib from '@src/lib';
 
 import styles from './Connect.styles';
 
-type Props = {};
-
-export const createInfuraProvider = (
-    chain: string,
-    key: string,
-): JsonRpcProvider => {
+export const createInfuraProvider = (chain: string, key: string): JsonRpcProvider => {
     return new InfuraProvider(chain, key);
 };
 
-const Connect: FunctionComponent<Props> = () => {
+const Connect: FunctionComponent<unknown> = () => {
     const [apiKey, setApiKey] = useState('');
     const [loading, setLoading] = useState(false);
 
-    React.useEffect(() => {
-        AppState.dispatch.setApiKey({
-            _localStorageTarget: 'apiKey',
-            _localStorageExpectedType: 'unique',
-            _localStorageValue: Web3Config.INFURA_KEY,
-        });
-    }, []);
+    const updateInfuraKey = client.keys.useUpdateInfuraKey();
 
     return (
         <div style={styles.container}>
@@ -43,20 +28,15 @@ const Connect: FunctionComponent<Props> = () => {
                 Add your Infura Project ID
             </Text>
             <Text type="text" size="smaller" textStyle={styles.text}>
-                By adding your Infura Project ID, you agree to nugg.xyz's Terms
-                of Service and acknowledge that you have read and understood the
-                nugg.xyz Protocol Disclaimer.
+                By adding your Infura Project ID, you agree to {`nugg.xyz's`} Terms of Service and
+                acknowledge that you have read and understood the nugg.xyz Protocol Disclaimer.
             </Text>
 
             <TextInput
                 styleInputContainer={globalStyles.fillWidth}
                 styleInput={styles.textInput}
-                setValue={(text) =>
-                    setApiKey(
-                        text === 'dotnugg'
-                            ? Web3Config.INFURA_KEY
-                            : Web3Config.INFURA_KEY,
-                    )
+                setValue={(text: string) =>
+                    setApiKey(text === 'dotnugg' ? web3.constants.INFURA_KEY : text)
                 }
                 value={apiKey}
                 placeholder="e.g., a1b2c3d4e5..."
@@ -64,13 +44,9 @@ const Connect: FunctionComponent<Props> = () => {
             <Button
                 label="Verify"
                 buttonStyle={styles.button}
-                onClick={async () => {
+                onClick={() => {
                     setLoading(true);
-                    AppState.dispatch.setApiKey({
-                        _localStorageTarget: 'apiKey',
-                        _localStorageExpectedType: 'unique',
-                        _localStorageValue: apiKey,
-                    });
+                    updateInfuraKey(apiKey);
                     // DotnuggV1Helper.instance
                     //     .connect(createInfuraProvider('rinkeby', apiKey))
                     //     ['combo(uint256[],bool)'](
@@ -96,11 +72,11 @@ const Connect: FunctionComponent<Props> = () => {
                     //     .finally(() => setLoading(false));
                 }}
                 rightIcon={
-                    loading && (
+                    loading ? (
                         <div style={styles.loader}>
-                            <Loader color={Colors.nuggRedText} />
+                            <Loader color={lib.colors.nuggRedText} />
                         </div>
-                    )
+                    ) : undefined
                 }
             />
         </div>

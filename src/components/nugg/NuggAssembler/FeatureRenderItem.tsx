@@ -1,10 +1,8 @@
 import React, { FunctionComponent } from 'react';
 
-import { isUndefinedOrNullOrNotNumber } from '../../../lib';
-import Colors from '../../../lib/colors';
-import constants from '../../../lib/constants';
-import Button from '../../general/Buttons/Button/Button';
-import Text from '../../general/Texts/Text/Text';
+import Colors from '@src/lib/colors';
+import Button from '@src/components/general/Buttons/Button/Button';
+import Text from '@src/components/general/Texts/Text/Text';
 
 import styles from './NuggAssembler.styles';
 
@@ -23,26 +21,19 @@ const FeatureRenderItem: FunctionComponent<Props> = ({
 }) => {
     return (
         <Button
-            label={
-                !isUndefinedOrNullOrNotNumber(+feature)
-                    ? constants.DOTNUGG_ITEMS[+feature]
-                    : feature
-            }
+            label={typeof feature === 'number' ? feature : feature}
             textStyle={{
                 color: isSelected ? Colors.nuggRedText : 'white',
             }}
             buttonStyle={{
                 ...styles.featureRenderItemContainer,
-                background: 'transparent', //!isSelected
+                background: 'transparent', //! isSelected
                 // ? 'transparent'
                 // : Colors.transparentWhite,
             }}
             onClick={onClick}
             rightIcon={
-                <Text
-                    type="text"
-                    size="small"
-                    textStyle={styles.featureRenderItemBadge}>
+                <Text type="text" size="small" textStyle={styles.featureRenderItemBadge}>
                     {numberOfItems}
                 </Text>
             }

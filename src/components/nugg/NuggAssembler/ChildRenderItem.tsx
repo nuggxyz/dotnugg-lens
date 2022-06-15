@@ -1,72 +1,53 @@
-import React, { FunctionComponent, useMemo } from 'react';
-import {
-    IoAdd,
-    IoAddCircle,
-    IoAddOutline,
-    IoAttach,
-    IoClose,
-    IoDocument,
-} from 'react-icons/io5';
-import { SiAddthis, SiVisualstudiocode } from 'react-icons/si';
+import React, { FunctionComponent } from 'react';
+import { IoAdd } from 'react-icons/io5';
+import { SiVisualstudiocode } from 'react-icons/si';
 
-import { DotnuggV1Helper } from '../../../contracts/DotnuggHelper';
-import { getFileFromPath, isUndefinedOrNullOrObjectEmpty } from '../../../lib';
-import Text from '../../general/Texts/Text/Text';
-import Colors from '../../../lib/colors';
-import Button from '../../general/Buttons/Button/Button';
-import Loader from '../../general/Loader/Loader';
-import { Item } from '../../../state/ipcListeners';
-import AppState from '../../../state/app';
-import constants from '../../../lib/constants';
-import Label from '../../general/Label/Label';
+import lib from '@src/lib';
+import Text from '@src/components/general/Texts/Text/Text';
+import Button from '@src/components/general/Buttons/Button/Button';
+import Loader from '@src/components/general/Loader/Loader';
+import Label from '@src/components/general/Label/Label';
+import client from '@src/client/index';
+import { ListRenderItemProps } from '@src/components/general/List/List';
+import { Item } from '@src/client/compiled';
 
 import styles from './NuggAssembler.styles';
 
-type Props = {
-    item: Item['items'][number];
-    extraData: any[];
-    index: number;
-};
+type Props = ListRenderItemProps<Item['items'][number], undefined, undefined>;
 
-const ChildRenderItem: FunctionComponent<Props> = ({
-    item,
-    extraData,
-    index,
-}) => {
-    const liveItem = AppState.hook.useCompiledItem(item.fileUri);
+const ChildRenderItem: FunctionComponent<Props> = ({ item, index }) => {
+    const liveItem = client.compiled.useCompiledItem(item.fileUri);
+    const pushToRecents = client.recents.usePushToRecents();
 
-    const isSelected = useMemo(() => {
-        return !isUndefinedOrNullOrObjectEmpty(
-            extraData[0].find((listItem) => item.fileUri === listItem.fileUri),
-        );
-    }, [extraData, item]);
+    // const isSelected = useMemo(() => {
+    //     return !isUndefinedOrNullOrObjectEmpty(
+    //         extraData[0].find((listItem) => item.fileUri === listItem.fileUri),
+    //     );
+    // }, [extraData, item]);
 
-    const callback = React.useCallback(() => {
-        extraData[1]((items) => {
-            // item = { ...item, svg: item.svg };
+    // const callback = React.useCallback(() => {
+    //     extraData[1]((items) => {
+    //         // item = { ...item, svg: item.svg };
 
-            const ok = items.filter((x) => x.feature !== item.feature);
+    //         const ok = items.filter((x) => x.feature !== item.feature);
 
-            ok.push(item);
+    //         ok.push(item);
 
-            ok.sort((a, b) => a.feature - b.feature);
+    //         ok.sort((a, b) => a.feature - b.feature);
 
-            // @ts-ignore - only recents have a time
-            if (!item.time)
-                AppState.dispatch.addRecent({ fileUri: item.fileUri });
+    //         // @ts-ignore - only recents have a time
+    //         if (!item.time) pushToRecents({ fileUri: item.fileUri });
 
-            return ok;
-        });
-    }, [extraData]);
+    //         return ok;
+    //     });
+    // }, [extraData]);
 
     return (
         <Button
             key={index}
             buttonStyle={{
                 ...styles.detailChildrenderItem,
-                background: isSelected
-                    ? Colors.nuggBlueSemiTransparent
-                    : styles.detailChildrenderItem.background,
+                background: styles.detailChildrenderItem.background,
                 width: '150px',
                 height: '150px',
 
@@ -80,23 +61,16 @@ const ChildRenderItem: FunctionComponent<Props> = ({
                 <>
                     <Button
                         buttonStyle={styles.detailSelectedItemClose}
-                        rightIcon={<IoAdd size={15} color={Colors.green} />}
-                        onClick={callback}
-                        disabled={isSelected}
+                        rightIcon={<IoAdd size={15} color={lib.colors.green} />}
+                        onClick={() => pushToRecents(item.fileUri)}
+                        // disabled={isSelected}
                     />
                     <Button
                         buttonStyle={styles.detailSelectedVsCode}
                         type="text"
                         size="small"
-                        leftIcon={
-                            <SiVisualstudiocode
-                                color={Colors.nuggBlueText}
-                                size={15}
-                            />
-                        }
-                        onClick={() =>
-                            window.dotnugg.openToVSCode(item.fileUri)
-                        }
+                        leftIcon={<SiVisualstudiocode color={lib.colors.nuggBlueText} size={15} />}
+                        onClick={() => window.dotnugg.openToVSCode(item.fileUri)}
                     />
 
                     <div
@@ -105,24 +79,22 @@ const ChildRenderItem: FunctionComponent<Props> = ({
                             alignItems: 'center',
                             ...styles.detailSelectedItemId,
                             paddingBottom: 5,
-                        }}>
-                        {/* <IoDocument size={25} color={Colors.transparentDarkGrey} /> */}
+                        }}
+                    >
+                        {/* <IoDocument size={25} color={lib.colors.transparentDarkGrey} /> */}
                         <Label
                             type="text"
                             size="small"
                             textStyle={{
-                                color: Colors.transparentDarkGrey,
+                                color: lib.colors.transparentDarkGrey,
                                 // marginLeft: '.5rem',
                                 fontSize: '10px',
                                 fontWeight: 'bold',
                                 // paddingBottom: 5,
                                 position: 'relative',
                             }}
-                            text={
-                                constants.DOTNUGG_ITEMS[item.feature] +
-                                ' ' +
-                                item.id
-                            }></Label>
+                            text={`${'hamd'} ${item.id}`}
+                        />
 
                         <div
                             style={{
@@ -131,13 +103,14 @@ const ChildRenderItem: FunctionComponent<Props> = ({
                                 ...styles.detailSelectedItemId,
                                 // right: undefined,
                                 left: styles.detailSelectedItemId.right,
-                            }}>
-                            {/* <IoDocument size={25} color={Colors.transparentDarkGrey} /> */}
+                            }}
+                        >
+                            {/* <IoDocument size={25} color={lib.colors.transparentDarkGrey} /> */}
                             {/* <Label
                             type="text"
                             size="small"
                             textStyle={{
-                                color: Colors.transparentDarkGrey,
+                                color: lib.colors.transparentDarkGrey,
                                 // marginLeft: '.5rem',
                                 fontSize: '10px',
                                 fontWeight: 'bold',
@@ -158,13 +131,15 @@ const ChildRenderItem: FunctionComponent<Props> = ({
                             justifyContent: 'center',
                             alignItems: 'end',
                             textAlign: 'center',
-                        }}>
+                        }}
+                    >
                         <Text
                             textStyle={{
                                 fontSize: 14,
                                 textAlign: 'center',
                                 marginRight: '2px',
-                            }}>
+                            }}
+                        >
                             {(item.percentWeight * 10000).toFixed(0)}
                         </Text>
                         <Text
@@ -172,7 +147,8 @@ const ChildRenderItem: FunctionComponent<Props> = ({
                                 fontSize: 10,
                                 textAlign: 'center',
                                 marginBottom: 1,
-                            }}>
+                            }}
+                        >
                             {' / 10k'}
                         </Text>
                     </div>
@@ -189,7 +165,8 @@ const ChildRenderItem: FunctionComponent<Props> = ({
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                        }}>
+                        }}
+                    >
                         <img
                             src={liveItem?.svg || item.svg}
                             style={{
@@ -197,6 +174,7 @@ const ChildRenderItem: FunctionComponent<Props> = ({
                                 // height: '150px',
                                 height: '50%',
                             }}
+                            alt="fix"
                         />
                     </div>
                 ) : (
@@ -207,7 +185,8 @@ const ChildRenderItem: FunctionComponent<Props> = ({
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                        }}>
+                        }}
+                    >
                         <Loader color="white" />
                     </div>
                 )

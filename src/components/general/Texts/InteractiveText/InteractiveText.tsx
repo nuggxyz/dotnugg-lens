@@ -1,12 +1,6 @@
-import { props } from 'bluebird';
-import React, {
-    CSSProperties,
-    FunctionComponent,
-    ReactChild,
-    useState,
-} from 'react';
+import React, { CSSProperties, FunctionComponent, ReactChild, useState } from 'react';
 
-import Text, { TextProps } from '../Text/Text';
+import Text, { TextProps } from '@src/components/general/Texts/Text/Text';
 
 import styles from './InteractiveText.styles';
 
@@ -70,7 +64,10 @@ const InteractiveText: FunctionComponent<Props> = ({
                 style={customStyle}
                 onClick={action}
                 onMouseEnter={() => setHover(true)}
-                onMouseLeave={() => setHover(false)}>
+                onMouseLeave={() => setHover(false)}
+                role="button"
+                aria-hidden="true"
+            >
                 <div>
                     <div style={textStyle}>
                         {leftIcon && leftIcon}

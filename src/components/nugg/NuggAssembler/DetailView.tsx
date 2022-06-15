@@ -1,57 +1,35 @@
-import React, {
-    FunctionComponent,
-    SetStateAction,
-    useEffect,
-    useRef,
-    useState,
-} from 'react';
-import {
-    IoCheckmarkCircle,
-    IoCheckmarkCircleOutline,
-    IoClose,
-    IoEllipseOutline,
-} from 'react-icons/io5';
+import React, { FunctionComponent, SetStateAction, useEffect, useRef, useState } from 'react';
+import { IoClose, IoSync } from 'react-icons/io5';
 import { SiVisualstudiocode } from 'react-icons/si';
-import { IoSync } from 'react-icons/io5';
 
-import { DotnuggV1Helper } from '../../../contracts/DotnuggHelper';
-import {
-    isUndefinedOrNullOrArrayEmpty,
-    isUndefinedOrNullOrStringEmpty,
-} from '../../../lib';
-import Colors from '../../../lib/colors';
-import AppState from '../../../state/app';
-import { Item } from '../../../state/ipcListeners';
-import Button from '../../general/Buttons/Button/Button';
-import AnimatedCard from '../../general/Cards/AnimatedCard/AnimatedCard';
-import FadeInOut from '../../general/FadeInOut/FadeInOut';
-import Loader from '../../general/Loader/Loader';
-import Text from '../../general/Texts/Text/Text';
-import usePrevious from '../../../hooks/usePrevious';
-import constants from '../../../lib/constants';
-import Label from '../../general/Label/Label';
+import lib, { isUndefinedOrNullOrArrayEmpty, isUndefinedOrNullOrStringEmpty } from '@src/lib';
+import Button from '@src/components/general/Buttons/Button/Button';
+import FadeInOut from '@src/components/general/FadeInOut/FadeInOut';
+import Loader from '@src/components/general/Loader/Loader';
+import Text from '@src/components/general/Texts/Text/Text';
+import usePrevious from '@src/hooks/usePrevious';
+import Label from '@src/components/general/Label/Label';
+import { useDotnuggV1 } from '@src/contracts/useContract';
+import client from '@src/client';
+import { Item } from '@src/client/compiled';
 
 import styles from './NuggAssembler.styles';
 
 type Props = {
     selectedItems: Item['items'][number][];
-    setSelectedItems: React.Dispatch<SetStateAction<any>>;
+    setSelectedItems: React.Dispatch<SetStateAction<Item['items'][number][]>>;
 };
 
-const DetailView: FunctionComponent<Props> = ({
-    selectedItems,
-    setSelectedItems,
-}) => {
-    const scrollRef = useRef<HTMLDivElement>();
+const DetailView: FunctionComponent<Props> = ({ selectedItems, setSelectedItems }) => {
+    const scrollRef = useRef<HTMLDivElement>(null);
     const [svg, setSvg] = React.useState('');
     const [loading, setLoading] = useState(false);
-    const isZoomOn = AppState.select.isZoomOn();
-    const { height } = AppState.select.dimensions();
-    const artRepo = AppState.select.artLocation();
+    // const isZoomOn = AppState.select.isZoomOn();
+    // const { height } = AppState.select.dimensions();
+    const artRepo = client.keys.useArtDir();
+    const dotnugg = useDotnuggV1();
 
-    const liveSelectedItems = AppState.hook.useCompiledItems(
-        selectedItems.map((x) => x.fileUri),
-    );
+    const liveSelectedItems = client.compiled.useCompiledItems(selectedItems.map((x) => x.fileUri));
 
     const prev = usePrevious(liveSelectedItems);
 
@@ -61,23 +39,22 @@ const DetailView: FunctionComponent<Props> = ({
                 setLoading(true);
                 console.log({ liveSelectedItems });
                 const tmp = liveSelectedItems;
-                DotnuggV1Helper.renderOnChain(
-                    [
-                        ...tmp
-                            .sort((a, b) => (a.feature < b.feature ? -1 : 1))
-                            .map((item) =>
-                                window.dotnugg.getHex(item, artRepo),
-                            ),
-                        ///////// bad ////////
-                        // [],
-                        // [],
-                        ///////// good ////////
-                        // [],
-                        // [],
-                    ],
-                    true,
-                )
-                    .then((svg) => setSvg(svg))
+                dotnugg
+                    .combo(
+                        [
+                            ...tmp
+                                .sort((a, b) => (a.feature < b.feature ? -1 : 1))
+                                .map((item) => window.dotnugg.getHex(item, artRepo)),
+                            /// ////// bad ////////
+                            // [],
+                            // [],
+                            /// ////// good ////////
+                            // [],
+                            // [],
+                        ],
+                        true,
+                    )
+                    .then((_svg) => setSvg(_svg))
                     .catch((e) => alert(e))
                     .finally(() => setLoading(false));
                 // scrollRef.current.scrollTo(scrollRef.current.scrollWidth, 0);
@@ -89,19 +66,19 @@ const DetailView: FunctionComponent<Props> = ({
         refresh();
     }, [liveSelectedItems, refresh]);
 
-    useEffect(() => {
-        if (scrollRef.current) {
-            const current = scrollRef.current;
-            const listener = (evt) => {
-                console.log(evt.deltaY);
-                current.scrollLeft += evt.deltaY;
-            };
-            current.addEventListener('wheel', listener);
-            return () => {
-                current.removeEventListener('wheel', listener);
-            };
-        }
-    }, [scrollRef.current]);
+    // useEffect(() => {
+    //     if (scrollRef.current) {
+    //         const { current } = scrollRef;
+    //         const listener = (evt) => {
+    //             console.log(evt.deltaY);
+    //             current.scrollLeft += evt.deltaY;
+    //         };
+    //         current.addEventListener('wheel', listener);
+    //         return () => {
+    //             current.removeEventListener('wheel', listener);
+    //         };
+    //     }
+    // }, [scrollRef.current]);
 
     return !isUndefinedOrNullOrArrayEmpty(selectedItems) ? (
         <div style={styles.detailContainer}>
@@ -113,13 +90,15 @@ const DetailView: FunctionComponent<Props> = ({
                     justifyContent: 'center',
                     alignItems: 'center',
                     display: 'flex',
-                }}>
+                }}
+            >
                 {!isUndefinedOrNullOrStringEmpty(svg) && (
                     <img
                         src={svg}
                         style={{
                             width: '90%',
                         }}
+                        alt="fix"
                     />
                 )}
             </div>
@@ -131,7 +110,8 @@ const DetailView: FunctionComponent<Props> = ({
                             textStyle={{
                                 color: 'white',
                                 marginRight: '.5rem',
-                            }}>
+                            }}
+                        >
                             Combining on-chain
                         </Text>
                         <Loader color="white" />
@@ -198,7 +178,8 @@ const DetailView: FunctionComponent<Props> = ({
                         width: '100%',
                         justifyContent: 'space-around',
                         flexWrap: 'wrap',
-                    }}>
+                    }}
+                >
                     {liveSelectedItems.map((item, index) => (
                         <div
                             style={{
@@ -208,14 +189,16 @@ const DetailView: FunctionComponent<Props> = ({
                                 display: 'flex',
                                 justifyContent: 'center',
                             }}
-                            key={`item-${index}`}>
+                            key={`item-${index}`}
+                        >
                             <Button
                                 buttonStyle={styles.detailSelectedItemClose}
                                 rightIcon={<IoClose size={15} />}
                                 onClick={() =>
-                                    setSelectedItems((items) =>
-                                        items.toggle(item, 'fileName'),
-                                    )
+                                    setSelectedItems((items) => {
+                                        items.toggle(item, 'fileName');
+                                        return items;
+                                    })
                                 }
                             />
                             <Button
@@ -223,20 +206,16 @@ const DetailView: FunctionComponent<Props> = ({
                                 type="text"
                                 size="small"
                                 leftIcon={
-                                    <SiVisualstudiocode
-                                        color={Colors.nuggBlueText}
-                                        size={15}
-                                    />
+                                    <SiVisualstudiocode color={lib.colors.nuggBlueText} size={15} />
                                 }
-                                onClick={() =>
-                                    window.dotnugg.openToVSCode(item.fileUri)
-                                }
+                                onClick={() => window.dotnugg.openToVSCode(item.fileUri)}
                             />
                             <img
                                 src={item.svg}
                                 style={{
                                     height: '55%',
                                 }}
+                                alt="fix"
                             />
                             <div
                                 style={{
@@ -246,21 +225,19 @@ const DetailView: FunctionComponent<Props> = ({
                                     // top: '.4rem',
                                     // bottom: ' .3rem',
                                     // right: undefined,
-                                }}>
+                                }}
+                            >
                                 <Label
                                     type="text"
                                     size="small"
                                     textStyle={{
-                                        color: Colors.transparentDarkGrey,
+                                        color: lib.colors.transparentDarkGrey,
                                         // marginLeft: '.5rem',
                                         fontSize: '10px',
                                         fontWeight: 'bold',
                                     }}
-                                    text={
-                                        constants.DOTNUGG_ITEMS[item.feature] +
-                                        ' ' +
-                                        item.id
-                                    }></Label>
+                                    text={`${'hannnd'} ${item.id}`}
+                                />
                             </div>
                             <div
                                 style={{
@@ -273,13 +250,15 @@ const DetailView: FunctionComponent<Props> = ({
                                     justifyContent: 'center',
                                     alignItems: 'end',
                                     textAlign: 'center',
-                                }}>
+                                }}
+                            >
                                 <Text
                                     textStyle={{
                                         fontSize: 14,
                                         textAlign: 'center',
                                         marginRight: '2px',
-                                    }}>
+                                    }}
+                                >
                                     {(item.percentWeight * 10000).toFixed(0)}
                                 </Text>
                                 <Text
@@ -287,7 +266,8 @@ const DetailView: FunctionComponent<Props> = ({
                                         fontSize: 10,
                                         textAlign: 'center',
                                         marginBottom: 1,
-                                    }}>
+                                    }}
+                                >
                                     {' / 10k'}
                                 </Text>
                             </div>

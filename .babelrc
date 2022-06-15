@@ -1,0 +1,47 @@
+{
+    "plugins": [
+        [
+            "@babel/plugin-transform-typescript",
+            {
+                "allowDeclareFields": true
+            }
+        ],
+        ["@babel/plugin-proposal-decorators", { "legacy": true }],
+        [
+            "module-resolver",
+            {
+                "root": ["."],
+                "extensions": [".js", ".ts", ".tsx", ".json"],
+                "alias": {
+                    "@src": "./src"
+                }
+            }
+        ],
+        [
+            "wildcard",
+            {
+                "exts": ["js", "es6", "es", "tsx", "typescript"]
+            }
+        ],
+        ["import-directory"],
+        ["macros"],
+        ["babel-plugin-dev-expression"],
+        ["transform-class-properties"]
+    ],
+    "presets": [
+        [
+            "@babel/preset-typescript",
+            {
+                "allowDeclareFields": true
+            }
+        ],
+        ["@babel/preset-env"],
+        ["@babel/preset-react"]
+    ],
+    "sourceType": "unambiguous",
+    "env": {
+        "test": {
+            "plugins": ["dynamic-import-node"]
+        }
+    }
+}
