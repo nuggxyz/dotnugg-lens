@@ -1,4 +1,4 @@
-import { NLStyleSheetCreator } from '../../../../lib';
+import { NLStyleSheetCreator } from '@src/lib';
 
 const styles = NLStyleSheetCreator({
     container: {},

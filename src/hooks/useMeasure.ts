@@ -4,9 +4,9 @@ export type UseMeasureRect = Pick<
     DOMRectReadOnly,
     'x' | 'y' | 'top' | 'left' | 'right' | 'bottom' | 'height' | 'width'
 >;
-export type UseMeasureRef<E extends Element = Element> = (element: E) => void;
+export type UseMeasureRef<E extends Element | null = Element> = (element: E) => void;
 export type UseMeasureResult<E extends Element = Element> = [
-    UseMeasureRef<E>,
+    UseMeasureRef<E | null>,
     UseMeasureRect,
 ];
 
@@ -27,7 +27,7 @@ function useMeasure<E extends Element = Element>(): UseMeasureResult<E> {
 
     const observer = useMemo(
         () =>
-            new (window as any).ResizeObserver((entries) => {
+            new window.ResizeObserver((entries) => {
                 if (entries[0]) {
                     const { x, y, width, height, top, left, bottom, right } =
                         entries[0].contentRect;
@@ -38,7 +38,7 @@ function useMeasure<E extends Element = Element>(): UseMeasureResult<E> {
     );
 
     useLayoutEffect(() => {
-        if (!element) return;
+        if (!element) return () => undefined;
         observer.observe(element);
         return () => {
             observer.disconnect();

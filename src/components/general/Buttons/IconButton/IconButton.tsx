@@ -2,21 +2,25 @@
 
 import React, { CSSProperties, FunctionComponent, useState } from 'react';
 
-import Image from '../../Images/Image/Image';
-import Button from '../Button/Button';
+import Image from '@src/components/general/Images/Image/Image';
+import Button from '@src/components/general/Buttons/Button/Button';
 
 import styles from './IconButton.styles';
 
 type Props = {
-    icon: string;
+    icon?: string;
     onClick: () => void;
     buttonStyle?: CSSProperties;
+    iconComponent?: JSX.Element;
+    className?: string;
 };
 
 const IconButton: FunctionComponent<Props> = ({
     icon,
     onClick,
     buttonStyle,
+    iconComponent: Comp,
+    className,
 }) => {
     const style = {
         ...styles.container,
@@ -25,12 +29,12 @@ const IconButton: FunctionComponent<Props> = ({
 
     const [hoverStyle, setHoverStyle] = useState(styles.hoverOff);
 
-    const isHovering = (hover: boolean) =>
-        setHoverStyle(hover ? styles.hoverOn : styles.hoverOff);
+    const isHovering = (hover: boolean) => setHoverStyle(hover ? styles.hoverOn : styles.hoverOff);
 
     return (
         <Button
-            rightIcon={<Image src={icon} style={hoverStyle} />}
+            className={className}
+            rightIcon={icon ? <Image src={icon} style={hoverStyle} /> : Comp || undefined}
             onClick={onClick}
             buttonStyle={style}
             isHovering={isHovering}
@@ -38,4 +42,4 @@ const IconButton: FunctionComponent<Props> = ({
     );
 };
 
-export default React.memo(IconButton);
+export default IconButton;

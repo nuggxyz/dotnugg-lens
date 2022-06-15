@@ -1,32 +1,28 @@
 import React, { FunctionComponent } from 'react';
 import {
-    IoClose,
     IoEllipsisHorizontal,
     IoFolderOpenOutline,
-    IoMenu,
     IoOpenOutline,
     IoReload,
     IoTrashBinOutline,
 } from 'react-icons/io5';
 import { SiVisualstudiocode } from 'react-icons/si';
 
-import { isUndefinedOrNullOrStringEmpty, shortenPathName } from '../../../lib';
-import Colors from '../../../lib/colors';
-import constants from '../../../lib/constants';
-import AppState from '../../../state/app';
-import Web3Config from '../../../Web3Config';
-import Button from '../../general/Buttons/Button/Button';
-import Flyout from '../../general/Flyout/Flyout';
-import InteractiveText from '../../general/Texts/InteractiveText/InteractiveText';
-import Text from '../../general/Texts/Text/Text';
+import lib, { isUndefinedOrNullOrStringEmpty, shortenPathName } from '@src/lib';
+import Button from '@src/components/general/Buttons/Button/Button';
+import Flyout from '@src/components/general/Flyout/Flyout';
+import InteractiveText from '@src/components/general/Texts/InteractiveText/InteractiveText';
+import client from '@src/client/index';
+import { useDotnuggV1 } from '@src/contracts/useContract';
 
 import styles from './ArtRepoHandler.styles';
 
-type Props = {};
+const ArtRepoHandler: FunctionComponent<unknown> = () => {
+    const artLocation = client.keys.useArtDir();
+    const apiKey = client.keys.useInfuraKey();
+    const updateMainIsLoading = client.keys.useUpdateMainIsLoading();
 
-const ArtRepoHandler: FunctionComponent<Props> = () => {
-    const artLocation = AppState.select.artLocation();
-    const apiKey = AppState.select.apiKey();
+    const dotnugg = useDotnuggV1();
 
     return !isUndefinedOrNullOrStringEmpty(artLocation) ? (
         <div style={styles.artLocationContainer}>
@@ -36,14 +32,12 @@ const ArtRepoHandler: FunctionComponent<Props> = () => {
                     <Button
                         buttonStyle={styles.artLocationDelete}
                         rightIcon={
-                            <IoEllipsisHorizontal
-                                color={Colors.nuggBlueText}
-                                size={15}
-                            />
+                            <IoEllipsisHorizontal color={lib.colors.nuggBlueText} size={15} />
                         }
                         onClick={() => {}}
                     />
-                }>
+                }
+            >
                 <>
                     <Button
                         buttonStyle={styles.flyoutSelect}
@@ -52,7 +46,7 @@ const ArtRepoHandler: FunctionComponent<Props> = () => {
                         textStyle={styles.flyoutSelectText}
                         leftIcon={
                             <IoOpenOutline
-                                color={Colors.nuggBlueText}
+                                color={lib.colors.nuggBlueText}
                                 size={20}
                                 style={styles.flyoutSelectIcon}
                             />
@@ -67,7 +61,7 @@ const ArtRepoHandler: FunctionComponent<Props> = () => {
                         textStyle={styles.flyoutSelectText}
                         leftIcon={
                             <SiVisualstudiocode
-                                color={Colors.nuggBlueText}
+                                color={lib.colors.nuggBlueText}
                                 size={20}
                                 style={styles.flyoutSelectIcon}
                             />
@@ -83,19 +77,15 @@ const ArtRepoHandler: FunctionComponent<Props> = () => {
                         textStyle={styles.flyoutSelectText}
                         leftIcon={
                             <IoReload
-                                color={Colors.nuggBlueText}
+                                color={lib.colors.nuggBlueText}
                                 size={20}
                                 style={styles.flyoutSelectIcon}
                             />
                         }
                         label="Recompile"
                         onClick={() => {
-                            AppState.dispatch.setMainProcessLoading(true);
-                            window.dotnugg.createCompiler(
-                                artLocation,
-                                Web3Config.DOTNUGG_V1,
-                                apiKey,
-                            );
+                            updateMainIsLoading(true);
+                            window.dotnugg.createCompiler(artLocation, dotnugg.address, apiKey);
                         }}
                     />
                     <div style={styles.divider} />
@@ -106,7 +96,7 @@ const ArtRepoHandler: FunctionComponent<Props> = () => {
                         textStyle={styles.flyoutSelectText}
                         leftIcon={
                             <IoTrashBinOutline
-                                color={Colors.nuggBlueText}
+                                color={lib.colors.nuggBlueText}
                                 size={20}
                                 style={styles.flyoutSelectIcon}
                             />
@@ -123,7 +113,7 @@ const ArtRepoHandler: FunctionComponent<Props> = () => {
                         textStyle={styles.flyoutSelectText}
                         leftIcon={
                             <IoFolderOpenOutline
-                                color={Colors.nuggBlueText}
+                                color={lib.colors.nuggBlueText}
                                 size={20}
                                 style={styles.flyoutSelectIcon}
                             />
@@ -136,8 +126,9 @@ const ArtRepoHandler: FunctionComponent<Props> = () => {
             <InteractiveText
                 weight="bold"
                 type="text"
-                textStyle={{ color: Colors.nuggBlueText }}
-                action={() => window.dotnugg.openTo(artLocation)}>
+                textStyle={{ color: lib.colors.nuggBlueText }}
+                action={() => window.dotnugg.openTo(artLocation)}
+            >
                 {shortenPathName(artLocation)}
             </InteractiveText>
         </div>

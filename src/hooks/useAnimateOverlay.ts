@@ -1,11 +1,10 @@
-import { useSpring } from '@react-spring/core';
+import { useSpring } from '@react-spring/web';
 import { CSSProperties } from 'react';
 
-import { NLStyleSheetCreator } from '../lib';
-import AppState from '../state/app';
+import { NLStyleSheetCreator } from '@src/lib';
 
 const useAnimateOverlay = (isOpen: boolean, style?: CSSProperties) => {
-    const wrapperStyle: any = useSpring({
+    const wrapperStyle = useSpring({
         ...styles.wrapper,
         opacity: isOpen ? 1 : 0,
         pointerEvents: isOpen ? 'auto' : 'none',

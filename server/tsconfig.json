@@ -1,0 +1,36 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "moduleResolution": "node",
+        "outDir": "build",
+        "skipLibCheck": true,
+        "types": ["node", "jest"],
+        "typeRoots": ["./index.d.ts"],
+        "lib": ["es2022"]
+    },
+    "include": ["./*.ts"],
+    "exclude": ["node_modules"]
+    // "ts-node": {
+    //     "moduleTypes": {
+    //         "./*.ts": "esm"
+    //         // // Globs are also supported with the same behavior as tsconfig "include"
+    //         // "webpack-config-scripts/**/*": "cjs"
+    //     }
+    // }
+    // Most ts-node options can be specified here using their programmatic names.
+    // "ts-node": {
+    //     // It is faster to skip typechecking.
+    //     // Remove if you want ts-node to do typechecking.
+    //     // "transpileOnly": true,
+
+    //     // "files": true,
+
+    //     "compilerOptions": {
+    //         // compilerOptions specified here will override those declared below,
+    //         // but *only* in ts-node.  Useful if you want ts-node and tsc to use
+    //         // different options with a single tsconfig.json.
+    //     }
+    // }
+}

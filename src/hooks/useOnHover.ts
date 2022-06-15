@@ -1,14 +1,18 @@
-import { LegacyRef, RefCallback, useEffect, useRef, useState } from 'react';
+import { RefCallback, useEffect, useRef, useState } from 'react';
+
+import useDimensions from '@src/hooks/useDimensions';
 
 const useOnHover = (
-    callback?: RefCallback<any>,
-): [LegacyRef<HTMLDivElement>, boolean] => {
-    const ref = useRef<HTMLDivElement>();
+    callback?: RefCallback<unknown>,
+): [React.RefObject<HTMLDivElement>, boolean] => {
+    const ref = useRef<HTMLDivElement>(null);
     const [isHovering, setIsHovering] = useState(false);
 
+    const { screen } = useDimensions();
+
     useEffect(() => {
-        if (ref.current) {
-            const current = ref.current;
+        if (screen === 'desktop' && ref.current) {
+            const { current } = ref;
             const enter = () => setIsHovering(true);
             const leave = () => setIsHovering(false);
             current.onmouseenter = () => setIsHovering(true);
@@ -25,13 +29,13 @@ const useOnHover = (
                 current.removeEventListener('mousemove', enter);
                 current.removeEventListener('mouseleave', leave);
             };
-        } else {
-            setIsHovering(false);
         }
-    }, [ref]);
+        setIsHovering(false);
+        return () => undefined;
+    }, [ref, screen]);
 
     useEffect(() => {
-        callback && callback(isHovering);
+        if (callback) callback(isHovering);
     }, [isHovering, callback]);
 
     return [ref, isHovering];
