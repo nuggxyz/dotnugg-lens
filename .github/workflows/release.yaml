@@ -17,7 +17,7 @@ jobs:
         strategy:
             matrix:
                 os: [macos-latest]
-
+                package_manager: [yarn]
         steps:
             - name: Check out Git repository
               uses: actions/checkout@v1
@@ -33,7 +33,7 @@ jobs:
                   # GitHub token, automatically provided to the action
                   # (No need to define this secret in the repo settings)
                   github_token: ${{ secrets.github_token }}
-
+                  args: NODE_OPTIONS='--experimental-modules'
                   mac_certs: ${{ secrets.mac_certs }}
                   mac_certs_password: ${{ secrets.mac_certs_password }}
 
