@@ -106,7 +106,7 @@
         "case-sensitive-paths-webpack-plugin": "^2.4.0",
         "concurrently": "^7.0.0",
         "css-minimizer-webpack-plugin": "^3.4.1",
-        "electron": "^17.0.0",
+        "electron": "^17.2.0",
         "electron-builder": "^22.14.13",
         "electron-reloader": "^1.2.2",
         "electron-webpack": "^2.8.2",
