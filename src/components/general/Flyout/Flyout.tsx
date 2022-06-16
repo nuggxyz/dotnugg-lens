@@ -10,6 +10,7 @@ import styles from './Flyout.styles';
 
 type Props = {
     button: JSX.Element;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     style?: AnimatedProps<any>;
     containerStyle?: CSSProperties;
     float?: 'left' | 'right';

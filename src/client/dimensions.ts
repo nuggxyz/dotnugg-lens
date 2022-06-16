@@ -35,7 +35,7 @@ export const useUpdateDimensions = () => {
         return () => {
             window.removeEventListener('resize', resizer);
         };
-    }, [resizer]);
+    }, [resizer, update]);
 
     // console.log({ innerHeight, innerWidth });
 

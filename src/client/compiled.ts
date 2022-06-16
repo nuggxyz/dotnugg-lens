@@ -154,7 +154,9 @@ const useStore = create(
                                 svg,
                             }));
                         })
-                        .catch((e) => alert(e));
+                        .catch((e) => {
+                            return new Error(e as string);
+                        });
                     set(() => ({
                         loading: false,
                     }));
