@@ -12,8 +12,8 @@
         "resolveJsonModule": true,
         "target": "esnext"
     },
-    // "include": ["./*.ts"],
-    "exclude": ["../node_modules"]
+    "include": ["."]
+    // "exclude": ["../node_modules"]
     // "ts-node": {
     //     "moduleTypes": {
     //         "./*.ts": "esm"
