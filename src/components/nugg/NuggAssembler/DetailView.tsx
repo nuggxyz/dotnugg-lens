@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useRef } from 'react';
-import { IoClose, IoSync } from 'react-icons/io5';
+import { IoSync } from 'react-icons/io5';
 import { SiVisualstudiocode } from 'react-icons/si';
 
 import lib, { isUndefinedOrNullOrStringEmpty } from '@src/lib';
@@ -154,10 +154,13 @@ export default DetailView;
 
 const SelectedItem = ({ fileUri }: { fileUri?: string | null }) => {
     const item = client.compiled.useCompiledItem(fileUri);
-    const select = client.compiled.useSelect();
+    const deselect = client.compiled.useDeselect();
 
     return item ? (
         <div
+            role="button"
+            aria-hidden="true"
+            className="mobile-pressable-div"
             style={{
                 ...styles.detailSelectedItem,
                 minWidth: 120,
@@ -166,18 +169,19 @@ const SelectedItem = ({ fileUri }: { fileUri?: string | null }) => {
                 justifyContent: 'center',
             }}
             key={`item-${item.fileUri}`}
+            onClick={() => {
+                deselect(item.fileUri);
+            }}
         >
-            <Button
-                buttonStyle={styles.detailSelectedItemClose}
-                rightIcon={<IoClose size={15} />}
-                onClick={() => select(item.fileUri)}
-            />
             <Button
                 buttonStyle={styles.detailSelectedVsCode}
                 type="text"
                 size="small"
                 leftIcon={<SiVisualstudiocode color={lib.colors.nuggBlueText} size={15} />}
-                onClick={() => window.dotnugg.openToVSCode(item.fileUri)}
+                onClick={(event) => {
+                    event.stopPropagation();
+                    window.dotnugg.openToVSCode(item.fileUri);
+                }}
             />
             <img
                 src={item.svg}

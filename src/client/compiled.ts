@@ -48,7 +48,7 @@ const strarr = (input: Item['bits']): BigNumber => {
         if (prev.eq(0)) {
             prev = ethers.BigNumber.from(curr.dat);
         } else {
-            prev.shl(curr.bit).or(curr.dat);
+            prev = prev.shl(curr.bit).or(curr.dat);
         }
         return prev;
     }, ethers.BigNumber.from(0));
@@ -61,7 +61,7 @@ const build = (input: Item['bits']): BigNumber[] => {
 const useStore = create(
     combine(
         {
-            infuraKey: '',
+            infuraKey: web3.constants.INFURA_KEY,
             artDir: '',
             items: {} as Record<string, Item>,
             selected: [null, null, null, null, null, null, null, null] as FixedLengthArray<
@@ -85,6 +85,7 @@ const useStore = create(
 
             const select = (itemUri: string) => {
                 const item = get().items[itemUri];
+                console.log('SELECT', item);
                 if (item) {
                     // @ts-ignore
                     set((data) => {
@@ -119,10 +120,12 @@ const useStore = create(
                     })
                     .filter((x) => x) as Byter[][];
 
+                const payload = items.map((item) => build(item));
+
                 await contract
                     .connect(new InfuraProvider(web3.constants.DEFAULT_CHAIN, get().infuraKey))
                     .combo(
-                        items.map((item) => build(item)),
+                        payload,
 
                         true,
                     )
@@ -131,12 +134,10 @@ const useStore = create(
                             svg,
                         }));
                     })
-                    .catch((e) => alert(e))
-                    .finally(() =>
-                        set(() => ({
-                            loading: false,
-                        })),
-                    );
+                    .catch((e) => alert(e));
+                set(() => ({
+                    loading: false,
+                }));
             };
 
             const updateInfuraKey = (key: string) => {
