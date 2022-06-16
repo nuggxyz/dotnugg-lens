@@ -16,6 +16,7 @@ const useStore = create(
         },
         (set) => {
             const udpate = (items: Item[]) => {
+                console.log({ items });
                 set(() => {
                     return {
                         items,

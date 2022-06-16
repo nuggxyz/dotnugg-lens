@@ -3,12 +3,7 @@ import Colors from '@src/lib/colors';
 import Layout from '@src/lib/layout';
 
 const styles = NLStyleSheetCreator({
-    artLocationContainer: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: '.5rem',
-    },
+    artLocationContainer: {},
     artLocationPicker: {
         color: Colors.nuggBlueText,
     },
@@ -19,12 +14,7 @@ const styles = NLStyleSheetCreator({
         background: Colors.nuggBlueTransparent,
         padding: '.2rem ',
     },
-    flyoutContainer: {
-        position: 'absolute',
-        left: '-.6rem',
-        top: '2.1rem',
-        overflow: 'hidden',
-    },
+    flyoutContainer: {},
     flyoutSelect: {
         justifyContent: 'flex-start',
         padding: '.4rem .7rem',

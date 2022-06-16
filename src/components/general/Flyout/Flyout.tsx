@@ -2,7 +2,6 @@
 import React, { CSSProperties, FunctionComponent, PropsWithChildren } from 'react';
 import { animated, AnimatedProps, config, useTransition } from '@react-spring/web';
 
-import useOnHover from '@src/hooks/useOnHover';
 import useOnClickOutside from '@src/hooks/useOnClickOutside';
 // import useDimensions from '@src/client/hooks/useDimensions';
 // import client from '@src/client';
@@ -27,22 +26,25 @@ const Flyout: FunctionComponent<PropsWithChildren<Props>> = ({
     float = 'right',
     top = 0,
     triggerWidth = '50px',
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     openOnHover = false,
 }) => {
     const [open, setOpen] = React.useState(false);
     // const [closing, setClosing] = React.useState(false);
-    const [openRef, openHover] = useOnHover(() => {
-        if (openOnHover) setOpen(true);
-    });
+    // const [openRef, openHover] = useOnHover(() => {
+    //     if (openOnHover) setOpen(true);
+    // });
 
-    const [closeRef, closeHover] = useOnHover(() => {
-        if (openOnHover) setOpen(openHover || closeHover);
-        else if (open && !closeHover) setOpen(false);
-    });
+    // const [closeRef, closeHover] = useOnHover(() => {
+    //     if (openOnHover) setOpen(openHover || closeHover);
+    //     else if (open && !closeHover) setOpen(false);
+    // });
     // const { screen } = useDimensions();
     // const dimentions = client.live.dimentions();
 
-    useOnClickOutside<HTMLDivElement>(closeRef, () => {
+    const ref = React.useRef(null);
+
+    useOnClickOutside<HTMLDivElement>(ref, () => {
         setOpen(false);
     });
 
@@ -66,7 +68,7 @@ const Flyout: FunctionComponent<PropsWithChildren<Props>> = ({
     return (
         <div
             style={{ cursor: 'pointer', ...containerStyle }}
-            ref={closeRef}
+            ref={ref}
             aria-hidden="true"
             onClick={() => {
                 setOpen(!open);
@@ -90,7 +92,7 @@ const Flyout: FunctionComponent<PropsWithChildren<Props>> = ({
                             }}
                         >
                             <div
-                                ref={openRef}
+                                // ref={openRef}
                                 style={{
                                     ...styles.container,
                                     ...style,

@@ -7,18 +7,16 @@ import { exec } from 'child_process';
 import { ipcMain, dialog, shell } from 'electron';
 import { ethers } from 'ethers';
 import { Output } from '@nuggxyz/dotnugg-sdk/dist/builder/types/BuilderTypes';
-import { dotnugg } from '@nuggxyz/dotnugg-sdk';
+
+import { dotnugg } from '../../dotnugg-sdk';
 
 import utils from './utils';
-import type Main from './main';
+import Main from './main';
 
 const __DEV__ = process.env.NODE_ENV === 'development';
 
 export class IpcListener {
-    public static main: typeof Main;
-
-    static register = (main: typeof Main) => {
-        this.main = main;
+    static register = () => {
         ipcMain.on('select-files', this.onSelectFiles);
         ipcMain.on('open-to', this.onOpenTo);
         ipcMain.on('open-to-vscode', this.onOpenToVsCode);
@@ -92,6 +90,9 @@ export class IpcListener {
                     } else {
                         event.reply('file-error');
                     }
+                })
+                .catch((err) => {
+                    console.log('ERROR: ', err);
                 });
         }
     };
@@ -122,9 +123,9 @@ export class IpcListener {
 
     public static onGetHex = (event: Electron.IpcMainEvent, item: Output) => {
         try {
-            event.returnValue = this.main.watcher.builder.hexArray(item);
+            event.returnValue = Main.watcher.builder.hexArray(item);
         } catch (e) {
-            event.returnValue = e;
+            event.returnValue = e as string;
         }
     };
 
@@ -135,39 +136,38 @@ export class IpcListener {
         apiKey: string,
     ) => {
         try {
-            const infura = new ethers.providers.InfuraProvider('rinkeby', apiKey);
+            console.log(filePath, address, apiKey);
+            const infura = new ethers.providers.InfuraProvider('goerli', apiKey);
 
-            this.main.watcher = dotnugg.watcher.watch(
-                this.main.APP_NAME,
+            console.log('SUP', Main.window);
+
+            Main._watcher = dotnugg.watcher.watch(
+                Main.APP_NAME,
                 filePath,
                 address,
                 infura,
                 (fileUri) => {
                     console.log('###################### FILE ', fileUri);
-                    this.main.window.webContents.send('main-loading');
+                    event.sender.send('main-loading');
                 },
-                // @ts-ignore
 
                 async (fileUri, me) => {
                     console.log('######## DONE COMPILING ##########', fileUri);
-                    // @ts-ignore
-                    // eslint-disable-next-line
+
                     await me.renderer.wait();
-                    // @ts-ignore
-                    // eslint-disable-next-line
-                    this.formatAndSend(me.builder, me.renderer);
+
+                    this.formatAndSend(me.builder, me.renderer, event);
                 },
 
-                // @ts-ignore
                 (error) => {
-                    this.main.window.webContents.send('compiler-error', error);
+                    event.sender.send('compiler-error', error);
                 },
             );
 
-            await this.main.watcher.renderer.wait();
+            await Main.watcher.renderer.wait();
 
-            this.formatAndSend(this.main.watcher.builder, this.main.watcher.renderer);
-        } catch (e) {
+            this.formatAndSend(Main.watcher.builder, Main.watcher.renderer, event);
+        } catch (e: unknown) {
             event.reply('compiler-error', `Compilation error: ${e as string}`);
         }
     };
@@ -178,42 +178,49 @@ export class IpcListener {
         destPath: string,
         layer = '_',
     ) => {
-        void this.safeExecAseprite(() => {
-            try {
-                if (!sourcePath.endsWith('.aseprite')) {
-                    throw new Error('Selected file is not an aseprite file');
-                }
-                if (!fs.existsSync(`${destPath}`)) {
-                    throw new Error('Incorrect Art Repo');
-                }
-                const filenames = sourcePath.split('.')[0].split(utils.pathDelimiter());
-                const dir = `generated_${filenames[filenames.length - 1]}`;
-                const base = `${destPath}${utils.pathDelimiter()}${dir}`;
-                const count = fs
-                    .readdirSync(destPath, { withFileTypes: true })
-                    .filter((entry) => entry.isDirectory() && entry.name.includes(dir)).length;
-                exec(`mkdir "${base}_${count + 1}"`);
+        void this.safeExecAseprite(
+            () => {
+                try {
+                    if (!sourcePath.endsWith('.aseprite')) {
+                        throw new Error('Selected file is not an aseprite file');
+                    }
+                    if (!fs.existsSync(`${destPath}`)) {
+                        throw new Error('Incorrect Art Repo');
+                    }
+                    const filenames = sourcePath.split('.')[0].split(utils.pathDelimiter());
+                    const dir = `generated_${filenames[filenames.length - 1]}`;
+                    const base = `${destPath}${utils.pathDelimiter()}${dir}`;
+                    const count = fs
+                        .readdirSync(destPath, { withFileTypes: true })
+                        .filter((entry) => entry.isDirectory() && entry.name.includes(dir)).length;
+                    exec(`mkdir "${base}_${count + 1}"`);
 
-                exec(
-                    `${utils.asepritePath()} -b --script-param source="${sourcePath}" --script-param dest="${base}_${
-                        count + 1
-                    }" --script-param layer="${layer}" --script "${
-                        __DEV__
-                            ? `.${utils.pathDelimiter()}aseprite2dotnugg.lua`
-                            : path.join(__dirname, `..${utils.pathDelimiter()}aseprite2dotnugg.lua`)
-                    }"`,
-                    (error) => {
-                        if (error !== null) {
-                            throw new Error(error as unknown as string);
-                        }
-                        // shell.openPath(destPath + '/generated');
-                        this.main.window.webContents.send('script-success', sourcePath, layer);
-                    },
-                );
-            } catch (e) {
-                this.main.window.webContents.send('script-error', e, sourcePath);
-            }
-        }, sourcePath);
+                    exec(
+                        `${utils.asepritePath()} -b --script-param source="${sourcePath}" --script-param dest="${base}_${
+                            count + 1
+                        }" --script-param layer="${layer}" --script "${
+                            __DEV__
+                                ? `.${utils.pathDelimiter()}aseprite2dotnugg.lua`
+                                : path.join(
+                                      __dirname,
+                                      `..${utils.pathDelimiter()}aseprite2dotnugg.lua`,
+                                  )
+                        }"`,
+                        (error) => {
+                            if (error !== null) {
+                                throw new Error(error as unknown as string);
+                            }
+                            // shell.openPath(destPath + '/generated');
+                            event.sender.send('script-success', sourcePath, layer);
+                        },
+                    );
+                } catch (e) {
+                    event.sender.send('script-error', e, sourcePath);
+                }
+            },
+            sourcePath,
+            event,
+        );
     };
 
     public static onOpenLink = (event: Electron.IpcMainEvent, url: string) => {
@@ -226,32 +233,40 @@ export class IpcListener {
     };
 
     public static onListLayers = (event: Electron.IpcMainEvent, filePath: string) => {
-        this.safeExecAseprite(() => {
-            try {
-                exec(
-                    `${utils.asepritePath()} -b --all-layers --list-layers "${filePath}"`,
-                    (error, stdout) => {
-                        if (error !== null) {
-                            throw new Error(error as unknown as string);
-                        }
-                        this.main.window.webContents.send('layers', filePath, stdout);
-                    },
-                );
-            } catch (e) {
-                this.main.window.webContents.send('script-error', e);
-            }
-        }, filePath);
+        this.safeExecAseprite(
+            () => {
+                try {
+                    exec(
+                        `${utils.asepritePath()} -b --all-layers --list-layers "${filePath}"`,
+                        (error, stdout) => {
+                            if (error !== null) {
+                                throw new Error(error as unknown as string);
+                            }
+                            event.sender.send('layers', filePath, stdout);
+                        },
+                    );
+                } catch (e) {
+                    event.sender.send('script-error', e);
+                }
+            },
+            filePath,
+            event,
+        );
     };
 
     public static onGetLensDefault = (event: Electron.IpcMainEvent) => {
         event.returnValue = path.join(
             __dirname,
             __DEV__ ? '' : `..${utils.pathDelimiter()}`,
-            this.main.DEFAULT,
+            Main.DEFAULT,
         );
     };
 
-    private static safeExecAseprite = (callback: () => void, filePath: string) => {
+    private static safeExecAseprite = (
+        callback: () => void,
+        filePath: string,
+        event: Electron.IpcMainEvent,
+    ) => {
         const command =
             os.platform() === 'win32'
                 ? `if exist ${utils.asepritePath()} echo TRUE`
@@ -260,7 +275,7 @@ export class IpcListener {
             if (stdout === 'TRUE\n' || stdout === 'TRUE\r\n') {
                 callback();
             } else {
-                this.main.window.webContents.send(
+                event.sender.send(
                     'script-error',
                     `Please make sure you have downloaded the *paid version* of Aseprite to ${utils.asepritePath()}, ${stdout}, ${
                         stdout === 'TRUE' ? 'true' : 'false'
@@ -273,7 +288,11 @@ export class IpcListener {
         });
     };
 
-    private static formatAndSend = (builder: dotnugg.builder, renderer: dotnugg.renderer) => {
+    private static formatAndSend = (
+        builder: dotnugg.builder,
+        renderer: dotnugg.renderer,
+        event: Electron.IpcMainEvent,
+    ) => {
         const res = Object.entries(builder.outputByItemIndex).map(([key, value]) => {
             return {
                 title: key,
@@ -285,13 +304,11 @@ export class IpcListener {
                 }),
             };
         });
+        console.log(res, Main.window);
         if (res) {
-            this.main.window.webContents.send('items-fetched', res);
+            event.sender.send('items-fetched', res);
         } else {
-            this.main.window.webContents.send(
-                'compiler-error',
-                'Error: unknown error while compiling files',
-            );
+            event.sender.send('compiler-error', 'Error: unknown error while compiling files');
         }
     };
 }
