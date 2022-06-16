@@ -345,7 +345,7 @@ Array.prototype.replace = function fn<T extends { id: string } | object>(
         if (
             !isUndefinedOrNullOrStringEmpty(field)
                 ? elem[field] === element[field]
-                : elem.id === (element as any).id
+                : elem.id === (element as { id: string }).id
         ) {
             acc.push({
                 ...elem,

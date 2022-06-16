@@ -24,7 +24,7 @@ export default class ErrorBoundary extends React.Component<
     }
 
     componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-        console.log({ error, errorInfo });
+        // console.log({ error, errorInfo });
         ReactGA.event('exception', {
             description: error.toString() + errorInfo.toString(),
             fatal: true,
