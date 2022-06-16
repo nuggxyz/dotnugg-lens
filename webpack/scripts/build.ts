@@ -100,6 +100,7 @@ checkBrowsers(paths.appPath, isInteractive)
             const publicUrl = paths.publicUrlOrPath;
             const publicPath = config.output.publicPath;
             const buildFolder = path.relative(process.cwd(), paths.appBuild);
+            // @ts-ignore
             printHostingInstructions(appPackage, publicUrl, publicPath, buildFolder, useYarn);
         },
         (err) => {
