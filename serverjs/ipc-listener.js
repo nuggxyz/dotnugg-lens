@@ -1,24 +1,20 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
-import * as path from 'path';
-import * as os from 'os';
-import * as fs from 'fs';
-import { exec } from 'child_process';
+const path = require('path');
+const os = require('os');
+const fs = require('fs');
+const { exec } = require('child_process');
 
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { ipcMain, dialog, shell } from 'electron';
-import { ethers } from 'ethers';
-import { Output } from '@nuggxyz/dotnugg-sdk/dist/builder/types/BuilderTypes';
-
+const { ipcMain, dialog, shell } = require('electron');
+const { ethers } = require('ethers');
 // eslint-disable-next-line module-resolver/use-alias
-import type { Item } from '../src/client/compiled';
-import { dotnugg } from '../../dotnugg-sdk';
+const { dotnugg } = require('@nuggxyz/dotnugg-sdk');
 
-import utils from './utils';
-import Main from './main';
+const Main = require('./main');
+const utils = require('./utils');
 
 const __DEV__ = process.env.NODE_ENV === 'development';
 
-export class IpcListener {
+class IpcListener {
     static register = () => {
         ipcMain.on('select-files', this.onSelectFiles);
         ipcMain.on('open-to', this.onOpenTo);
@@ -31,7 +27,7 @@ export class IpcListener {
         ipcMain.on('list-layers', this.onListLayers);
     };
 
-    public static onSelectFiles = (event: Electron.IpcMainEvent) => {
+    static onSelectFiles = (event) => {
         if (os.platform() === 'linux' || os.platform() === 'win32') {
             void dialog
                 .showOpenDialog({
@@ -100,11 +96,7 @@ export class IpcListener {
         }
     };
 
-    public static onOpenTo = (
-        event: Electron.IpcMainEvent,
-        filePath: string,
-        application: string,
-    ) => {
+    static onOpenTo = (event, filePath, application) => {
         if (application) {
             exec(`open -a "${application}" ${filePath.replaceAll(' ', '\\ ')}`);
         } else {
@@ -112,7 +104,7 @@ export class IpcListener {
         }
     };
 
-    public static onOpenToVsCode = (event: Electron.IpcMainEvent, filePath: string) => {
+    static onOpenToVsCode = (event, filePath) => {
         if (os.platform() === 'win32') {
             exec(`code ${filePath}`);
         } else {
@@ -120,24 +112,19 @@ export class IpcListener {
         }
     };
 
-    public static onCheckOs = (event: Electron.IpcMainEvent) => {
+    static onCheckOs = (event) => {
         event.returnValue = os.platform();
     };
 
-    public static onGetHex = (event: Electron.IpcMainEvent, item: Output) => {
+    static onGetHex = (event, item) => {
         try {
             event.returnValue = Main.watcher.builder.hexArray(item);
         } catch (e) {
-            event.returnValue = e as string;
+            event.returnValue = e;
         }
     };
 
-    public static onFetchCompilerItems = async (
-        event: Electron.IpcMainEvent,
-        filePath: string,
-        address: string,
-        apiKey: string,
-    ) => {
+    static onFetchCompilerItems = async (event, filePath, address, apiKey) => {
         try {
             console.log(filePath, address, apiKey);
             const infura = new ethers.providers.InfuraProvider('goerli', apiKey);
@@ -170,17 +157,12 @@ export class IpcListener {
             await Main.watcher.renderer.wait();
 
             this.formatAndSend(event);
-        } catch (e: unknown) {
-            event.reply('compiler-error', `Compilation error: ${e as string}`);
+        } catch (e) {
+            event.reply('compiler-error', `Compilation error: ${e}`);
         }
     };
 
-    public static onConvertAseprite = (
-        event: Electron.IpcMainEvent,
-        sourcePath: string,
-        destPath: string,
-        layer = '_',
-    ) => {
+    static onConvertAseprite = (event, sourcePath, destPath, layer = '_') => {
         void this.safeExecAseprite(
             () => {
                 try {
@@ -211,7 +193,7 @@ export class IpcListener {
                         }"`,
                         (error) => {
                             if (error !== null) {
-                                throw new Error(error as unknown as string);
+                                throw new Error(error);
                             }
                             // shell.openPath(destPath + '/generated');
                             event.sender.send('script-success', sourcePath, layer);
@@ -226,16 +208,16 @@ export class IpcListener {
         );
     };
 
-    public static onOpenLink = (event: Electron.IpcMainEvent, url: string) => {
+    static onOpenLink = (event, url) => {
         void shell.openExternal(url);
     };
 
-    public static onClearCache = (event: Electron.IpcMainEvent, filePath: string) => {
+    static onClearCache = (event, filePath) => {
         const command = os.platform() === 'win32' ? 'rmdir /s /q' : 'rm -rf';
         exec(`${command} ${path.join(filePath, '.dotnugg-cache')}`);
     };
 
-    public static onListLayers = (event: Electron.IpcMainEvent, filePath: string) => {
+    static onListLayers = (event, filePath) => {
         this.safeExecAseprite(
             () => {
                 try {
@@ -243,7 +225,7 @@ export class IpcListener {
                         `${utils.asepritePath()} -b --all-layers --list-layers "${filePath}"`,
                         (error, stdout) => {
                             if (error !== null) {
-                                throw new Error(error as unknown as string);
+                                throw new Error(error);
                             }
                             event.sender.send('layers', filePath, stdout);
                         },
@@ -257,7 +239,7 @@ export class IpcListener {
         );
     };
 
-    public static onGetLensDefault = (event: Electron.IpcMainEvent) => {
+    static onGetLensDefault = (event) => {
         event.returnValue = path.join(
             __dirname,
             __DEV__ ? '' : `..${utils.pathDelimiter()}`,
@@ -265,11 +247,7 @@ export class IpcListener {
         );
     };
 
-    private static safeExecAseprite = (
-        callback: () => void,
-        filePath: string,
-        event: Electron.IpcMainEvent,
-    ) => {
+    static safeExecAseprite = (callback, filePath, event) => {
         const command =
             os.platform() === 'win32'
                 ? `if exist ${utils.asepritePath()} echo TRUE`
@@ -291,9 +269,9 @@ export class IpcListener {
         });
     };
 
-    private static formatAndSend = (event: Electron.IpcMainEvent) => {
+    static formatAndSend = (event) => {
         // @ts-ignore
-        const res: Item[] = Main.watcher.builder.output.map((item) => {
+        const res = Main.watcher.builder.output.map((item) => {
             return {
                 ...item,
                 svg: Main.watcher.renderer.results[item.fileUri].data,
@@ -307,3 +285,5 @@ export class IpcListener {
         }
     };
 }
+
+module.exports = IpcListener;
