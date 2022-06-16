@@ -10,8 +10,15 @@
         "typeRoots": ["./index.d.ts"],
         "lib": ["es2022"]
     },
-    "include": ["./*.ts"],
-    "exclude": ["node_modules"]
+    // "include": ["./*.ts"],
+    "exclude": ["../node_modules"]
+    // "ts-node": {
+    //     "moduleTypes": {
+    //         "./*.ts": "esm"
+    //         // // Globs are also supported with the same behavior as tsconfig "include"
+    //         // "webpack-config-scripts/**/*": "cjs"
+    //     }
+    // }
     // "ts-node": {
     //     "moduleTypes": {
     //         "./*.ts": "esm"

@@ -42,6 +42,8 @@ const Main = () => {
         ];
     }, [recents, compiledItems]);
 
+    console.log({ artLocation });
+
     return (
         <Dropzone
             onDrop={() => {

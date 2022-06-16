@@ -46,4 +46,5 @@ export default {
     useUpdateArtDir: () => useStore((data) => data.updateArtDir),
     useMainIsLoading: () => useStore((data) => data.mainIsLoading),
     useUpdateMainIsLoading: () => useStore((data) => data.updateMainIsLoading),
+    useStore,
 };

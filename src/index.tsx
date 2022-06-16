@@ -10,6 +10,8 @@ import App from './pages/App';
 import ErrorBoundary from './components/general/ErrorBoundry';
 import useClientUpdater from './client/useClientUpdater';
 
+import './client/ipc-listeners';
+
 global.Buffer = global.Buffer || (await import('buffer')).Buffer;
 
 const GlobalHooks = () => {

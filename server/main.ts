@@ -7,7 +7,7 @@ import { app, BrowserWindow, shell, Menu } from 'electron';
 
 import { IpcListener } from './ipc-listener';
 
-declare const __DEV__: boolean;
+const __DEV__ = process.env.NODE_ENV === 'development';
 
 export default class Main {
     public static window: Electron.BrowserWindow;
