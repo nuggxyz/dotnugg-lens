@@ -2368,10 +2368,10 @@
   resolved "https://registry.yarnpkg.com/@nuggxyz/dotnugg-grammar/-/dotnugg-grammar-0.2.4.tgz#7bad06a426c13a1ec306159c0c491bfbaabde6e6"
   integrity sha512-6zf4olYNSeYUTfu7+cTavUQIY9Yn8n2hVgXrXI/Lnxgyxof4n2e4BGc9bvi8/hFz3Lee/3o2SGqEKYt+RPWpjA==
 
-"@nuggxyz/dotnugg-sdk@^0.3.2":
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/@nuggxyz/dotnugg-sdk/-/dotnugg-sdk-0.3.2.tgz#7af7fb48fcfe8efe147d588a5d0c35eaebd7ec1f"
-  integrity sha512-GjB5zuCMKhjidndg/jzdz8Q8SLXbVZG/rhSCUO1K7hVWL9jOq3ZaWQB64+fCvon+PKnclmLoF/QKD6koZIp2ww==
+"@nuggxyz/dotnugg-sdk@^0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@nuggxyz/dotnugg-sdk/-/dotnugg-sdk-0.3.5.tgz#a95440386c97a56f48e0725618401d6f997d28f6"
+  integrity sha512-4F+aXifnJ1RK2KYaccSTKqBKDL82w2I+CLQmyZM8ypxZaOQHz/LTQ0yyK7CwtbtwXc4Zi9CrOMNSt96YBt03oQ==
   dependencies:
     "@ethersproject/abi" "^5.0.0"
     "@ethersproject/bytes" "^5.0.0"
@@ -7028,6 +7028,18 @@ es6-object-assign@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/es6-object-assign/-/es6-object-assign-1.1.0.tgz#c2c3582656247c39ea107cb1e6652b6f9f24523c"
   integrity sha512-MEl9uirslVwqQU369iHNWZXsI8yaZYGg/D65aOgZkeyFJwHYSxilf7rQzXKI7DdDuBPrBXbfk3sl9hJhmd5AUw==
+
+es6-promise-promise@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/es6-promise-promise/-/es6-promise-promise-1.0.0.tgz#3a91f235fdd2b08c4492b5734dfd1f417289b994"
+  integrity sha512-+Y7JJ8d0QIvQyLLmCULjUGPTg1CctpyEIMtGS+AE/xx9Rr0iqJi3heJYYRSucwOp7ngAAOi/GMKakAIAP79qRQ==
+  dependencies:
+    es6-promise "^3.2.1"
+
+es6-promise@^3.2.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/es6-promise/-/es6-promise-3.3.1.tgz#a08cdde84ccdbf34d027a1451bc91d4bcd28a613"
+  integrity sha512-SOp9Phqvqn7jtEUxPWdWfWoLmyt2VaJ6MpvP9Comy1MceMXqE6bxvaTu4iaxpYYPzhny28Lc+M87/c2cPK6lDg==
 
 escalade@^3.1.1:
   version "3.1.1"

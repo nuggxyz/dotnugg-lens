@@ -6,7 +6,7 @@ import lib from '@src/lib';
 import client from '@src/client/index';
 
 const UseOurs: FunctionComponent<unknown> = () => {
-    const updateArtDir = client.keys.useUpdateArtDir();
+    const updateArtDir = client.compiled.useUpdateArtDir();
     return (
         <Text
             textStyle={{

@@ -8,6 +8,8 @@ import { ipcMain, dialog, shell } from 'electron';
 import { ethers } from 'ethers';
 import { Output } from '@nuggxyz/dotnugg-sdk/dist/builder/types/BuilderTypes';
 
+// eslint-disable-next-line module-resolver/use-alias
+import type { Item } from '../src/client/compiled';
 import { dotnugg } from '../../dotnugg-sdk';
 
 import utils from './utils';
@@ -293,15 +295,10 @@ export class IpcListener {
         renderer: dotnugg.renderer,
         event: Electron.IpcMainEvent,
     ) => {
-        const res = Object.entries(builder.outputByItemIndex).map(([key, value]) => {
+        const res: Item[] = builder.output.map((item) => {
             return {
-                title: key,
-                items: Object.values(value).map((item) => {
-                    return {
-                        ...builder.output[item],
-                        svg: renderer.results[builder.output[item].fileUri].data,
-                    };
-                }),
+                ...item,
+                svg: renderer.results[item.fileUri].data,
             };
         });
         console.log(res, Main.window);

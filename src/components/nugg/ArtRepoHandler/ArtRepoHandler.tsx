@@ -18,9 +18,9 @@ import { useDotnuggV1 } from '@src/contracts/useContract';
 import styles from './ArtRepoHandler.styles';
 
 const ArtRepoHandler: FunctionComponent<unknown> = () => {
-    const artLocation = client.keys.useArtDir();
-    const apiKey = client.keys.useInfuraKey();
-    const updateMainIsLoading = client.keys.useUpdateMainIsLoading();
+    const artLocation = client.compiled.useArtDir();
+    const apiKey = client.compiled.useInfuraKey();
+    const updateMainIsLoading = client.compiled.useSetMainLoading();
 
     const dotnugg = useDotnuggV1();
 
