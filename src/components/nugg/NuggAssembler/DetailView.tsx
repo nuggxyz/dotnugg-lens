@@ -14,30 +14,11 @@ import styles from './NuggAssembler.styles';
 
 const DetailView: FunctionComponent<unknown> = () => {
     const scrollRef = useRef<HTMLDivElement>(null);
-    // const isZoomOn = AppState.select.isZoomOn();
-    // const { height } = AppState.select.dimensions();
-    const artRepo = client.compiled.useArtDir();
 
     const liveSelectedItems = client.compiled.useSelectedFileUris();
     const svg = client.compiled.useSvg();
     const loading = client.compiled.useLoading();
     const combo = client.compiled.useCombo();
-
-    console.log(artRepo, svg, scrollRef);
-
-    // useEffect(() => {
-    //     if (scrollRef.current) {
-    //         const { current } = scrollRef;
-    //         const listener = (evt) => {
-    //             console.log(evt.deltaY);
-    //             current.scrollLeft += evt.deltaY;
-    //         };
-    //         current.addEventListener('wheel', listener);
-    //         return () => {
-    //             current.removeEventListener('wheel', listener);
-    //         };
-    //     }
-    // }, [scrollRef.current]);
 
     return (
         <div style={styles.detailContainer}>
@@ -49,13 +30,15 @@ const DetailView: FunctionComponent<unknown> = () => {
                     justifyContent: 'center',
                     alignItems: 'center',
                     display: 'flex',
+                    overflow: 'visible',
                 }}
             >
                 {!isUndefinedOrNullOrStringEmpty(svg) && (
                     <img
                         src={svg}
                         style={{
-                            width: '90%',
+                            width: '100%',
+                            height: '100%',
                         }}
                         alt="fix"
                     />
@@ -141,8 +124,8 @@ const DetailView: FunctionComponent<unknown> = () => {
                         flexWrap: 'wrap',
                     }}
                 >
-                    {liveSelectedItems.map((item) => (
-                        <SelectedItem fileUri={item} />
+                    {liveSelectedItems.map((item, i) => (
+                        <SelectedItem key={`selected-${item ?? i}`} fileUri={item} />
                     ))}
                 </div>
             </div>
@@ -155,6 +138,7 @@ export default DetailView;
 const SelectedItem = ({ fileUri }: { fileUri?: string | null }) => {
     const item = client.compiled.useCompiledItem(fileUri);
     const deselect = client.compiled.useDeselect();
+    const featureNames = client.compiled.useFeautureNames();
 
     return item ? (
         <div
@@ -209,7 +193,7 @@ const SelectedItem = ({ fileUri }: { fileUri?: string | null }) => {
                         fontSize: '10px',
                         fontWeight: 'bold',
                     }}
-                    text={`${'hannnd'} ${item.id}`}
+                    text={`${featureNames[item.feature]?.toLowerCase() ?? 'unknown'} ${item.id}`}
                 />
             </div>
             <div

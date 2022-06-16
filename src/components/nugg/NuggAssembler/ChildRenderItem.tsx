@@ -18,7 +18,7 @@ const ChildRenderItem: FunctionComponent<{
     const liveItem = client.compiled.useCompiledItem(item.fileUri);
     const pushToRecents = client.recents.usePushToRecents();
     const select = client.compiled.useSelect();
-
+    const featureNames = client.compiled.useFeautureNames();
     return (
         <div
             className="mobile-pressable-div"
@@ -72,7 +72,7 @@ const ChildRenderItem: FunctionComponent<{
                         // paddingBottom: 5,
                         position: 'relative',
                     }}
-                    text={`${'hamd'} ${item.id}`}
+                    text={`${featureNames[item.feature]?.toLowerCase() ?? 'unknown'} ${item.id}`}
                 />
 
                 <div
