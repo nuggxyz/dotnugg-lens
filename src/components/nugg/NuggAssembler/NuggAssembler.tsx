@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from 'react';
 
 import client from '@src/client';
+import lib from '@src/lib';
 
 import ChildRenderItem from './ChildRenderItem';
 import DetailView from './DetailView';
@@ -51,25 +52,69 @@ const NuggAssembler: FunctionComponent<unknown> = () => {
 
     const items = client.compiled.useCompiledItems();
 
-    console.log({ items });
+    // console.log({ items });
 
     const List = React.useMemo(() => {
-        return (
-            <>
-                {Object.values(items)
-                    .filter((x) => x.feature === viewingFeature)
-                    .map((x, i) => (
-                        <ChildRenderItem item={x} index={i} key={`${x.fileUri}-main-list`} />
-                    )) || []}
-            </>
-        );
+        return Object.values(items)
+            .filter((x) => x.feature === viewingFeature)
+            .map((x, i) => <ChildRenderItem item={x} index={i} key={`${x.fileUri}-main-list`} />);
     }, [viewingFeature, items]);
 
+    const ref = React.useRef(null);
+
     return (
-        <>
-            {List}
+        <div
+            style={{
+                border: 'none',
+                overflow: 'hidden',
+                height: '90%',
+                display: 'flex',
+                width: '90%',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                // position: 'absolute',
+            }}
+        >
+            <div
+                style={{
+                    boxShadow: `${lib.layout.boxShadow.prefix} ${lib.layout.boxShadow.basic}`,
+                    borderRadius: lib.layout.borderRadius.medium,
+                    border: 'none',
+                    overflow: 'hidden',
+                    background: lib.colors.gradient3Transparent,
+                    height: '90%',
+                    width: '66%',
+                    // position: 'absolute',
+                }}
+            >
+                {/* <div style={styles.sticky}>
+                    <TitleRenderItem
+                        title={item.title}
+                        setOpen={setOpen}
+                        extraData={extraData}
+                        open={open}
+                    />
+                </div> */}
+                <div
+                    style={{
+                        overflow: 'hidden',
+                    }}
+                >
+                    <div
+                        style={{
+                            flexDirection: 'row',
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            justifyContent: 'space-around',
+                        }}
+                        ref={ref}
+                    >
+                        {List}
+                    </div>
+                </div>
+            </div>
             <DetailView />
-        </>
+        </div>
         // <StickyList
         //     // @ts-ignore
         //     style={{ ...styles.container }}
