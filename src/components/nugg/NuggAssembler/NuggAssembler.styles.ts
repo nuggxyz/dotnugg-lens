@@ -97,7 +97,7 @@ const styles = lib.layout.NLStyleSheetCreator({
         padding: '.3rem',
         borderRadius: Layout.borderRadius.large,
         position: 'absolute',
-        top: '2.3rem',
+        top: '.5rem',
         left: '.5rem',
         zIndex: 1000,
     },
