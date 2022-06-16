@@ -1,18 +1,25 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import * as path from 'path';
 
-import { dotnugg } from '@nuggxyz/dotnugg-sdk';
 import { autoUpdater } from 'electron/main';
 import { app, BrowserWindow, shell, Menu } from 'electron';
 
-import { IpcListener } from './ipc-listener';
+import { dotnugg } from '../../dotnugg-sdk';
 
 const __DEV__ = process.env.NODE_ENV === 'development';
 
 export default class Main {
-    public static window: Electron.BrowserWindow;
+    private static _window: Electron.BrowserWindow;
 
-    public static watcher: dotnugg.watcher;
+    public static get window() {
+        return this._window;
+    }
+
+    public static _watcher: dotnugg.watcher;
+
+    public static get watcher() {
+        return this._watcher;
+    }
 
     public static readonly APP_NAME = 'lens/main';
 
@@ -25,8 +32,8 @@ export default class Main {
     }
 
     private static onClose() {
-        // Dereference the window object.
-        // this.window = null;
+        // Dereference the _window object.
+        this._window = null;
     }
 
     private static onActivate() {
@@ -36,10 +43,9 @@ export default class Main {
     }
 
     private static onReady() {
-        console.log(__DEV__, process.env.NODE_ENVIRONMENT);
-        // @ts-ignore
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        this.window = new BrowserWindow({
+        // console.log(__DEV__, process.env.NODE_ENVIRONMENT);
+
+        this._window = new BrowserWindow({
             width: 800,
             height: 600,
             webPreferences: {
@@ -50,16 +56,18 @@ export default class Main {
             titleBarOverlay: true,
             // transparent: true,
         });
-        void this.window.loadURL(
+
+        console.log(this._window);
+        void this._window.loadURL(
             __DEV__
                 ? 'http://localhost:3000'
                 : `file://${path.join(__dirname, '../build/index.html')}`,
         );
-        this.window.maximize();
-        this.window.on('closed', () => this.onClose());
+        this._window.maximize();
+        this._window.on('closed', () => this.onClose());
 
         if (__DEV__) {
-            this.window.webContents.openDevTools();
+            this._window.webContents.openDevTools();
         }
 
         autoUpdater.checkForUpdates();
@@ -98,6 +106,6 @@ export default class Main {
         app.on('ready', this.onReady);
         app.on('activate', this.onActivate);
 
-        IpcListener.register(this);
+        void dotnugg.parser.init('lens/main');
     }
 }

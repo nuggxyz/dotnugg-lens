@@ -25,18 +25,17 @@ const ArtRepoHandler: FunctionComponent<unknown> = () => {
     const dotnugg = useDotnuggV1();
 
     return !isUndefinedOrNullOrStringEmpty(artLocation) ? (
-        <div style={styles.artLocationContainer}>
+        <div
+            style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: '.5rem',
+            }}
+        >
             <Flyout
-                style={styles.flyoutContainer}
-                button={
-                    <Button
-                        buttonStyle={styles.artLocationDelete}
-                        rightIcon={
-                            <IoEllipsisHorizontal color={lib.colors.nuggBlueText} size={15} />
-                        }
-                        onClick={() => {}}
-                    />
-                }
+                style={{ position: 'absolute', left: 0, top: '2.1rem', overflow: 'hidden' }}
+                button={<IoEllipsisHorizontal color={lib.colors.nuggBlueText} size={15} />}
             >
                 <>
                     <Button
@@ -85,6 +84,7 @@ const ArtRepoHandler: FunctionComponent<unknown> = () => {
                         label="Recompile"
                         onClick={() => {
                             updateMainIsLoading(true);
+                            console.log(dotnugg);
                             window.dotnugg.createCompiler(artLocation, dotnugg.address, apiKey);
                         }}
                     />
