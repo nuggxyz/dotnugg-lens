@@ -84,7 +84,6 @@ const ArtRepoHandler: FunctionComponent<unknown> = () => {
                         label="Recompile"
                         onClick={() => {
                             updateMainIsLoading(true);
-                            console.log(dotnugg);
                             window.dotnugg.createCompiler(artLocation, dotnugg.address, apiKey);
                         }}
                     />

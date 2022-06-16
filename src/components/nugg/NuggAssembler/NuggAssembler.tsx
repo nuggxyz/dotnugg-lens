@@ -2,65 +2,56 @@ import React, { FunctionComponent } from 'react';
 
 import client from '@src/client';
 import lib from '@src/lib';
+import Text from '@src/components/general/Texts/Text/Text';
 
 import ChildRenderItem from './ChildRenderItem';
 import DetailView from './DetailView';
 
 const NuggAssembler: FunctionComponent<unknown> = () => {
-    // const isEmpty = useMemo(() => {
-    //     return isUndefinedOrNullOrArrayEmpty(data);
-    // }, [data]);
-
-    // React.useEffect(() => {
-    //     selectedItems.forEach((x) => {
-    //         data.forEach((a) => {
-    //             a.items.forEach((b) => {
-    //                 if (b.fileUri === x.fileUri) {
-    //                     const tmp = selectedItems;
-
-    //                     tmp[tmp.findIndex((y) => y.fileUri === x.fileUri)] = b;
-
-    //                     setSelectedItems(tmp);
-    //                 }
-    //             });
-    //         });
-    //     });
-    //     // setSelectedItems((items) => {
-    //     //     console.log({ data, items });
-    //     //     items.forEach((x) => {
-    //     //         data.forEach((a) => {
-    //     //             a.items.forEach((b) => {
-    //     //                 if (b.fileUri === x.fileUri) {
-    //     //                     console.log(b.fileUri, x.fileUri);
-
-    //     //                     x = b;
-    //     //                 }
-    //     //             });
-    //     //         });
-    //     //     });
-    //     //     return items;
-    //     // });
-    // }, [data, selectedItems]);
-
-    // const transition = useTransition(data.length, {
-    //     from: { opacity: 0 },
-    //     enter: { opacity: 1 },
-    //     leave: { opacity: 0 },
-    //     config: config.default,
-    // });
-    const [viewingFeature] = React.useState(0);
-
+    const selectedFeature = client.compiled.useSelectedFeature();
     const items = client.compiled.useCompiledItems();
-
-    // console.log({ items });
+    const document = client.compiled.useDocument();
+    const updateSelectedFeature = client.compiled.useUpdateSelectedFeature();
 
     const List = React.useMemo(() => {
         return Object.values(items)
-            .filter((x) => x.feature === viewingFeature)
+            .filter((x) => x.feature === selectedFeature)
             .map((x, i) => <ChildRenderItem item={x} index={i} key={`${x.fileUri}-main-list`} />);
-    }, [viewingFeature, items]);
+    }, [selectedFeature, items]);
 
     const ref = React.useRef(null);
+
+    const featureList = React.useMemo(() => {
+        return Object.values(document?.collection.features || {})
+            .reverse()
+            .map((x, i) => (
+                <div
+                    key={`featureList-${i}`}
+                    className="mobile-pressable-div"
+                    style={{
+                        display: 'flex',
+                        width: 200,
+                        height: 59,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        margin: 10,
+                        background:
+                            selectedFeature === i
+                                ? lib.colors.transparentWhite
+                                : lib.colors.transparent,
+                        borderRadius: lib.layout.borderRadius.medium,
+                        cursor: 'pointer',
+                    }}
+                    role="button"
+                    aria-hidden="true"
+                    onClick={() => {
+                        updateSelectedFeature(i);
+                    }}
+                >
+                    <Text>{x.name?.toLowerCase()}</Text>
+                </div>
+            ));
+    }, [document, updateSelectedFeature, selectedFeature]);
 
     return (
         <div
@@ -87,27 +78,30 @@ const NuggAssembler: FunctionComponent<unknown> = () => {
                     // position: 'absolute',
                 }}
             >
-                {/* <div style={styles.sticky}>
-                    <TitleRenderItem
-                        title={item.title}
-                        setOpen={setOpen}
-                        extraData={extraData}
-                        open={open}
-                    />
-                </div> */}
+                <div style={{ display: 'flex', justifyContent: 'space-around' }}>{featureList}</div>
+
                 <div
                     style={{
-                        overflow: 'hidden',
+                        flexDirection: 'row',
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        overflow: 'scroll',
+                        height: '100%',
+                        width: '100%',
+
+                        alignItems: 'flex-start',
                     }}
+                    ref={ref}
                 >
                     <div
                         style={{
-                            flexDirection: 'row',
+                            justifyContent: 'space-evenly',
+
+                            width: '100%',
                             display: 'flex',
                             flexWrap: 'wrap',
-                            justifyContent: 'space-around',
+                            overflow: 'scroll',
                         }}
-                        ref={ref}
                     >
                         {List}
                     </div>
@@ -115,20 +109,6 @@ const NuggAssembler: FunctionComponent<unknown> = () => {
             </div>
             <DetailView />
         </div>
-        // <StickyList
-        //     // @ts-ignore
-        //     style={{ ...styles.container }}
-        //     styleLeft={styles.left}
-        //     styleRight={styles.right}
-        //     data={data}
-        //     ChildRenderItem={ChildRenderItem}
-        //     TitleRenderItem={TitleRenderItem}
-        //     FeatureRenderItem={FeatureRenderItem}
-        //     extraData={undefined}
-        //     // extraData={[selectedItems, setSelectedItems]}
-        // >
-
-        // </StickyList>
     );
 };
 

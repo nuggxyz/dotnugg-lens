@@ -1,3 +1,5 @@
+import { Document } from '@nuggxyz/dotnugg-sdk/dist/builder/types/TransformTypes';
+
 import client from '@src/client';
 
 import { Item } from './compiled';
@@ -8,10 +10,9 @@ window.dotnugg.on('file-selected', (event, path: string) => {
     client.compiled.useStore.getState().updateArtDir(path);
 });
 
-window.dotnugg.on('items-fetched', (event, items: Item[]) => {
-    console.log('ITEMS FETCHED', event, items);
+window.dotnugg.on('items-fetched', (event, items: Item[], doc: Document) => {
     client.compiled.useStore.getState().updateMainLoading(false);
-    client.compiled.useStore.getState().udpate(items);
+    client.compiled.useStore.getState().udpate(items, doc);
 });
 
 window.dotnugg.on('compiler-error', (event, error: Error) => {

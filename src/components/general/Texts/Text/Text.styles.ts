@@ -7,7 +7,7 @@ const styles = NLStyleSheetCreator({
         // color: Colors.textColor,
     },
     text: {
-        fontFamily: lib.layout.fontFamily.monospace,
+        fontFamily: lib.layout.fontFamily.rounded,
         // color: Colors.textColor,
     },
     code: {
