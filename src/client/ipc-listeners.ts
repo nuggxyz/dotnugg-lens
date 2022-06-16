@@ -17,11 +17,11 @@ window.dotnugg.on('items-fetched', (event, items: Item[], doc: Document) => {
 
 window.dotnugg.on('compiler-error', (event, error: Error) => {
     client.compiled.useStore.getState().updateMainLoading(false);
-    alert(`Dotnugg ${error as unknown as string}`);
+    throw new Error(`Dotnugg ${error as unknown as string}`);
 });
 
 window.dotnugg.on('file-error', () => {
-    alert('Error locating art');
+    throw new Error('Error locating art');
 });
 
 window.dotnugg.on('script-error', (event, error, file: string) => {
@@ -31,7 +31,7 @@ window.dotnugg.on('script-error', (event, error, file: string) => {
     //     loading: false,
     //     compiled: false,
     // });
-    alert(`Error converting to dotnugg [${file}]: ${error as unknown as string}`);
+    throw new Error(`Error converting to dotnugg [${file}]: ${error as unknown as string}`);
 });
 
 // window.dotnugg.on('script-success', (event, file: string, layer) => {
@@ -86,7 +86,7 @@ window.dotnugg.on('script-error', (event, error, file: string) => {
 //             },
 //         });
 //     }
-//     // alert(`Success! Check ${generated} to categorize your dotnugg files`);
+//     //  throw new Error(`Success! Check ${generated} to categorize your dotnugg files`);
 // });
 
 // window.dotnugg.on('layers', (event, path, layers) => {

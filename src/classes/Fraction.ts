@@ -125,10 +125,10 @@ export class Fraction {
             if ((unsafe as Fraction).num && (unsafe as Fraction).den)
                 return new Fraction(unsafe.num, unsafe.den);
 
-            console.log({ unsafe });
+            // console.log({ unsafe });
             throw new Error('Could not parse fraction');
         } catch (e) {
-            console.error(e);
+            // console.error(e);
             throw new Error('Could not parse fraction');
         }
     }

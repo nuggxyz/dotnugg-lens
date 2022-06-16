@@ -52,7 +52,7 @@ const Button: FunctionComponent<PropsWithChildren<ButtonProps>> = ({
             ...buttonStyle,
             ...(hover && !disableHoverAnimation && hoverStyle),
         };
-    }, [hover, disabled, buttonStyle, hoverStyle, bypassDisableStyle]);
+    }, [hover, disabled, buttonStyle, hoverStyle, bypassDisableStyle, disableHoverAnimation]);
 
     const RightIcon = useCallback(() => rightIcon || null, [rightIcon]);
 

@@ -250,7 +250,7 @@ export const saveStringToLocalStorage = (str: string, target = 'tokens') => {
     try {
         localStorage.setItem(target, str);
     } catch (e) {
-        console.log(e);
+        // console.log(e);
     }
 };
 
@@ -258,7 +258,7 @@ export const loadStringFromLocalStorage = (target = 'tokens') => {
     try {
         return localStorage.getItem(target);
     } catch (e) {
-        console.log(e);
+        // console.log(e);
         return undefined;
     }
 };
