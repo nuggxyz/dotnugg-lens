@@ -18,29 +18,7 @@ import styles from './Main.styles';
 const Main = () => {
     const updateInfuraKey = client.compiled.useUpdateInfuraKey();
     const artLocation = client.compiled.useArtDir();
-    // const asepriteFiles = AppState.select.asepriteFiles();
     const loading = client.compiled.useLoading();
-
-    // const recentAndCompiled = React.useMemo(() => {
-    //     const items: (typeof compiledItems[number]['items'][number] & {
-    //         time: number;
-    //     })[] = [];
-    //     compiledItems.forEach((x) => {
-    //         x.items.forEach((y) => {
-    //             const t = recents.find((z) => z.fileUri === y.fileUri);
-    //             if (t) items.push({ ...y, time: t.time });
-    //         });
-    //     });
-    //     return [
-    //         {
-    //             title: 'RECENT',
-    //             items: items.sort((a, b) => (a.time > b.time ? -1 : 1)),
-    //         },
-    //         ...compiledItems,
-    //     ];
-    // }, [recents, compiledItems]);
-
-    console.log({ artLocation });
 
     return (
         <Dropzone

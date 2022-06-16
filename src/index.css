@@ -170,18 +170,20 @@ html {
     -webkit-transition: 0.3s cubic-bezier(0.34, 0.55, 0.06, 0.99);
     transition: 0.3s cubic-bezier(0.34, 0.55, 0.06, 0.99);
     -webkit-tap-highlight-color: transparent;
-}
-
-.mobile-pressable-div:active {
-    -webkit-transform: scale(0.9);
-    -ms-transform: scale(0.9);
-    transform: scale(0.9);
+    cursor: pointer;
+    touch-action: auto;
 }
 
 .mobile-pressable-div:hover {
-    -webkit-transform: scale(1.03);
-    -ms-transform: scale(1.03);
-    transform: scale(1.03);
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform: scale(1.1);
+}
+
+.mobile-pressable-div:active {
+    -webkit-transform: scale(0.95);
+    -ms-transform: scale(0.95);
+    transform: scale(0.95);
 }
 
 .mobile-pressable-div-deep {

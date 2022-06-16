@@ -158,7 +158,7 @@ export class IpcListener {
 
                     await me.renderer.wait();
 
-                    this.formatAndSend(me.builder, me.renderer, event);
+                    this.formatAndSend(event);
                 },
 
                 (error) => {
@@ -168,7 +168,7 @@ export class IpcListener {
 
             await Main.watcher.renderer.wait();
 
-            this.formatAndSend(Main.watcher.builder, Main.watcher.renderer, event);
+            this.formatAndSend(event);
         } catch (e: unknown) {
             event.reply('compiler-error', `Compilation error: ${e as string}`);
         }
@@ -290,20 +290,16 @@ export class IpcListener {
         });
     };
 
-    private static formatAndSend = (
-        builder: dotnugg.builder,
-        renderer: dotnugg.renderer,
-        event: Electron.IpcMainEvent,
-    ) => {
-        const res: Item[] = builder.output.map((item) => {
+    private static formatAndSend = (event: Electron.IpcMainEvent) => {
+        const res: Item[] = Main.watcher.builder.output.map((item) => {
             return {
                 ...item,
-                svg: renderer.results[item.fileUri].data,
+                svg: Main.watcher.renderer.results[item.fileUri].data,
             };
         });
         console.log(res, Main.window);
         if (res) {
-            event.sender.send('items-fetched', res);
+            event.sender.send('items-fetched', res, Main.watcher.parsedDocument);
         } else {
             event.sender.send('compiler-error', 'Error: unknown error while compiling files');
         }

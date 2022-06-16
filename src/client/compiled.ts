@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import create from 'zustand';
-import { combine } from 'zustand/middleware';
+import { combine, persist } from 'zustand/middleware';
 import { Output } from '@nuggxyz/dotnugg-sdk/dist/builder/types/BuilderTypes';
 import React from 'react';
 import { Byter } from '@nuggxyz/dotnugg-sdk/dist/builder/types/EncoderTypes';
@@ -8,6 +8,8 @@ import { BaseContract } from '@ethersproject/contracts';
 import { InfuraProvider } from '@ethersproject/providers';
 import { ethers } from 'ethers';
 import invariant from 'tiny-invariant';
+import { Document } from '@nuggxyz/dotnugg-sdk/dist/builder/types/TransformTypes';
+import shallow from 'zustand/shallow';
 
 import { DotnuggV1, DotnuggV1__factory } from '@src/typechain';
 import web3 from '@src/web3';
@@ -59,119 +61,140 @@ const build = (input: Item['bits']): BigNumber[] => {
 };
 
 const useStore = create(
-    combine(
-        {
-            infuraKey: web3.constants.INFURA_KEY,
-            artDir: '',
-            items: {} as Record<string, Item>,
-            selected: [null, null, null, null, null, null, null, null] as FixedLengthArray<
-                string | null,
-                8
-            >,
-            svg: null as string | null,
-            loading: false,
-            mainLoading: false,
-        },
-        (set, get) => {
-            const udpate = (items: Item[]) => {
-                set(() => {
-                    return {
-                        items: items.reduce((prev, curr) => {
-                            return { ...prev, [curr.fileUri]: curr };
-                        }, {}),
-                    };
-                });
-            };
-
-            const select = (itemUri: string) => {
-                const item = get().items[itemUri];
-                console.log('SELECT', item);
-                if (item) {
-                    // @ts-ignore
-                    set((data) => {
-                        data.selected[item.feature] = item.fileUri;
+    persist(
+        combine(
+            {
+                infuraKey: web3.constants.INFURA_KEY,
+                artDir: '',
+                items: {} as Record<string, Item>,
+                selected: [null, null, null, null, null, null, null, null] as FixedLengthArray<
+                    string | null,
+                    8
+                >,
+                selectedFeature: 0,
+                svg: null as string | null,
+                loading: false,
+                mainLoading: false,
+                document: null as Document | null,
+                featureNames: [null, null, null, null, null, null, null, null] as FixedLengthArray<
+                    string | null,
+                    8
+                >,
+            },
+            (set, get) => {
+                const udpate = (items: Item[], document: Document) => {
+                    set(() => {
+                        return {
+                            items: items.reduce((prev, curr) => {
+                                return { ...prev, [curr.fileUri]: curr };
+                            }, {}),
+                            document,
+                            featureNames: Object.keys(
+                                document.collection.features,
+                            ).reverse() as unknown as FixedLengthArray<string | null, 8>,
+                        };
                     });
 
                     void combo();
-                }
-            };
+                };
 
-            const deselect = (itemUri: string) => {
-                const item = get().items[itemUri];
+                const updateSelectedFeature = (selectedFeature: number) => {
+                    set(() => ({
+                        selectedFeature,
+                    }));
+                };
 
-                if (item && get().selected[item.feature]) {
-                    // @ts-ignore
-                    set((data) => {
-                        data.selected[item.feature] = null;
+                const select = (itemUri: string) => {
+                    const item = get().items[itemUri];
+                    if (item) {
+                        // @ts-ignore
+                        set((data) => {
+                            data.selected[item.feature] = item.fileUri;
+                        });
+
+                        void combo();
+                    }
+                };
+
+                const deselect = (itemUri: string) => {
+                    const item = get().items[itemUri];
+
+                    if (item && get().selected[item.feature]) {
+                        // @ts-ignore
+                        set((data) => {
+                            data.selected[item.feature] = null;
+                        });
+
+                        void combo();
+                    }
+                };
+
+                const combo = async () => {
+                    set(() => ({
+                        loading: true,
+                    }));
+                    const items = get()
+                        .selected.map((x) => {
+                            if (x) return get().items[x].bits;
+                            return null;
+                        })
+                        .filter((x) => x) as Byter[][];
+
+                    const payload = items.map((item) => build(item));
+
+                    await contract
+                        .connect(new InfuraProvider(web3.constants.DEFAULT_CHAIN, get().infuraKey))
+                        .combo(
+                            payload,
+
+                            true,
+                        )
+                        .then((svg) => {
+                            set(() => ({
+                                svg,
+                            }));
+                        })
+                        .catch((e) => alert(e));
+                    set(() => ({
+                        loading: false,
+                    }));
+                };
+
+                const updateInfuraKey = (key: string) => {
+                    set(() => {
+                        return {
+                            infuraKey: key,
+                        };
                     });
+                };
 
-                    void combo();
-                }
-            };
-
-            const combo = async () => {
-                set(() => ({
-                    loading: true,
-                }));
-                const items = get()
-                    .selected.map((x) => {
-                        if (x) return get().items[x].bits;
-                        return null;
-                    })
-                    .filter((x) => x) as Byter[][];
-
-                const payload = items.map((item) => build(item));
-
-                await contract
-                    .connect(new InfuraProvider(web3.constants.DEFAULT_CHAIN, get().infuraKey))
-                    .combo(
-                        payload,
-
-                        true,
-                    )
-                    .then((svg) => {
-                        set(() => ({
-                            svg,
-                        }));
-                    })
-                    .catch((e) => alert(e));
-                set(() => ({
-                    loading: false,
-                }));
-            };
-
-            const updateInfuraKey = (key: string) => {
-                set(() => {
-                    return {
-                        infuraKey: key,
-                    };
-                });
-            };
-
-            const updateArtDir = (artDir: string) => {
-                set(() => {
-                    return {
-                        artDir,
-                    };
-                });
-            };
-            const updateMainLoading = (mainLoading: boolean) => {
-                set(() => {
-                    return {
-                        mainLoading,
-                    };
-                });
-            };
-            return {
-                udpate,
-                select,
-                deselect,
-                combo,
-                updateInfuraKey,
-                updateArtDir,
-                updateMainLoading,
-            };
-        },
+                const updateArtDir = (artDir: string) => {
+                    set(() => {
+                        return {
+                            artDir,
+                        };
+                    });
+                };
+                const updateMainLoading = (mainLoading: boolean) => {
+                    set(() => {
+                        return {
+                            mainLoading,
+                        };
+                    });
+                };
+                return {
+                    udpate,
+                    select,
+                    deselect,
+                    combo,
+                    updateInfuraKey,
+                    updateArtDir,
+                    updateMainLoading,
+                    updateSelectedFeature,
+                };
+            },
+        ),
+        { name: 'dotnugg-lens-compiled' },
     ),
 );
 
@@ -191,6 +214,12 @@ export const useCompilerUpdater = () => {
 };
 
 export default {
+    useFeautureNames: () => useStore((data) => data.featureNames, shallow),
+
+    useDocument: () => useStore((data) => data.document),
+    useSelectedFeature: () => useStore((data) => data.selectedFeature),
+    useUpdateSelectedFeature: () => useStore((data) => data.updateSelectedFeature),
+
     useInfuraKey: () => useStore((data) => data.infuraKey),
     useUpdateInfuraKey: () => useStore((data) => data.updateInfuraKey),
     useArtDir: () => useStore((data) => data.artDir),
