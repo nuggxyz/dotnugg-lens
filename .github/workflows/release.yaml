@@ -9,6 +9,7 @@ env:
     NUGG_APP_INFURA_KEY: ${{ secrets.NUGG_APP_INFURA_KEY }}
     NUGG_APP_ALCHEMY_KEY: ${{ secrets.NUGG_APP_ALCHEMY_KEY }}
     NUGG_APP_GOOGLE_ANALYTICS_ID: ${{ secrets.NUGG_APP_GOOGLE_ANALYTICS_ID }}
+    NODE_OPTIONS: '--experimental-modules'
 
 jobs:
     release:
@@ -33,7 +34,6 @@ jobs:
                   # GitHub token, automatically provided to the action
                   # (No need to define this secret in the repo settings)
                   github_token: ${{ secrets.github_token }}
-                  args: NODE_OPTIONS='--experimental-modules'
                   mac_certs: ${{ secrets.mac_certs }}
                   mac_certs_password: ${{ secrets.mac_certs_password }}
 
