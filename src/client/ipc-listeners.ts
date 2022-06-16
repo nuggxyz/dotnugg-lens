@@ -20,7 +20,7 @@ window.dotnugg.on('items-fetched', (event, items: Item[]) => {
 
 window.dotnugg.on('compiler-error', (event, error: Error) => {
     client.keys.useStore.getState().updateMainIsLoading(false);
-    alert(`Dotnugg ${error.message}`);
+    alert(`Dotnugg ${error as unknown as string}`);
 });
 
 window.dotnugg.on('file-error', () => {

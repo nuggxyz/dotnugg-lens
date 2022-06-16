@@ -8,7 +8,9 @@
         "skipLibCheck": true,
         "types": ["node", "jest"],
         "typeRoots": ["./index.d.ts"],
-        "lib": ["es2022"]
+        "lib": ["es2022"],
+        "resolveJsonModule": true,
+        "target": "esnext"
     },
     // "include": ["./*.ts"],
     "exclude": ["../node_modules"]

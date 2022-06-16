@@ -77,7 +77,16 @@ const RenderItem = <T, B, A>({
                     overflow: 'hidden',
                 }}
             >
-                <animated.div style={{ opacity, y }} ref={ref}>
+                <animated.div
+                    style={{
+                        opacity,
+                        y,
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        justifyContent: 'space-around',
+                    }}
+                    ref={ref}
+                >
                     {item.items.map((childItem, index) => (
                         // eslint-disable-next-line react/no-array-index-key
                         <React.Fragment key={`child-${index}`}>
@@ -199,7 +208,7 @@ Props<T, B, A>) => {
             <div
                 style={{
                     height: '100%',
-                    // overflow: 'scroll',
+                    overflow: 'scroll',
                     ...styleRight,
                 }}
                 ref={listRef}
