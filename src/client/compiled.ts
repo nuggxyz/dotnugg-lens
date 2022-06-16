@@ -67,4 +67,5 @@ export default {
     useCompiledItem,
     useCompiledItems,
     useAllCompiledItems: () => useStore((data) => data.items),
+    useStore,
 };

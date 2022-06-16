@@ -12,7 +12,7 @@ import { dotnugg } from '@nuggxyz/dotnugg-sdk';
 import utils from './utils';
 import type Main from './main';
 
-declare const __DEV__: boolean;
+const __DEV__ = process.env.NODE_ENV === 'development';
 
 export class IpcListener {
     public static main: typeof Main;

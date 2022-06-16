@@ -316,8 +316,11 @@ export default function (webpackEnv: 'production' | 'development'): webpack.Conf
                 // crypto: false, // require.resolve("crypto-browserify")
                 // stream: false, // require.resolve("stream-browserify")
                 // url: false, // require.resolve("url/")
-                // path: false, // require.resolve("path-browserify")
+                path: require.resolve('path-browserify'),
                 // http: false, // require.resolve("stream-http")
+                vm: require.resolve('vm-browserify'),
+                console: require.resolve('console-browserify'),
+                constants: require.resolve('constants-browserify'),
 
                 fs: false,
                 util: require.resolve('assert/'),
@@ -375,6 +378,12 @@ export default function (webpackEnv: 'production' | 'development'): webpack.Conf
         module: {
             strictExportPresence: true,
             rules: [
+                {
+                    // We're specifying native_modules in the test because the asset relocator loader generates a
+                    // "fake" .node file which is really a cjs file.
+                    test: /native_modules\/.+\.node$/,
+                    use: 'node-loader',
+                },
                 // Handle node_modules packages that contain sourcemaps
                 shouldUseSourceMap && {
                     enforce: 'pre' as string,
@@ -477,6 +486,7 @@ export default function (webpackEnv: 'production' | 'development'): webpack.Conf
                                 and: [/\.(ts|tsx|js|jsx|md|mdx)$/],
                             },
                         },
+
                         // Process application JS with Babel.
                         // The preset includes JSX, Flow, TypeScript, and some ESnext features.
                         {
