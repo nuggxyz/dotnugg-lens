@@ -8,14 +8,14 @@ import Button from '@src/components/general/Buttons/Button/Button';
 import Loader from '@src/components/general/Loader/Loader';
 import Label from '@src/components/general/Label/Label';
 import client from '@src/client/index';
-import { ListRenderItemProps } from '@src/components/general/List/List';
 import { Item } from '@src/client/compiled';
 
 import styles from './NuggAssembler.styles';
 
-type Props = ListRenderItemProps<Item['items'][number], undefined, undefined>;
-
-const ChildRenderItem: FunctionComponent<Props> = ({ item, index }) => {
+const ChildRenderItem: FunctionComponent<{
+    item: Item;
+    index: number;
+}> = ({ item, index }) => {
     const liveItem = client.compiled.useCompiledItem(item.fileUri);
     const pushToRecents = client.recents.usePushToRecents();
 

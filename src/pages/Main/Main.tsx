@@ -16,31 +16,29 @@ import client from '@src/client';
 import styles from './Main.styles';
 
 const Main = () => {
-    const compiledItems = client.compiled.useAllCompiledItems();
-    const recents = client.recents.useRecents();
-    const updateInfuraKey = client.keys.useUpdateInfuraKey();
-    const artLocation = client.keys.useArtDir();
+    const updateInfuraKey = client.compiled.useUpdateInfuraKey();
+    const artLocation = client.compiled.useArtDir();
     // const asepriteFiles = AppState.select.asepriteFiles();
-    const loading = client.keys.useMainIsLoading();
+    const loading = client.compiled.useLoading();
 
-    const recentAndCompiled = React.useMemo(() => {
-        const items: (typeof compiledItems[number]['items'][number] & {
-            time: number;
-        })[] = [];
-        compiledItems.forEach((x) => {
-            x.items.forEach((y) => {
-                const t = recents.find((z) => z.fileUri === y.fileUri);
-                if (t) items.push({ ...y, time: t.time });
-            });
-        });
-        return [
-            {
-                title: 'RECENT',
-                items: items.sort((a, b) => (a.time > b.time ? -1 : 1)),
-            },
-            ...compiledItems,
-        ];
-    }, [recents, compiledItems]);
+    // const recentAndCompiled = React.useMemo(() => {
+    //     const items: (typeof compiledItems[number]['items'][number] & {
+    //         time: number;
+    //     })[] = [];
+    //     compiledItems.forEach((x) => {
+    //         x.items.forEach((y) => {
+    //             const t = recents.find((z) => z.fileUri === y.fileUri);
+    //             if (t) items.push({ ...y, time: t.time });
+    //         });
+    //     });
+    //     return [
+    //         {
+    //             title: 'RECENT',
+    //             items: items.sort((a, b) => (a.time > b.time ? -1 : 1)),
+    //         },
+    //         ...compiledItems,
+    //     ];
+    // }, [recents, compiledItems]);
 
     console.log({ artLocation });
 
@@ -131,9 +129,7 @@ const Main = () => {
                     <UseOurs />
                 </div>
             ) : null}
-            {!isUndefinedOrNullOrStringEmpty(artLocation) ? (
-                <NuggAssembler data={recentAndCompiled} />
-            ) : null}
+            {!isUndefinedOrNullOrStringEmpty(artLocation) ? <NuggAssembler /> : null}
         </Dropzone>
     );
 };

@@ -1,25 +1,21 @@
-import { Output } from '@nuggxyz/dotnugg-sdk/dist/builder/types/BuilderTypes';
-
 import client from '@src/client';
 
-export type Item = {
-    title: string;
-    items: (Output & { svg: string; title: string | undefined })[];
-};
+import { Item } from './compiled';
 
 // window.dotnugg.selectFiles();
 
 window.dotnugg.on('file-selected', (event, path: string) => {
-    client.keys.useStore.getState().updateArtDir(path);
+    client.compiled.useStore.getState().updateArtDir(path);
 });
 
 window.dotnugg.on('items-fetched', (event, items: Item[]) => {
-    client.keys.useStore.getState().updateMainIsLoading(false);
+    console.log('ITEMS FETCHED', event, items);
+    client.compiled.useStore.getState().updateMainLoading(false);
     client.compiled.useStore.getState().udpate(items);
 });
 
 window.dotnugg.on('compiler-error', (event, error: Error) => {
-    client.keys.useStore.getState().updateMainIsLoading(false);
+    client.compiled.useStore.getState().updateMainLoading(false);
     alert(`Dotnugg ${error as unknown as string}`);
 });
 
@@ -28,7 +24,7 @@ window.dotnugg.on('file-error', () => {
 });
 
 window.dotnugg.on('script-error', (event, error, file: string) => {
-    client.keys.useStore.getState().updateMainIsLoading(false);
+    client.compiled.useStore.getState().updateMainLoading(false);
     // AppState.dispatch.updateAsepriteFiles({
     //     path: file,
     //     loading: false,
@@ -110,5 +106,5 @@ window.dotnugg.on('script-error', (event, error, file: string) => {
 // });
 
 window.dotnugg.on('main-loading', () => {
-    client.keys.useStore.getState().updateMainIsLoading(true);
+    client.compiled.useStore.getState().updateMainLoading(true);
 });

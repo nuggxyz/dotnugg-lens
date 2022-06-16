@@ -669,6 +669,12 @@ export default function (webpackEnv: 'production' | 'development'): webpack.Conf
             ].filter(Boolean) as webpack.RuleSetRule[],
         },
         plugins: [
+            new webpack.ProvidePlugin({
+                Promise: 'es6-promise-promise',
+            }),
+            new webpack.ProvidePlugin({
+                process: 'process/browser',
+            }),
             // Generates an `index.html` file with the <script> injected.
             new HtmlWebpackPlugin(
                 Object.assign(

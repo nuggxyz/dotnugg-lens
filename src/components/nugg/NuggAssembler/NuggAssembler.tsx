@@ -1,121 +1,126 @@
-import React, { FunctionComponent, useMemo } from 'react';
-import { animated, config, useTransition } from '@react-spring/web';
+import React, { FunctionComponent } from 'react';
 
-import { isUndefinedOrNullOrArrayEmpty } from '@src/lib';
-import Colors from '@src/lib/colors';
-import Layout from '@src/lib/layout';
-import StickyList from '@src/components/general/List/StickyList';
-import Text from '@src/components/general/Texts/Text/Text';
-import UseOurs from '@src/components/nugg/UseOurs';
-import { Item } from '@src/client/compiled';
+import client from '@src/client';
 
 import ChildRenderItem from './ChildRenderItem';
 import DetailView from './DetailView';
-import FeatureRenderItem from './FeatureRenderItem';
-import styles from './NuggAssembler.styles';
-import TitleRenderItem from './TitleRenderItem';
 
-type Props = { data: Item[] };
+const NuggAssembler: FunctionComponent<unknown> = () => {
+    // const isEmpty = useMemo(() => {
+    //     return isUndefinedOrNullOrArrayEmpty(data);
+    // }, [data]);
 
-const NuggAssembler: FunctionComponent<Props> = ({ data }) => {
-    const [selectedItems, setSelectedItems] = React.useState<Item['items'][number][]>([]);
+    // React.useEffect(() => {
+    //     selectedItems.forEach((x) => {
+    //         data.forEach((a) => {
+    //             a.items.forEach((b) => {
+    //                 if (b.fileUri === x.fileUri) {
+    //                     const tmp = selectedItems;
 
-    const isEmpty = useMemo(() => {
+    //                     tmp[tmp.findIndex((y) => y.fileUri === x.fileUri)] = b;
+
+    //                     setSelectedItems(tmp);
+    //                 }
+    //             });
+    //         });
+    //     });
+    //     // setSelectedItems((items) => {
+    //     //     console.log({ data, items });
+    //     //     items.forEach((x) => {
+    //     //         data.forEach((a) => {
+    //     //             a.items.forEach((b) => {
+    //     //                 if (b.fileUri === x.fileUri) {
+    //     //                     console.log(b.fileUri, x.fileUri);
+
+    //     //                     x = b;
+    //     //                 }
+    //     //             });
+    //     //         });
+    //     //     });
+    //     //     return items;
+    //     // });
+    // }, [data, selectedItems]);
+
+    // const transition = useTransition(data.length, {
+    //     from: { opacity: 0 },
+    //     enter: { opacity: 1 },
+    //     leave: { opacity: 0 },
+    //     config: config.default,
+    // });
+    const [viewingFeature] = React.useState(0);
+
+    const items = client.compiled.useCompiledItems();
+
+    console.log({ items });
+
+    const List = React.useMemo(() => {
         return (
-            isUndefinedOrNullOrArrayEmpty(data) ||
-            data.every((item) => isUndefinedOrNullOrArrayEmpty(item.items))
+            <>
+                {Object.values(items)
+                    .filter((x) => x.feature === viewingFeature)
+                    .map((x, i) => (
+                        <ChildRenderItem item={x} index={i} key={`${x.fileUri}-main-list`} />
+                    )) || []}
+            </>
         );
-    }, [data]);
+    }, [viewingFeature, items]);
 
-    React.useEffect(() => {
-        selectedItems.forEach((x) => {
-            data.forEach((a) => {
-                a.items.forEach((b) => {
-                    if (b.fileUri === x.fileUri) {
-                        const tmp = selectedItems;
+    return (
+        <>
+            {List}
+            <DetailView />
+        </>
+        // <StickyList
+        //     // @ts-ignore
+        //     style={{ ...styles.container }}
+        //     styleLeft={styles.left}
+        //     styleRight={styles.right}
+        //     data={data}
+        //     ChildRenderItem={ChildRenderItem}
+        //     TitleRenderItem={TitleRenderItem}
+        //     FeatureRenderItem={FeatureRenderItem}
+        //     extraData={undefined}
+        //     // extraData={[selectedItems, setSelectedItems]}
+        // >
 
-                        tmp[tmp.findIndex((y) => y.fileUri === x.fileUri)] = b;
-
-                        setSelectedItems(tmp);
-                    }
-                });
-            });
-        });
-        // setSelectedItems((items) => {
-        //     console.log({ data, items });
-        //     items.forEach((x) => {
-        //         data.forEach((a) => {
-        //             a.items.forEach((b) => {
-        //                 if (b.fileUri === x.fileUri) {
-        //                     console.log(b.fileUri, x.fileUri);
-
-        //                     x = b;
-        //                 }
-        //             });
-        //         });
-        //     });
-        //     return items;
-        // });
-    }, [data, selectedItems]);
-
-    const transition = useTransition(data.length, {
-        from: { opacity: 0 },
-        enter: { opacity: 1 },
-        leave: { opacity: 0 },
-        config: config.default,
-    });
-
-    return transition(({ opacity }) =>
-        isEmpty ? (
-            <animated.div
-                style={{
-                    position: 'absolute',
-                    textAlign: 'center',
-                    justifyContent: 'center',
-                    opacity,
-                }}
-            >
-                <Text
-                    textStyle={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        textAlign: 'center',
-                    }}
-                    type="text"
-                >
-                    Add some
-                    <Text
-                        type="code"
-                        textStyle={{
-                            background: Colors.transparentGrey,
-                            borderRadius: Layout.borderRadius.smallish,
-                            margin: '0rem .2rem',
-                            padding: '.2rem .3rem',
-                        }}
-                    >
-                        .nugg
-                    </Text>
-                    files to your Art Directory
-                </Text>
-                <UseOurs />
-            </animated.div>
-        ) : (
-            <StickyList
-                // @ts-ignore
-                style={{ ...styles.container, opacity }}
-                styleLeft={styles.left}
-                styleRight={styles.right}
-                data={data}
-                ChildRenderItem={ChildRenderItem}
-                TitleRenderItem={TitleRenderItem}
-                FeatureRenderItem={FeatureRenderItem}
-                extraData={undefined}
-                // extraData={[selectedItems, setSelectedItems]}
-            >
-                <DetailView selectedItems={selectedItems} setSelectedItems={setSelectedItems} />
-            </StickyList>
-        ),
+        // </StickyList>
     );
 };
 
 export default NuggAssembler;
+
+// {
+//     /* <animated.div
+// style={{
+//     position: 'absolute',
+//     textAlign: 'center',
+//     justifyContent: 'center',
+//     opacity,
+// }}
+// >
+// <Text
+//     textStyle={{
+//         display: 'flex',
+//         alignItems: 'center',
+//         textAlign: 'center',
+//     }}
+//     type="text"
+// >
+//     Add some
+//     <Text
+//         type="code"
+//         textStyle={{
+//             background: Colors.transparentGrey,
+//             borderRadius: Layout.borderRadius.smallish,
+//             margin: '0rem .2rem',
+//             padding: '.2rem .3rem',
+//         }}
+//     >
+//         .nugg
+//     </Text>
+//     files to your Art Directory
+// </Text>
+// <UseOurs />
+// </animated.div>
+// fasdfasd */
+// }
