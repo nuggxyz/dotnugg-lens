@@ -4,6 +4,11 @@ on:
     push:
         tags:
             - 'v*'
+env:
+    NUGG_APP_ETHERSCAN_KEY: ${{ secrets.NUGG_APP_ETHERSCAN_KEY }}
+    NUGG_APP_INFURA_KEY: ${{ secrets.NUGG_APP_INFURA_KEY }}
+    NUGG_APP_ALCHEMY_KEY: ${{ secrets.NUGG_APP_ALCHEMY_KEY }}
+    NUGG_APP_GOOGLE_ANALYTICS_ID: ${{ secrets.NUGG_APP_GOOGLE_ANALYTICS_ID }}
 
 jobs:
     release:
