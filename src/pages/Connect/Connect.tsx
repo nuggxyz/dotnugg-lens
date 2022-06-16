@@ -20,7 +20,7 @@ const Connect: FunctionComponent<unknown> = () => {
     const [apiKey, setApiKey] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const updateInfuraKey = client.keys.useUpdateInfuraKey();
+    const updateInfuraKey = client.compiled.useUpdateInfuraKey();
 
     return (
         <div style={styles.container}>

@@ -7,7 +7,7 @@ import Connect from './Connect/Connect';
 import Main from './Main/Main';
 
 const App: FunctionComponent<unknown> = () => {
-    const apiKey = client.keys.useInfuraKey();
+    const apiKey = client.compiled.useInfuraKey();
 
     return (
         <div
