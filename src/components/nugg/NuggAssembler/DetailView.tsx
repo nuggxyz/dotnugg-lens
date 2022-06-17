@@ -34,30 +34,32 @@ const DetailView: FunctionComponent<unknown> = () => {
                 alignItems: 'center',
             }}
         >
-            <div
-                style={{
-                    zIndex: 2,
-                    width: '100%',
-                    height: '70%',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    display: 'flex',
-                    overflow: 'visible',
-                    background: lib.colors.transparentWhite,
-                    borderRadius: lib.layout.borderRadius.large,
-                }}
-            >
-                {!isUndefinedOrNullOrStringEmpty(svg) && (
-                    <img
-                        src={svg}
-                        className="customized-dotnugg"
-                        style={{
-                            width: '100%',
-                            height: '100%',
-                        }}
-                        alt="fix"
-                    />
-                )}
+            <div style={{ width: '100%', height: '70%' }}>
+                <div
+                    style={{
+                        zIndex: 2,
+                        width: '100%',
+                        height: '100%',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        display: 'flex',
+                        overflow: 'visible',
+                        background: lib.colors.transparentWhite,
+                        borderRadius: lib.layout.borderRadius.large,
+                    }}
+                >
+                    {!isUndefinedOrNullOrStringEmpty(svg) && (
+                        <img
+                            src={svg}
+                            className="customized-dotnugg"
+                            style={{
+                                width: '100%',
+                                height: '100%',
+                            }}
+                            alt="fix"
+                        />
+                    )}
+                </div>
             </div>
             <div
                 style={{
