@@ -24,7 +24,7 @@ globalThis.__DEV__ = process.env.NODE_ENV === 'development';
 const path = require('path');
 
 const { autoUpdater } = require('electron/main');
-const { app, BrowserWindow, shell, Menu } = require('electron');
+const { app, BrowserWindow, shell, Menu, ipcMain } = require('electron');
 
 const { dotnugg } = require('@nuggxyz/dotnugg-sdk');
 
@@ -83,7 +83,7 @@ class Main {
             width: 800,
             height: 600,
             webPreferences: {
-                preload: path.join(__dirname, '../preload.js'),
+                preload: path.join(__dirname, './preload.js'),
                 nodeIntegration: true,
                 // contextIsolation: false,
             },
@@ -414,3 +414,6 @@ class IpcListener {
         }
     };
 }
+
+Main.main();
+IpcListener.register();

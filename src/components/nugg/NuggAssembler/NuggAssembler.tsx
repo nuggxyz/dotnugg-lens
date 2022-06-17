@@ -75,6 +75,7 @@ const NuggAssembler: FunctionComponent<unknown> = () => {
                     background: lib.colors.gradient3Transparent,
                     height: '90%',
                     width: '66%',
+
                     // position: 'absolute',
                 }}
             >
@@ -96,6 +97,7 @@ const NuggAssembler: FunctionComponent<unknown> = () => {
                     <div
                         style={{
                             justifyContent: 'space-evenly',
+                            paddingBottom: 100,
 
                             width: '100%',
                             display: 'flex',
