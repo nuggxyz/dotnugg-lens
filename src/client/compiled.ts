@@ -10,11 +10,12 @@ import { ethers } from 'ethers';
 import invariant from 'tiny-invariant';
 import { Document } from '@nuggxyz/dotnugg-sdk/dist/builder/types/TransformTypes';
 import shallow from 'zustand/shallow';
+import Bluebird from 'bluebird';
 
 import { DotnuggV1, DotnuggV1__factory } from '@src/typechain';
 import web3 from '@src/web3';
 
-export type Item = Remap<Output & { svg: string; title: string | undefined }>;
+export type Item = Remap<Output & { title: string | undefined }>;
 
 const contract = new BaseContract(
     web3.constants.DEFAULT_CONTRACTS.DotnuggV1,
@@ -81,9 +82,23 @@ const useStore = create(
                     string | null,
                     8
                 >,
+                images: {} as { [_: string]: { svg: string; mTimeMs: number } | undefined },
             },
             (set, get) => {
                 const udpate = (items: Item[], document: Document) => {
+                    const currItems = get().items;
+
+                    const updated: Item[] = [];
+                    items.forEach((element) => {
+                        const currItem = currItems[element.fileUri];
+                        if (
+                            !element.mtimeMs ||
+                            !currItem?.mtimeMs ||
+                            element.mtimeMs !== currItem.mtimeMs
+                        ) {
+                            updated.push(element);
+                        }
+                    });
                     set(() => {
                         return {
                             items: items.reduce((prev, curr) => {
@@ -97,6 +112,14 @@ const useStore = create(
                     });
 
                     void combo();
+
+                    void Bluebird.Promise.map(
+                        updated,
+                        async (element) => {
+                            await single(element);
+                        },
+                        { concurrency: 10 },
+                    );
                 };
 
                 const updateSelectedFeature = (selectedFeature: number) => {
@@ -133,6 +156,48 @@ const useStore = create(
 
                         void combo();
                     }
+                };
+
+                const single = async (item: Item) => {
+                    if (!item) return;
+
+                    console.log({ item });
+
+                    // @ts-ignore
+                    set((data) => {
+                        data.images[item.fileUri] = undefined;
+                    });
+
+                    const payload = [build(item.bits)];
+
+                    // const items = get()
+                    //     .selected.map((x) => {
+                    //         if (x) return get().items[x].bits;
+                    //         return null;
+                    //     })
+                    //     .filter((x) => x) as Byter[][];
+
+                    // const payload = items.map((item) => build(item));
+
+                    await contract
+                        .connect(new InfuraProvider(web3.constants.DEFAULT_CHAIN, get().infuraKey))
+                        .combo(
+                            payload,
+
+                            true,
+                        )
+                        .then((svg) => {
+                            // @ts-ignore
+                            set((data) => {
+                                data.images[item.fileUri] = {
+                                    svg,
+                                    mTimeMs: item.mtimeMs ?? 0,
+                                };
+                            });
+                        })
+                        .catch((e) => {
+                            return new Error(e as string);
+                        });
                 };
 
                 const combo = async () => {
@@ -223,7 +288,10 @@ export const useCompilerUpdater = () => {
 
 export default {
     useFeautureNames: () => useStore((data) => data.featureNames, shallow),
-
+    useItemSvg: (fileUri?: string | null) =>
+        useStore(
+            React.useCallback((data) => (fileUri ? data.images[fileUri] : undefined), [fileUri]),
+        ),
     useDocument: () => useStore((data) => data.document),
     useSelectedFeature: () => useStore((data) => data.selectedFeature),
     useUpdateSelectedFeature: () => useStore((data) => data.updateSelectedFeature),
