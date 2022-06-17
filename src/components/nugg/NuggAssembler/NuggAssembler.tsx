@@ -12,17 +12,24 @@ const NuggAssembler: FunctionComponent<unknown> = () => {
     const items = client.compiled.useCompiledItems();
     const document = client.compiled.useDocument();
     const updateSelectedFeature = client.compiled.useUpdateSelectedFeature();
+    const recents = client.compiled.useRecents();
 
     const List = React.useMemo(() => {
+        if (selectedFeature === 0)
+            return recents.map((x, i) => (
+                <ChildRenderItem fileUri={x.fileUri} index={i} key={`${x.fileUri}-main-list`} />
+            ));
         return Object.values(items)
-            .filter((x) => x.feature === selectedFeature)
-            .map((x, i) => <ChildRenderItem item={x} index={i} key={`${x.fileUri}-main-list`} />);
-    }, [selectedFeature, items]);
+            .filter((x) => x.feature === selectedFeature - 1)
+            .map((x, i) => (
+                <ChildRenderItem fileUri={x.fileUri} index={i} key={`${x.fileUri}-main-list`} />
+            ));
+    }, [selectedFeature, items, recents]);
 
     const ref = React.useRef(null);
 
     const featureList = React.useMemo(() => {
-        return Object.values(document?.collection.features || {})
+        return [...Object.values(document?.collection.features || {}), { name: 'recents' }]
             .reverse()
             .map((x, i) => (
                 <div
@@ -58,25 +65,22 @@ const NuggAssembler: FunctionComponent<unknown> = () => {
             style={{
                 border: 'none',
                 overflow: 'hidden',
-                height: '90%',
+                height: '100%',
                 display: 'flex',
-                width: '90%',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                // position: 'absolute',
+                width: '100%',
+                justifyContent: 'space-around',
             }}
         >
             <div
                 style={{
-                    boxShadow: `${lib.layout.boxShadow.prefix} ${lib.layout.boxShadow.basic}`,
                     borderRadius: lib.layout.borderRadius.medium,
                     border: 'none',
                     overflow: 'hidden',
-                    background: lib.colors.gradient3Transparent,
-                    height: '90%',
+                    height: '100%',
                     width: '66%',
-
-                    // position: 'absolute',
+                    margin: 20,
+                    marginTop: 100,
+                    alignItems: 'flex-end',
                 }}
             >
                 <div style={{ display: 'flex', justifyContent: 'space-around' }}>{featureList}</div>
@@ -96,8 +100,8 @@ const NuggAssembler: FunctionComponent<unknown> = () => {
                 >
                     <div
                         style={{
-                            justifyContent: 'space-evenly',
-                            paddingBottom: 100,
+                            justifyContent: 'center',
+                            paddingBottom: 300,
 
                             width: '100%',
                             display: 'flex',
@@ -109,7 +113,15 @@ const NuggAssembler: FunctionComponent<unknown> = () => {
                     </div>
                 </div>
             </div>
-            <DetailView />
+            <div
+                style={{
+                    border: 'none',
+                    height: '100%',
+                    width: '34%',
+                }}
+            >
+                <DetailView />
+            </div>
         </div>
     );
 };

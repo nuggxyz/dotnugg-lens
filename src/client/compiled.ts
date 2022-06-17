@@ -64,6 +64,7 @@ const useStore = create(
     persist(
         combine(
             {
+                recents: [] as { fileUri: string; time: number }[],
                 infuraKey: web3.constants.INFURA_KEY,
                 artDir: '',
                 items: {} as Record<string, Item>,
@@ -110,6 +111,11 @@ const useStore = create(
                         // @ts-ignore
                         set((data) => {
                             data.selected[item.feature] = item.fileUri;
+                            data.recents.filterInPlace((x) => x.fileUri !== item.fileUri);
+                            data.recents.push({
+                                fileUri: item.fileUri,
+                                time: new Date().getTime(),
+                            });
                         });
 
                         void combo();
@@ -231,6 +237,7 @@ export default {
             React.useCallback((data) => (fileUri ? data.items[fileUri] : undefined), [fileUri]),
         ),
     useSelectedFileUris: () => useStore((data) => data.selected),
+    useRecents: () => useStore((data) => data.recents),
 
     useCombo: () => useStore((data) => data.combo),
     useSvg: () => useStore((data) => data.svg),
@@ -241,5 +248,6 @@ export default {
     useLoading: () => useStore((data) => data.loading),
     useSetMainLoading: () => useStore((data) => data.updateMainLoading),
     useMainLoading: () => useStore((data) => data.mainLoading),
+    // useClearPersist: () => () => useStore.persist.clearStorage(),
     useStore,
 };

@@ -3,8 +3,8 @@ import lib from '@src/lib';
 const styles = lib.layout.NLStyleSheetCreator({
     powerButton: {
         position: 'absolute',
-        top: '1.5rem',
-        right: '2rem',
+        top: '3rem',
+        left: '4.5rem',
     },
     trayButton: {
         position: 'absolute',
