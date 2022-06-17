@@ -19,6 +19,8 @@ const ChildRenderItem: FunctionComponent<{
     const select = client.compiled.useSelect();
     const featureNames = client.compiled.useFeautureNames();
 
+    const svg = client.compiled.useItemSvg(fileUri);
+
     if (!item) return null;
     return (
         <div
@@ -133,7 +135,7 @@ const ChildRenderItem: FunctionComponent<{
                     {' / 10k'}
                 </Text>
             </div>
-            {item.svg ? (
+            {svg?.svg ? (
                 <div
                     style={{
                         width: '100%',
@@ -145,7 +147,7 @@ const ChildRenderItem: FunctionComponent<{
                     }}
                 >
                     <img
-                        src={item.svg}
+                        src={svg.svg}
                         className="customized-dotnugg"
                         style={{
                             // alignSelf: 'center',

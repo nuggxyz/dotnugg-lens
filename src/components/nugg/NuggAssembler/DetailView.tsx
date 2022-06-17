@@ -148,6 +148,7 @@ const SelectedItem = ({ fileUri }: { fileUri?: string | null }) => {
     const item = client.compiled.useCompiledItem(fileUri);
     const deselect = client.compiled.useDeselect();
     const featureNames = client.compiled.useFeautureNames();
+    const svg = client.compiled.useItemSvg(fileUri);
 
     return item ? (
         <div
@@ -184,7 +185,7 @@ const SelectedItem = ({ fileUri }: { fileUri?: string | null }) => {
                 }}
             />
             <img
-                src={item.svg}
+                src={svg?.svg}
                 className="customized-dotnugg"
                 style={{
                     height: '55%',

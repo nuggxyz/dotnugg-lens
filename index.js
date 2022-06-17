@@ -51,13 +51,13 @@ class Main {
     static _window;
 
     static get window() {
-        return this._window;
+        return Main._window;
     }
 
     static _watcher;
 
     static get watcher() {
-        return this._watcher;
+        return Main._watcher;
     }
 
     static APP_NAME = 'lens/main';
@@ -72,19 +72,19 @@ class Main {
 
     static onClose() {
         // Dereference the _window object.
-        this._window = null;
+        Main._window = null;
     }
 
     static onActivate() {
         if (BrowserWindow.getAllWindows().length === 0) {
-            this.onReady();
+            Main.onReady();
         }
     }
 
     static onReady() {
         // console.log(__DEV__, process.env.NODE_ENVIRONMENT);
 
-        this._window = new BrowserWindow({
+        Main._window = new BrowserWindow({
             width: 800,
             height: 600,
             webPreferences: {
@@ -98,18 +98,18 @@ class Main {
             // transparent: true,
         });
 
-        console.log(this._window);
-        void this._window.loadURL(
+        console.log(Main._window);
+        void Main._window.loadURL(
             __DEV__
                 ? 'http://localhost:3000'
                 : `file://${path.join(__dirname, './build/index.html')}`,
         );
-        this._window.maximize();
-        this._window.on('closed', () => Main.onClose());
+        Main._window.maximize();
+        Main._window.on('closed', () => Main.onClose());
 
-        // if (__DEV__) {
-        this._window.webContents.openDevTools();
-        // }
+        if (__DEV__) {
+            Main._window.webContents.openDevTools();
+        }
 
         autoUpdater.checkForUpdates();
         Menu.setApplicationMenu(
@@ -143,9 +143,9 @@ class Main {
         // so this class has no dependencies. This
         // makes the code easier to write tests for
 
-        app.on('window-all-closed', this.onWindowAllClosed);
-        app.on('ready', this.onReady);
-        app.on('activate', this.onActivate);
+        app.on('window-all-closed', Main.onWindowAllClosed);
+        app.on('ready', Main.onReady);
+        app.on('activate', Main.onActivate);
 
         void dotnugg.parser.init('lens/main');
     }
@@ -153,15 +153,15 @@ class Main {
 
 class IpcListener {
     static register = () => {
-        ipcMain.on('select-files', this.onSelectFiles);
-        ipcMain.on('open-to', this.onOpenTo);
-        ipcMain.on('open-to-vscode', this.onOpenToVsCode);
-        ipcMain.on('check-os', this.onCheckOs);
-        ipcMain.on('get-hex', this.onGetHex);
-        ipcMain.on('fetch-compiler-items', this.onFetchCompilerItems);
-        ipcMain.on('clear-cache', this.onClearCache);
-        ipcMain.on('get-lens-default', this.onGetLensDefault);
-        ipcMain.on('list-layers', this.onListLayers);
+        ipcMain.on('select-files', IpcListener.onSelectFiles);
+        ipcMain.on('open-to', IpcListener.onOpenTo);
+        ipcMain.on('open-to-vscode', IpcListener.onOpenToVsCode);
+        ipcMain.on('check-os', IpcListener.onCheckOs);
+        ipcMain.on('get-hex', IpcListener.onGetHex);
+        ipcMain.on('fetch-compiler-items', IpcListener.onFetchCompilerItems);
+        ipcMain.on('clear-cache', IpcListener.onClearCache);
+        ipcMain.on('get-lens-default', IpcListener.onGetLensDefault);
+        ipcMain.on('list-layers', IpcListener.onListLayers);
     };
 
     static onSelectFiles = (event) => {
@@ -266,11 +266,11 @@ class IpcListener {
         try {
             const infura = new ethers.providers.InfuraProvider('goerli', apiKey);
 
-            Main._watcher = dotnugg.watcher.watch(
+            Main._watcher = dotnugg.watcher.watchNoRender(
                 Main.APP_NAME,
                 filePath,
-                address,
-                infura,
+                // address,
+                // infura,
                 (fileUri) => {
                     console.log('###################### FILE ', fileUri);
                     event.sender.send('main-loading');
@@ -279,9 +279,9 @@ class IpcListener {
                 async (fileUri, me) => {
                     console.log('######## DONE COMPILING ##########', fileUri);
 
-                    await me.renderer.wait();
+                    // await me.renderer.wait();
 
-                    this.formatAndSend(event);
+                    IpcListener.formatAndSend(event);
                 },
 
                 (error) => {
@@ -289,9 +289,9 @@ class IpcListener {
                 },
             );
 
-            await Main.watcher.renderer.wait();
+            // await Main.watcher.renderer.wait();
 
-            this.formatAndSend(event);
+            IpcListener.formatAndSend(event);
         } catch (e) {
             event.sender.send('compiler-error', `Compilation error: ${e}`);
             alert(e);
@@ -299,7 +299,7 @@ class IpcListener {
     };
 
     static onConvertAseprite = (event, sourcePath, destPath, layer = '_') => {
-        void this.safeExecAseprite(
+        void IpcListener.safeExecAseprite(
             () => {
                 try {
                     if (!sourcePath.endsWith('.aseprite')) {
@@ -351,7 +351,7 @@ class IpcListener {
     };
 
     static onListLayers = (event, filePath) => {
-        this.safeExecAseprite(
+        IpcListener.safeExecAseprite(
             () => {
                 try {
                     exec(
@@ -403,16 +403,12 @@ class IpcListener {
     };
 
     static formatAndSend = (event) => {
-        // @ts-ignore
-        const res = Main.watcher.builder.output.map((item) => {
-            return {
-                ...item,
-                svg: Main.watcher.renderer.results[item.fileUri].data,
-            };
-        });
-
-        if (res) {
-            event.sender.send('items-fetched', res, Main.watcher.parsedDocument);
+        if (Main.watcher.builder.output) {
+            event.sender.send(
+                'items-fetched',
+                Main.watcher.builder.output,
+                Main.watcher.parsedDocument,
+            );
         } else {
             event.sender.send('compiler-error', 'Error: unknown error while compiling files');
         }
