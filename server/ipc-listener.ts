@@ -299,7 +299,6 @@ export class IpcListener {
                 svg: Main.watcher.renderer.results[item.fileUri].data,
             };
         });
-        console.log(res, Main.window);
         if (res) {
             event.sender.send('items-fetched', res, Main.watcher.parsedDocument);
         } else {
