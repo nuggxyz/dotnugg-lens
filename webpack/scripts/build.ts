@@ -165,26 +165,26 @@ function build(previousFileSizes) {
                 return reject(new Error(messages.errors.join('\n\n')));
             }
 
-            if (
-                process.env.CI &&
-                (typeof process.env.CI !== 'string' || process.env.CI.toLowerCase() !== 'false') &&
-                messages.warnings.length
-            ) {
-                // Ignore sourcemap warnings in CI builds. See #8227 for more info.
-                const filteredWarnings = messages.warnings
-                    .filter((w) => !/Failed to parse source map/.test(w))
-                    .filter((w) => !/entrypoint size limit:/.test(w))
-                    .filter((w) => !/asset size limit:/.test(w));
-                if (filteredWarnings.length) {
-                    console.log(
-                        chalk.yellow(
-                            '\nTreating warnings as errors because process.env.CI = true.\n' +
-                                'Most CI servers set it automatically.\n',
-                        ),
-                    );
-                    return reject(new Error(filteredWarnings.join('\n\n')));
-                }
-            }
+            // if (
+            //     process.env.CI &&
+            //     (typeof process.env.CI !== 'string' || process.env.CI.toLowerCase() !== 'false') &&
+            //     messages.warnings.length
+            // ) {
+            //     // Ignore sourcemap warnings in CI builds. See #8227 for more info.
+            //     const filteredWarnings = messages.warnings
+            //         .filter((w) => !/Failed to parse source map/.test(w))
+            //         .filter((w) => !/entrypoint size limit:/.test(w))
+            //         .filter((w) => !/asset size limit:/.test(w));
+            //     if (filteredWarnings.length) {
+            //         console.log(
+            //             chalk.yellow(
+            //                 '\nTreating warnings as errors because process.env.CI = true.\n' +
+            //                     'Most CI servers set it automatically.\n',
+            //             ),
+            //         );
+            //         return reject(new Error(filteredWarnings.join('\n\n')));
+            //     }
+            // }
 
             const resolveArgs = {
                 stats,
