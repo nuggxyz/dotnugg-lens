@@ -18,13 +18,18 @@
 // }); // This will register the TypeScript compiler
 // require('./server/index.ts');
 
-globalThis.__DEV__ = process.env.NODE_ENV === 'development';
+// globalThis.__DEV__ = process.env.NODE_ENV === 'development';
 
 /* eslint-disable @typescript-eslint/unbound-method */
 const path = require('path');
+const fs = require('fs');
+
+const ethers = require('ethers');
+const os = require('os');
+const { exec } = require('child_process');
 
 const { autoUpdater } = require('electron/main');
-const { app, BrowserWindow, shell, Menu, ipcMain } = require('electron');
+const { app, BrowserWindow, shell, Menu, ipcMain, dialog } = require('electron');
 
 const { dotnugg } = require('@nuggxyz/dotnugg-sdk');
 
@@ -97,14 +102,14 @@ class Main {
         void this._window.loadURL(
             __DEV__
                 ? 'http://localhost:3000'
-                : `file://${path.join(__dirname, '../build/index.html')}`,
+                : `file://${path.join(__dirname, './build/index.html')}`,
         );
         this._window.maximize();
-        this._window.on('closed', () => this.onClose());
+        this._window.on('closed', () => Main.onClose());
 
-        if (__DEV__) {
-            this._window.webContents.openDevTools();
-        }
+        // if (__DEV__) {
+        this._window.webContents.openDevTools();
+        // }
 
         autoUpdater.checkForUpdates();
         Menu.setApplicationMenu(
@@ -167,7 +172,7 @@ class IpcListener {
                 })
                 .then(({ filePaths }) => {
                     if (filePaths) {
-                        event.reply('file-selected', filePaths[0]);
+                        event.sender.send('file-selected', filePaths[0]);
                         fs.readdir(filePaths[0], (err, list) => {
                             if (err) throw err;
                             for (let i = 0; i < list.length; i++) {
@@ -188,7 +193,7 @@ class IpcListener {
                             );
                         });
                     } else {
-                        event.reply('file-error');
+                        event.sender.send('file-error');
                     }
                 });
         } else {
@@ -198,7 +203,7 @@ class IpcListener {
                 })
                 .then(({ filePaths }) => {
                     if (filePaths) {
-                        event.reply('file-selected', filePaths[0]);
+                        event.sender.send('file-selected', filePaths[0]);
                         fs.readdir(filePaths[0], (err, list) => {
                             if (err) throw err;
                             for (let i = 0; i < list.length; i++) {
@@ -219,11 +224,12 @@ class IpcListener {
                             );
                         });
                     } else {
-                        event.reply('file-error');
+                        event.sender.send('file-error');
                     }
                 })
                 .catch((err) => {
                     console.log('ERROR: ', err);
+                    alert(err);
                 });
         }
     };
@@ -258,10 +264,7 @@ class IpcListener {
 
     static onFetchCompilerItems = async (event, filePath, address, apiKey) => {
         try {
-            console.log(filePath, address, apiKey);
             const infura = new ethers.providers.InfuraProvider('goerli', apiKey);
-
-            console.log('SUP', Main.window);
 
             Main._watcher = dotnugg.watcher.watch(
                 Main.APP_NAME,
@@ -290,7 +293,8 @@ class IpcListener {
 
             this.formatAndSend(event);
         } catch (e) {
-            event.reply('compiler-error', `Compilation error: ${e}`);
+            event.sender.send('compiler-error', `Compilation error: ${e}`);
+            alert(e);
         }
     };
 
@@ -406,7 +410,7 @@ class IpcListener {
                 svg: Main.watcher.renderer.results[item.fileUri].data,
             };
         });
-        console.log(res, Main.window);
+
         if (res) {
             event.sender.send('items-fetched', res, Main.watcher.parsedDocument);
         } else {
