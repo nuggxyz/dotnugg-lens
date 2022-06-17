@@ -21,7 +21,19 @@ const DetailView: FunctionComponent<unknown> = () => {
     const combo = client.compiled.useCombo();
 
     return (
-        <div style={styles.detailContainer}>
+        <div
+            style={{
+                position: 'relative',
+                justifyContent: 'flex-start',
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100%',
+                padding: 20,
+                paddingLeft: 0,
+                width: '100%',
+                alignItems: 'center',
+            }}
+        >
             <div
                 style={{
                     zIndex: 2,
@@ -31,11 +43,14 @@ const DetailView: FunctionComponent<unknown> = () => {
                     alignItems: 'center',
                     display: 'flex',
                     overflow: 'visible',
+                    background: lib.colors.transparentWhite,
+                    borderRadius: lib.layout.borderRadius.large,
                 }}
             >
                 {!isUndefinedOrNullOrStringEmpty(svg) && (
                     <img
                         src={svg}
+                        className="customized-dotnugg"
                         style={{
                             width: '100%',
                             height: '100%',
@@ -44,62 +59,48 @@ const DetailView: FunctionComponent<unknown> = () => {
                     />
                 )}
             </div>
-            <div style={{ position: 'relative' }}>
+            <div
+                style={{
+                    position: 'relative',
+                    marginTop: 60,
+                    height: '30%',
+                    // width: '100%',
+                    // overflow: 'scroll',
+                    // maxWidth: 500,
+                }}
+            >
                 <FadeInOut toggle={loading}>
-                    <div style={styles.detailLoading}>
-                        <Text
-                            type="text"
-                            textStyle={{
-                                color: 'white',
-                                marginRight: '.5rem',
-                            }}
-                        >
-                            Combining on-chain
-                        </Text>
-                        <Loader color="white" />
-                    </div>
-                </FadeInOut>
-                {/* <FadeInOut toggle={!loading}>
                     <div style={styles.detailLoading}>
                         <Button
                             hoverStyle={{ filter: 'brightness(.9)' }}
                             buttonStyle={{
-                                background: 'transparent',
-                                padding: '0',
+                                background: lib.colors.transparentPrimaryColor,
+                                padding: '.5rem .8rem',
+                                borderRadius: lib.layout.borderRadius.large,
                             }}
                             type="text"
                             textStyle={{
                                 color: 'white',
                                 marginRight: '.5rem',
                             }}
-                            label="Zoom"
-                            onClick={() =>
-                                AppState.dispatch.setIsZoomOn({
-                                    _localStorageValue: !isZoomOn,
-                                    _localStorageTarget: 'zoom',
-                                    _localStorageExpectedType: 'unique',
-                                })
-                            }
-                            rightIcon={
-                                isZoomOn ? (
-                                    <IoCheckmarkCircle
-                                        color="white"
-                                        size={20}
-                                    />
-                                ) : (
-                                    <IoEllipseOutline color="white" size={20} />
-                                )
-                            }
+                            // label="Refresh"
+                            onClick={() => {
+                                void combo();
+                            }}
+                            rightIcon={<Loader color="white" />}
                         />
                     </div>
-                </FadeInOut> */}
+                </FadeInOut>
+
                 <FadeInOut toggle={!loading}>
                     <div style={styles.detailLoading}>
                         <Button
+                            className="mobile-pressable-div"
                             hoverStyle={{ filter: 'brightness(.9)' }}
                             buttonStyle={{
-                                background: 'transparent',
-                                padding: '0',
+                                background: lib.colors.transparentPrimaryColor,
+                                padding: '.5rem .8rem',
+                                borderRadius: lib.layout.borderRadius.large,
                             }}
                             type="text"
                             textStyle={{
@@ -117,11 +118,17 @@ const DetailView: FunctionComponent<unknown> = () => {
                 <div
                     ref={scrollRef}
                     style={{
-                        ...styles.detailSelectedItems,
-                        marginRight: '30px',
-                        width: '100%',
-                        justifyContent: 'space-around',
+                        display: 'flex',
+                        // minWidth: '500px',
+                        // overflow: 'scroll',
+                        padding: '0rem 2rem',
+                        // marginRight: '30px',
+                        minWidth: 500,
+                        height: '100%',
+                        // maxHeight: 110 * 2 + 5,
+                        justifyContent: 'center',
                         flexWrap: 'wrap',
+                        overflow: 'scroll',
                     }}
                 >
                     {liveSelectedItems.map((item, i) => (
@@ -146,11 +153,18 @@ const SelectedItem = ({ fileUri }: { fileUri?: string | null }) => {
             aria-hidden="true"
             className="mobile-pressable-div"
             style={{
-                ...styles.detailSelectedItem,
-                minWidth: 120,
+                position: 'relative',
+                margin: 5,
+                background: lib.colors.transparentWhite,
+                borderRadius: lib.layout.borderRadius.medium,
+                width: 100,
+                height: 100,
+                boxShadow: lib.layout.boxShadow.basic,
+
                 alignItems: 'center',
                 display: 'flex',
                 justifyContent: 'center',
+                overflow: 'visible',
             }}
             key={`item-${item.fileUri}`}
             onClick={() => {
@@ -169,6 +183,7 @@ const SelectedItem = ({ fileUri }: { fileUri?: string | null }) => {
             />
             <img
                 src={item.svg}
+                className="customized-dotnugg"
                 style={{
                     height: '55%',
                 }}

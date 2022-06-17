@@ -115,7 +115,7 @@ const styles = lib.layout.NLStyleSheetCreator({
         background: lib.colors.transparentLightGrey,
         borderRadius: Layout.borderRadius.large,
         position: 'absolute',
-        top: '-2rem',
+        top: '-3rem',
         zIndex: 5,
     },
 });
