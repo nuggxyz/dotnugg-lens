@@ -7,18 +7,19 @@ import Button from '@src/components/general/Buttons/Button/Button';
 import Loader from '@src/components/general/Loader/Loader';
 import Label from '@src/components/general/Label/Label';
 import client from '@src/client/index';
-import { Item } from '@src/client/compiled';
 
 import styles from './NuggAssembler.styles';
 
 const ChildRenderItem: FunctionComponent<{
-    item: Item;
+    fileUri: string;
     index: number;
-}> = ({ item, index }) => {
-    const liveItem = client.compiled.useCompiledItem(item.fileUri);
+}> = ({ fileUri, index }) => {
+    const item = client.compiled.useCompiledItem(fileUri);
     const pushToRecents = client.recents.usePushToRecents();
     const select = client.compiled.useSelect();
     const featureNames = client.compiled.useFeautureNames();
+
+    if (!item) return null;
     return (
         <div
             className="mobile-pressable-div"
@@ -30,11 +31,12 @@ const ChildRenderItem: FunctionComponent<{
                 background: styles.detailChildrenderItem.background,
                 width: '150px',
                 height: '150px',
-
+                margin: 5,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'space-between',
+                boxShadow: lib.layout.boxShadow.basic,
             }}
             onClick={() => {
                 pushToRecents(item.fileUri);
@@ -131,7 +133,7 @@ const ChildRenderItem: FunctionComponent<{
                     {' / 10k'}
                 </Text>
             </div>
-            {liveItem?.svg || item.svg ? (
+            {item.svg ? (
                 <div
                     style={{
                         width: '100%',
@@ -143,7 +145,8 @@ const ChildRenderItem: FunctionComponent<{
                     }}
                 >
                     <img
-                        src={liveItem?.svg || item.svg}
+                        src={item.svg}
+                        className="customized-dotnugg"
                         style={{
                             // alignSelf: 'center',
                             // height: '150px',

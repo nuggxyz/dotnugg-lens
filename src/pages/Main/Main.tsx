@@ -5,7 +5,6 @@ import { isUndefinedOrNullOrStringEmpty } from '@src/lib';
 import Button from '@src/components/general/Buttons/Button/Button';
 import Text from '@src/components/general/Texts/Text/Text';
 import Colors from '@src/lib/colors';
-import Dropzone from '@src/components/nugg/Dropzone/Dropzone';
 import ArtRepoHandler from '@src/components/nugg/ArtRepoHandler/ArtRepoHandler';
 import NuggAssembler from '@src/components/nugg/NuggAssembler/NuggAssembler';
 import FadeInOut from '@src/components/general/FadeInOut/FadeInOut';
@@ -21,23 +20,17 @@ const Main = () => {
     const loading = client.compiled.useLoading();
 
     return (
-        <Dropzone
-            onDrop={() => {
-                // if (!isUndefinedOrNullOrStringEmpty(artLocation)) {
-                //     // files.forEach((file) => window.dotnugg.listLayers(file));
-                //     AppState.dispatch.addToAsepriteFiles(
-                //         files.map((file) => {
-                //             window.dotnugg.listLayers(file);
-                //             return {
-                //                 path: file,
-                //                 compiled: false,
-                //                 loading: false,
-                //             };
-                //         }),
-                //     );
-                // }
-            }}
-        >
+        <>
+            <div
+                style={{
+                    position: 'absolute',
+                    height: 100,
+                    top: 0,
+                    width: '100%',
+                    // @ts-ignore
+                    WebkitAppRegion: 'drag',
+                }}
+            />
             <FadeInOut toggle={loading} style={styles.loaderContainer}>
                 <Text
                     textStyle={{
@@ -53,7 +46,8 @@ const Main = () => {
                 toggle={!loading}
                 style={{
                     position: 'absolute',
-                    top: '1.5rem',
+                    top: '2.5rem',
+                    left: '8rem',
                 }}
             >
                 <ArtRepoHandler />
@@ -108,7 +102,7 @@ const Main = () => {
                 </div>
             ) : null}
             {!isUndefinedOrNullOrStringEmpty(artLocation) ? <NuggAssembler /> : null}
-        </Dropzone>
+        </>
     );
 };
 
