@@ -1,7 +1,5 @@
 import React, { CSSProperties, FunctionComponent, ReactNode } from 'react';
-import { animated, AnimatedProps } from 'react-spring';
-
-import Colors from '../../../../lib/colors';
+import { animated, AnimatedProps } from '@react-spring/web';
 
 import styles from './Text.styles';
 

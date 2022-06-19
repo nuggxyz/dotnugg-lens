@@ -1,24 +1,18 @@
 import React, { CSSProperties, FunctionComponent, useRef } from 'react';
 
-import useAnimationFrame from '../../../../hooks/useAnimationFrame';
-import {
-    isUndefinedOrNullOrObjectEmpty,
-    isUndefinedOrNullOrStringEmpty,
-} from '../../../../lib';
+import useAnimationFrame from '@src/hooks/useAnimationFrame';
+import { isUndefinedOrNullOrObjectEmpty, isUndefinedOrNullOrStringEmpty } from '@src/lib';
 
 import styles from './BarTimer.styles';
+
 type Props = {
     duration: number;
     style?: CSSProperties;
     color?: string;
 };
 
-const AnimatedBarTimer: FunctionComponent<Props> = ({
-    duration,
-    color,
-    style,
-}) => {
-    const ref = useRef<HTMLDivElement>();
+const AnimatedBarTimer: FunctionComponent<Props> = ({ duration, color, style }) => {
+    const ref = useRef<HTMLDivElement>(null);
     let time = duration;
     useAnimationFrame(
         (t) => {
@@ -34,13 +28,12 @@ const AnimatedBarTimer: FunctionComponent<Props> = ({
             style={{
                 ...styles.barContainer,
                 ...(!isUndefinedOrNullOrObjectEmpty(style) ? style : {}),
-            }}>
+            }}
+        >
             <div
                 style={{
                     ...styles.timer,
-                    ...(!isUndefinedOrNullOrStringEmpty(color)
-                        ? { background: color }
-                        : {}),
+                    ...(!isUndefinedOrNullOrStringEmpty(color) ? { background: color } : {}),
                 }}
                 ref={ref}
             />

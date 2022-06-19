@@ -1,9 +1,6 @@
 import React, { CSSProperties, FunctionComponent } from 'react';
 
-import {
-    isUndefinedOrNullOrObjectEmpty,
-    isUndefinedOrNullOrStringEmpty,
-} from '../../../lib';
+import { isUndefinedOrNullOrObjectEmpty, isUndefinedOrNullOrStringEmpty } from '@src/lib';
 
 import styles from './Loader.styles';
 import './Loader.css';

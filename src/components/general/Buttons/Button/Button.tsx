@@ -1,24 +1,32 @@
-import React, { FunctionComponent, useCallback, useMemo } from 'react';
+import React, {
+    FunctionComponent,
+    useCallback,
+    useMemo,
+    CSSProperties,
+    PropsWithChildren,
+} from 'react';
 
-import useOnHover from '../../../../hooks/useOnHover';
-import AppState from '../../../../state/app';
-import Text, { TextProps } from '../../Texts/Text/Text';
+import useOnHover from '@src/hooks/useOnHover';
+import Text, { TextProps } from '@src/components/general/Texts/Text/Text';
 
 import styles from './Button.styles';
 
 export type ButtonProps = {
-    onClick: any | (() => void);
+    onClick: React.MouseEventHandler<HTMLDivElement>;
     label?: string;
-    buttonStyle?: React.CSSProperties;
+    buttonStyle?: CSSProperties;
     textStyle?: React.CSSProperties;
     rightIcon?: JSX.Element;
     leftIcon?: JSX.Element;
     hoverStyle?: React.CSSProperties;
     disabled?: boolean;
+    className?: string;
     isHovering?: (hover: boolean) => void;
+    disableHoverAnimation?: boolean;
+    bypassDisableStyle?: boolean;
 } & Partial<TextProps>;
 
-const Button: FunctionComponent<ButtonProps> = ({
+const Button: FunctionComponent<PropsWithChildren<ButtonProps>> = ({
     onClick,
     label,
     buttonStyle,
@@ -27,6 +35,10 @@ const Button: FunctionComponent<ButtonProps> = ({
     disabled = false,
     isHovering,
     hoverStyle,
+    className,
+    disableHoverAnimation = false,
+    children,
+    bypassDisableStyle,
     ...textProps
 }) => {
     const [ref, hover] = useOnHover(isHovering);
@@ -34,32 +46,31 @@ const Button: FunctionComponent<ButtonProps> = ({
     const style = useMemo(() => {
         return {
             ...styles.button,
-            ...(hover && !disabled ? { filter: 'brightness(.8)' } : {}),
-            ...(disabled ? { opacity: '0.3' } : {}),
-            cursor: disabled ? 'not-allowed' : 'pointer',
+            ...(hover && !disableHoverAnimation && !disabled ? { filter: 'brightness(.8)' } : {}),
+            ...(disabled && !bypassDisableStyle ? { opacity: '0.3' } : {}),
+            cursor: disabled && !bypassDisableStyle ? 'not-allowed' : 'pointer',
             ...buttonStyle,
-            ...(hover && hoverStyle),
+            ...(hover && !disableHoverAnimation && hoverStyle),
         };
-    }, [hover, disabled, buttonStyle, hoverStyle]);
+    }, [hover, disabled, buttonStyle, hoverStyle, bypassDisableStyle, disableHoverAnimation]);
 
-    const RightIcon = useCallback(
-        () => (rightIcon ? rightIcon : null),
-        [rightIcon],
-    );
-    const LeftIcon = useCallback(
-        () => (leftIcon ? leftIcon : null),
-        [leftIcon],
-    );
-    const Label = useCallback(
-        () => (label ? <Text {...textProps}>{label}</Text> : null),
-        [label, textProps],
-    );
+    const RightIcon = useCallback(() => rightIcon || null, [rightIcon]);
+
+    const LeftIcon = useCallback(() => leftIcon || null, [leftIcon]);
 
     return (
-        <div ref={ref} onClick={disabled ? undefined : onClick} style={style}>
-            <LeftIcon />
-            <Label />
-            <RightIcon />
+        <div
+            className={className}
+            aria-hidden="true"
+            role="button"
+            ref={ref}
+            onClick={disabled ? undefined : onClick}
+            style={style}
+        >
+            {LeftIcon && <LeftIcon />}
+            {label ? <Text {...textProps}>{label}</Text> : null}
+            {RightIcon && <RightIcon />}
+            {children}
         </div>
     );
 };

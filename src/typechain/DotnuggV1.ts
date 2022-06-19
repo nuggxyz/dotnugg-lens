@@ -36,7 +36,6 @@ export interface DotnuggV1Interface extends utils.Interface {
     "randOf(uint8,uint256)": FunctionFragment;
     "read(uint8,uint8)": FunctionFragment;
     "register(bytes[])": FunctionFragment;
-    "supersize(uint256[][][],bool)": FunctionFragment;
     "svg(uint256[],bool)": FunctionFragment;
     "write(bytes[])": FunctionFragment;
   };
@@ -100,10 +99,6 @@ export interface DotnuggV1Interface extends utils.Interface {
     values: [BytesLike[]]
   ): string;
   encodeFunctionData(
-    functionFragment: "supersize",
-    values: [BigNumberish[][][], boolean]
-  ): string;
-  encodeFunctionData(
     functionFragment: "svg",
     values: [BigNumberish[], boolean]
   ): string;
@@ -137,7 +132,6 @@ export interface DotnuggV1Interface extends utils.Interface {
   decodeFunctionResult(functionFragment: "randOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "read", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "register", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "supersize", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "svg", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "write", data: BytesLike): Result;
 
@@ -277,12 +271,6 @@ export interface DotnuggV1 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    supersize(
-      reads: BigNumberish[][][],
-      base64: boolean,
-      overrides?: CallOverrides
-    ): Promise<[string[]] & { res: string[] }>;
-
     svg(
       calculated: BigNumberish[],
       base64: boolean,
@@ -380,12 +368,6 @@ export interface DotnuggV1 extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  supersize(
-    reads: BigNumberish[][][],
-    base64: boolean,
-    overrides?: CallOverrides
-  ): Promise<string[]>;
-
   svg(
     calculated: BigNumberish[],
     base64: boolean,
@@ -482,12 +464,6 @@ export interface DotnuggV1 extends BaseContract {
     ): Promise<BigNumber[][]>;
 
     register(input: BytesLike[], overrides?: CallOverrides): Promise<string>;
-
-    supersize(
-      reads: BigNumberish[][][],
-      base64: boolean,
-      overrides?: CallOverrides
-    ): Promise<string[]>;
 
     svg(
       calculated: BigNumberish[],
@@ -602,12 +578,6 @@ export interface DotnuggV1 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    supersize(
-      reads: BigNumberish[][][],
-      base64: boolean,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     svg(
       calculated: BigNumberish[],
       base64: boolean,
@@ -713,12 +683,6 @@ export interface DotnuggV1 extends BaseContract {
     register(
       input: BytesLike[],
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    supersize(
-      reads: BigNumberish[][][],
-      base64: boolean,
-      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     svg(

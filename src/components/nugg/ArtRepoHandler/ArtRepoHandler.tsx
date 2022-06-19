@@ -1,145 +1,120 @@
 import React, { FunctionComponent } from 'react';
-import {
-    IoClose,
-    IoEllipsisHorizontal,
-    IoFolderOpenOutline,
-    IoMenu,
-    IoOpenOutline,
-    IoReload,
-    IoTrashBinOutline,
-} from 'react-icons/io5';
+import { IoFolderOpenOutline, IoOpenOutline, IoReload, IoTrashBinOutline } from 'react-icons/io5';
 import { SiVisualstudiocode } from 'react-icons/si';
 
-import { isUndefinedOrNullOrStringEmpty, shortenPathName } from '../../../lib';
-import Colors from '../../../lib/colors';
-import constants from '../../../lib/constants';
-import AppState from '../../../state/app';
-import Web3Config from '../../../Web3Config';
-import Button from '../../general/Buttons/Button/Button';
-import Flyout from '../../general/Flyout/Flyout';
-import InteractiveText from '../../general/Texts/InteractiveText/InteractiveText';
-import Text from '../../general/Texts/Text/Text';
+import lib from '@src/lib';
+import Button from '@src/components/general/Buttons/Button/Button';
+import client from '@src/client/index';
+import { useDotnuggV1 } from '@src/contracts/useContract';
 
 import styles from './ArtRepoHandler.styles';
 
-type Props = {};
+const ArtRepoHandler: FunctionComponent<unknown> = () => {
+    const artLocation = client.compiled.useArtDir();
+    const apiKey = client.compiled.useInfuraKey();
+    const updateMainIsLoading = client.compiled.useSetMainLoading();
 
-const ArtRepoHandler: FunctionComponent<Props> = () => {
-    const artLocation = AppState.select.artLocation();
-    const apiKey = AppState.select.apiKey();
+    const dotnugg = useDotnuggV1();
 
-    return !isUndefinedOrNullOrStringEmpty(artLocation) ? (
-        <div style={styles.artLocationContainer}>
-            <Flyout
-                style={styles.flyoutContainer}
-                button={
-                    <Button
-                        buttonStyle={styles.artLocationDelete}
-                        rightIcon={
-                            <IoEllipsisHorizontal
-                                color={Colors.nuggBlueText}
-                                size={15}
-                            />
-                        }
-                        onClick={() => {}}
-                    />
-                }>
-                <>
-                    <Button
-                        buttonStyle={styles.flyoutSelect}
-                        type="text"
-                        size="small"
-                        textStyle={styles.flyoutSelectText}
-                        leftIcon={
-                            <IoOpenOutline
-                                color={Colors.nuggBlueText}
-                                size={20}
-                                style={styles.flyoutSelectIcon}
-                            />
-                        }
-                        label="Open"
-                        onClick={() => window.dotnugg.openTo(artLocation)}
-                    />
-                    <Button
-                        buttonStyle={styles.flyoutSelect}
-                        type="text"
-                        size="small"
-                        textStyle={styles.flyoutSelectText}
-                        leftIcon={
-                            <SiVisualstudiocode
-                                color={Colors.nuggBlueText}
-                                size={20}
-                                style={styles.flyoutSelectIcon}
-                            />
-                        }
-                        label="Open in VS Code"
-                        onClick={() => window.dotnugg.openToVSCode(artLocation)}
-                    />
-                    <div style={styles.divider} />
-                    <Button
-                        buttonStyle={styles.flyoutSelect}
-                        type="text"
-                        size="small"
-                        textStyle={styles.flyoutSelectText}
-                        leftIcon={
-                            <IoReload
-                                color={Colors.nuggBlueText}
-                                size={20}
-                                style={styles.flyoutSelectIcon}
-                            />
-                        }
-                        label="Recompile"
-                        onClick={() => {
-                            AppState.dispatch.setMainProcessLoading(true);
-                            window.dotnugg.createCompiler(
-                                artLocation,
-                                Web3Config.DOTNUGG_V1,
-                                apiKey,
-                            );
-                        }}
-                    />
-                    <div style={styles.divider} />
-                    <Button
-                        buttonStyle={styles.flyoutSelect}
-                        type="text"
-                        size="small"
-                        textStyle={styles.flyoutSelectText}
-                        leftIcon={
-                            <IoTrashBinOutline
-                                color={Colors.nuggBlueText}
-                                size={20}
-                                style={styles.flyoutSelectIcon}
-                            />
-                        }
-                        label="Clear cache"
-                        onClick={() => {
-                            window.dotnugg.clearCache(artLocation);
-                        }}
-                    />
-                    <Button
-                        buttonStyle={styles.flyoutSelect}
-                        type="text"
-                        size="small"
-                        textStyle={styles.flyoutSelectText}
-                        leftIcon={
-                            <IoFolderOpenOutline
-                                color={Colors.nuggBlueText}
-                                size={20}
-                                style={styles.flyoutSelectIcon}
-                            />
-                        }
-                        label="Change directories"
-                        onClick={() => window.dotnugg.selectFiles()}
-                    />
-                </>
-            </Flyout>
-            <InteractiveText
-                weight="bold"
+    return artLocation ? (
+        <div
+            style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: '.5rem',
+                background: lib.colors.transparentWhite,
+                borderRadius: lib.layout.borderRadius.large,
+            }}
+        >
+            <Button
+                className="mobile-pressable-div"
+                buttonStyle={{ ...styles.flyoutSelect, background: 'transparent', padding: 10 }}
                 type="text"
-                textStyle={{ color: Colors.nuggBlueText }}
-                action={() => window.dotnugg.openTo(artLocation)}>
-                {shortenPathName(artLocation)}
-            </InteractiveText>
+                size="small"
+                textStyle={styles.flyoutSelectText}
+                leftIcon={
+                    <IoOpenOutline
+                        color={lib.colors.nuggBlueText}
+                        size={20}
+                        style={styles.flyoutSelectIcon}
+                    />
+                }
+                label="Open in Finder"
+                onClick={() => window.dotnugg.openTo(artLocation)}
+            />
+            <Button
+                className="mobile-pressable-div"
+                buttonStyle={{ ...styles.flyoutSelect, background: 'transparent', padding: 10 }}
+                type="text"
+                size="small"
+                textStyle={styles.flyoutSelectText}
+                leftIcon={
+                    <SiVisualstudiocode
+                        color={lib.colors.nuggBlueText}
+                        size={20}
+                        style={styles.flyoutSelectIcon}
+                    />
+                }
+                label="Open in VS Code"
+                onClick={() => window.dotnugg.openToVSCode(artLocation)}
+            />
+            <div style={styles.divider} />
+            <Button
+                className="mobile-pressable-div"
+                buttonStyle={{ ...styles.flyoutSelect, background: 'transparent', padding: 10 }}
+                type="text"
+                size="small"
+                textStyle={styles.flyoutSelectText}
+                leftIcon={
+                    <IoReload
+                        color={lib.colors.nuggBlueText}
+                        size={20}
+                        style={styles.flyoutSelectIcon}
+                    />
+                }
+                label="Recompile"
+                onClick={() => {
+                    updateMainIsLoading(true);
+                    window.dotnugg.createCompiler(artLocation, dotnugg.address, apiKey);
+                }}
+            />
+            <div style={styles.divider} />
+            <Button
+                className="mobile-pressable-div"
+                buttonStyle={{ ...styles.flyoutSelect, background: 'transparent', padding: 10 }}
+                type="text"
+                size="small"
+                textStyle={styles.flyoutSelectText}
+                leftIcon={
+                    <IoTrashBinOutline
+                        color={lib.colors.nuggBlueText}
+                        size={20}
+                        style={styles.flyoutSelectIcon}
+                    />
+                }
+                label="Clear cache"
+                onClick={() => {
+                    window.dotnugg.clearCache(artLocation);
+                    client.compiled.useStore.persist.clearStorage();
+                }}
+            />
+            <Button
+                className="mobile-pressable-div"
+                buttonStyle={{ ...styles.flyoutSelect, background: 'transparent', padding: 10 }}
+                type="text"
+                size="small"
+                textStyle={styles.flyoutSelectText}
+                leftIcon={
+                    <IoFolderOpenOutline
+                        color={lib.colors.nuggBlueText}
+                        size={20}
+                        style={styles.flyoutSelectIcon}
+                    />
+                }
+                label="Change directories"
+                onClick={() => window.dotnugg.selectFiles()}
+            />
         </div>
     ) : null;
 };

@@ -1,7 +1,7 @@
 import React, { CSSProperties, FunctionComponent, useState } from 'react';
 
-import NLStaticImage, { NLStaticImageKey } from '../../NLStaticImage';
-import Button from '../Button/Button';
+import NLStaticImage, { NLStaticImageKey } from '@src/components/general/NLStaticImage';
+import Button from '@src/components/general/Buttons/Button/Button';
 
 import styles from './IconButton.styles';
 
@@ -11,11 +11,7 @@ type Props = {
     buttonStyle?: CSSProperties;
 };
 
-const IconButton: FunctionComponent<Props> = ({
-    icon,
-    onClick,
-    buttonStyle,
-}) => {
+const IconButton: FunctionComponent<Props> = ({ icon, onClick, buttonStyle }) => {
     const [hoverStyle, setHoverStyle] = useState(styles.hoverOff);
 
     const style = {

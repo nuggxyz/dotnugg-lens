@@ -1,29 +1,23 @@
 import React, { FunctionComponent } from 'react';
 
-import { isUndefinedOrNullOrStringEmpty } from '../lib';
-import globalStyles from '../lib/globalStyles';
-import AppState from '../state/app';
+import globalStyles from '@src/lib/globalStyles';
+import client from '@src/client';
 
 import Connect from './Connect/Connect';
 import Main from './Main/Main';
 
-type Props = {};
-
-const App: FunctionComponent<Props> = () => {
-    const apiKey = AppState.select.apiKey();
-
-    React.useEffect(() => {
-        AppState.dispatch.setOS(window.dotnugg.checkOs());
-    }, []);
+const App: FunctionComponent<unknown> = () => {
+    const apiKey = client.compiled.useInfuraKey();
 
     return (
         <div
             style={{
-                ...globalStyles.centerFlex,
+                ...globalStyles.centered,
                 ...globalStyles.fillHeight,
                 ...globalStyles.fillWidth,
-            }}>
-            {!isUndefinedOrNullOrStringEmpty(apiKey) ? <Main /> : <Connect />}
+            }}
+        >
+            {apiKey ? <Main /> : <Connect />}
         </div>
     );
 };

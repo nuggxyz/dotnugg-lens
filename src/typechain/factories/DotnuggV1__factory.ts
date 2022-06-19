@@ -53,7 +53,7 @@ const _abi = [
         type: "uint256[]",
       },
     ],
-    stateMutability: "pure",
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -77,7 +77,7 @@ const _abi = [
         type: "string",
       },
     ],
-    stateMutability: "pure",
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -400,30 +400,6 @@ const _abi = [
       },
     ],
     stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256[][][]",
-        name: "reads",
-        type: "uint256[][][]",
-      },
-      {
-        internalType: "bool",
-        name: "base64",
-        type: "bool",
-      },
-    ],
-    name: "supersize",
-    outputs: [
-      {
-        internalType: "string[]",
-        name: "res",
-        type: "string[]",
-      },
-    ],
-    stateMutability: "pure",
     type: "function",
   },
   {
