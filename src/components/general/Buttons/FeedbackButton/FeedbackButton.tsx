@@ -1,20 +1,21 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
 
-import Button, { ButtonProps } from '../Button/Button';
+import Button, { ButtonProps } from '@src/components/general/Buttons/Button/Button';
 
-type Props = ButtonProps & {
+type Props = {
     feedbackText: string;
     timeout?: number;
     overrideFeedback?: boolean;
-};
+    label: string;
+    onClick: () => void;
+} & Omit<ButtonProps, 'onClick'>;
 
 const FeedbackButton: FunctionComponent<Props> = ({
     feedbackText,
-    onClick,
     disabled,
     label,
     timeout = 10000,
-    overrideFeedback,
+    overrideFeedback = false,
     ...props
 }) => {
     const [clicked, setClicked] = useState(false);
@@ -24,21 +25,24 @@ const FeedbackButton: FunctionComponent<Props> = ({
         if (clicked) {
             const id = setTimeout(() => {
                 setFeedback(overrideFeedback ? label : 'Retry?');
+                setClicked(false);
             }, timeout);
             return () => {
                 clearTimeout(id);
             };
         }
+        return () => undefined;
     }, [clicked, timeout, label, overrideFeedback]);
 
     return (
         <Button
             {...props}
-            // disabled={clicked || disabled}
+            disabled={clicked || disabled}
             label={clicked ? feedback : label}
+            buttonStyle={props.buttonStyle}
             onClick={() => {
                 setClicked(true);
-                onClick();
+                if (props.onClick) props.onClick();
             }}
         />
     );

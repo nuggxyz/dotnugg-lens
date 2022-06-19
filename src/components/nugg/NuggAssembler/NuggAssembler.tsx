@@ -1,126 +1,165 @@
-import React, { FunctionComponent, useMemo } from 'react';
-import { animated, config, useTransition } from '@react-spring/web';
-import useEffect from 'react';
+import React, { FunctionComponent } from 'react';
 
-import {
-    isUndefinedOrNullOrArrayEmpty,
-    isUndefinedOrNullOrObjectEmpty,
-} from '../../../lib';
-import Colors from '../../../lib/colors';
-import Layout from '../../../lib/layout';
-import StickyList from '../../general/List/StickyList';
-import InteractiveText from '../../general/Texts/InteractiveText/InteractiveText';
-import Text from '../../general/Texts/Text/Text';
-import UseOurs from '../UseOurs';
-import { Item } from '../../../state/ipcListeners';
+import client from '@src/client';
+import lib from '@src/lib';
+import Text from '@src/components/general/Texts/Text/Text';
 
 import ChildRenderItem from './ChildRenderItem';
 import DetailView from './DetailView';
-import FeatureRenderItem from './FeatureRenderItem';
-import styles from './NuggAssembler.styles';
-import TitleRenderItem from './TitleRenderItem';
 
-type Props = { data: Item[] };
+const NuggAssembler: FunctionComponent<unknown> = () => {
+    const selectedFeature = client.compiled.useSelectedFeature();
+    const items = client.compiled.useCompiledItems();
+    const document = client.compiled.useDocument();
+    const updateSelectedFeature = client.compiled.useUpdateSelectedFeature();
+    const recents = client.compiled.useRecents();
 
-const NuggAssembler: FunctionComponent<Props> = ({ data }) => {
-    const [selectedItems, setSelectedItems] = React.useState<
-        Item['items'][number][]
-    >([]);
+    const List = React.useMemo(() => {
+        if (selectedFeature === 0)
+            return recents.map((x, i) => (
+                <ChildRenderItem fileUri={x.fileUri} index={i} key={`${x.fileUri}-main-list`} />
+            ));
+        return Object.values(items)
+            .filter((x) => x.feature === selectedFeature - 1)
+            .map((x, i) => (
+                <ChildRenderItem fileUri={x.fileUri} index={i} key={`${x.fileUri}-main-list`} />
+            ));
+    }, [selectedFeature, items, recents]);
 
-    const isEmpty = useMemo(() => {
-        return (
-            isUndefinedOrNullOrArrayEmpty(data) ||
-            data.every((item) => isUndefinedOrNullOrArrayEmpty(item.items))
-        );
-    }, [data]);
+    const ref = React.useRef(null);
 
-    React.useEffect(() => {
-        selectedItems.forEach((x) => {
-            data.forEach((a) => {
-                a.items.forEach((b) => {
-                    if (b.fileUri === x.fileUri) {
-                        const tmp = selectedItems;
-
-                        tmp[tmp.findIndex((y) => y.fileUri === x.fileUri)] = b;
-
-                        setSelectedItems(tmp);
-                    }
-                });
-            });
-        });
-        // setSelectedItems((items) => {
-        //     console.log({ data, items });
-        //     items.forEach((x) => {
-        //         data.forEach((a) => {
-        //             a.items.forEach((b) => {
-        //                 if (b.fileUri === x.fileUri) {
-        //                     console.log(b.fileUri, x.fileUri);
-
-        //                     x = b;
-        //                 }
-        //             });
-        //         });
-        //     });
-        //     return items;
-        // });
-    }, [data, selectedItems]);
-
-    const transition = useTransition(data.length, {
-        from: { opacity: 0 },
-        enter: { opacity: 1 },
-        leave: { opacity: 0 },
-        config: config.default,
-    });
-
-    return transition(({ opacity }, length) =>
-        isEmpty ? (
-            <animated.div
-                style={{
-                    position: 'absolute',
-                    textAlign: 'center',
-                    justifyContent: 'center',
-                    opacity,
-                }}>
-                <Text
-                    textStyle={{
+    const featureList = React.useMemo(() => {
+        return [...Object.values(document?.collection.features || {}), { name: 'recents' }]
+            .reverse()
+            .map((x, i) => (
+                <div
+                    key={`featureList-${i}`}
+                    className="mobile-pressable-div"
+                    style={{
                         display: 'flex',
+                        width: 200,
+                        height: 59,
                         alignItems: 'center',
-                        textAlign: 'center',
+                        justifyContent: 'center',
+                        margin: 10,
+                        background:
+                            selectedFeature === i
+                                ? lib.colors.transparentWhite
+                                : lib.colors.transparent,
+                        borderRadius: lib.layout.borderRadius.medium,
+                        cursor: 'pointer',
                     }}
-                    type="text">
-                    Add some
-                    <Text
-                        type="code"
-                        textStyle={{
-                            background: Colors.transparentGrey,
-                            borderRadius: Layout.borderRadius.smallish,
-                            margin: '0rem .2rem',
-                            padding: '.2rem .3rem',
-                        }}>
-                        .nugg
-                    </Text>
-                    files to your Art Directory
-                </Text>
-                <UseOurs />
-            </animated.div>
-        ) : (
-            <StickyList
-                // @ts-ignore
-                style={{ ...styles.container, opacity }}
-                styleLeft={styles.left}
-                styleRight={styles.right}
-                data={data}
-                ChildRenderItem={ChildRenderItem}
-                TitleRenderItem={TitleRenderItem}
-                FeatureRenderItem={FeatureRenderItem}
-                extraData={[selectedItems, setSelectedItems]}>
-                <DetailView
-                    selectedItems={selectedItems}
-                    setSelectedItems={setSelectedItems}
-                />
-            </StickyList>
-        ),
+                    role="button"
+                    aria-hidden="true"
+                    onClick={() => {
+                        updateSelectedFeature(i);
+                    }}
+                >
+                    <Text>{x.name?.toLowerCase()}</Text>
+                </div>
+            ));
+    }, [document, updateSelectedFeature, selectedFeature]);
+
+    return (
+        <div
+            style={{
+                border: 'none',
+                overflow: 'hidden',
+                height: '100%',
+                display: 'flex',
+                width: '100%',
+                justifyContent: 'space-around',
+            }}
+        >
+            <div
+                style={{
+                    borderRadius: lib.layout.borderRadius.medium,
+                    border: 'none',
+                    overflow: 'hidden',
+                    height: '100%',
+                    width: '66%',
+                    margin: 20,
+                    marginTop: 100,
+                    alignItems: 'flex-end',
+                }}
+            >
+                <div style={{ display: 'flex', justifyContent: 'space-around' }}>{featureList}</div>
+
+                <div
+                    style={{
+                        flexDirection: 'row',
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        overflow: 'scroll',
+                        height: '100%',
+                        width: '100%',
+
+                        alignItems: 'flex-start',
+                    }}
+                    ref={ref}
+                >
+                    <div
+                        style={{
+                            justifyContent: 'center',
+                            paddingBottom: 300,
+
+                            width: '100%',
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            overflow: 'scroll',
+                        }}
+                    >
+                        {List}
+                    </div>
+                </div>
+            </div>
+            <div
+                style={{
+                    border: 'none',
+                    height: '100%',
+                    width: '34%',
+                }}
+            >
+                <DetailView />
+            </div>
+        </div>
     );
 };
 
 export default NuggAssembler;
+
+// {
+//     /* <animated.div
+// style={{
+//     position: 'absolute',
+//     textAlign: 'center',
+//     justifyContent: 'center',
+//     opacity,
+// }}
+// >
+// <Text
+//     textStyle={{
+//         display: 'flex',
+//         alignItems: 'center',
+//         textAlign: 'center',
+//     }}
+//     type="text"
+// >
+//     Add some
+//     <Text
+//         type="code"
+//         textStyle={{
+//             background: Colors.transparentGrey,
+//             borderRadius: Layout.borderRadius.smallish,
+//             margin: '0rem .2rem',
+//             padding: '.2rem .3rem',
+//         }}
+//     >
+//         .nugg
+//     </Text>
+//     files to your Art Directory
+// </Text>
+// <UseOurs />
+// </animated.div>
+// fasdfasd */
+// }

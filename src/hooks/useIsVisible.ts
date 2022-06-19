@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 
 const useIsVisible = (
-    root = undefined,
+    root: HTMLElement | null,
     rootMargin = '0px',
     threshold = 0,
-): [React.MutableRefObject<HTMLDivElement>, boolean] => {
-    const ref = useRef<HTMLDivElement>();
+): [React.RefObject<HTMLDivElement>, boolean] => {
+    const ref = useRef<HTMLDivElement>(null);
     const [isVisible, setIsVisible] = useState(false);
     useEffect(() => {
-        const current = ref.current;
+        const { current } = ref;
         const observer = new IntersectionObserver(
             ([entry]) => {
                 setIsVisible(entry.isIntersecting);
@@ -23,7 +23,7 @@ const useIsVisible = (
             observer.observe(current);
         }
         return () => {
-            current && observer.unobserve(current);
+            if (current) observer.unobserve(current);
         };
     }, []);
     return [ref, isVisible];

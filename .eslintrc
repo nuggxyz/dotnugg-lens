@@ -1,0 +1,131 @@
+{
+    "root": true,
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "settings": {
+        "import/resolver": {
+            "babel-module": { "allowExistingDirectories": true }
+        },
+        "import/extensions": [".ts", ".tsx", ".js"]
+    },
+    "globals": {
+        "__DEV__": true
+    },
+    "extends": [
+        "airbnb",
+        "airbnb-typescript",
+        "airbnb/hooks",
+        "prettier",
+        "plugin:prettier/recommended",
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "tsx": true,
+
+            "experimentalObjectRestSpread": true,
+            "impliedStrict": true,
+            "binaryLiterals": true
+        },
+        "ecmaVersion": "latest",
+
+        "sourceType": "module",
+        "project": ["./tsconfig.json", "./server/tsconfig.json"]
+    },
+    "plugins": [
+        "@typescript-eslint",
+        "prettier",
+        "import",
+        "unused-imports",
+        "react-hooks",
+        "module-resolver"
+    ],
+    "rules": {
+        "new-cap": "warn",
+        "react/no-unused-prop-types": "off",
+        "@typescript-eslint/no-unnecessary-type-assertion": "off",
+        "no-undef-init": "off",
+        "react/jsx-no-useless-fragment": "off",
+        "import/prefer-default-export": "off",
+        "no-cond-assign": "off",
+        "react/no-array-index-key": "off",
+        "no-unexpected-multiline": "off",
+        "class-methods-use-this": "off",
+        "no-param-reassign": "off",
+        "no-nested-ternary": "off",
+        "import/newline-after-import": "warn",
+        "no-void": ["error", { "allowAsStatement": true }],
+        "no-bitwise": ["error", { "allow": ["&", "|", "<<", ">>"] }],
+        "no-underscore-dangle": "off",
+        "@typescript-eslint/camelcase": "off",
+        "@typescript-eslint/no-plusplus": 0,
+        "no-plusplus": 0,
+        "@typescript-eslint/naming-convention": "off",
+        "@typescript-eslint/no-use-before-define": "off",
+        "module-resolver/use-alias": [
+            "error",
+            {
+                "extensions": [".ts", ".tsx"]
+            }
+        ],
+        "@typescript-eslint/ban-ts-comment": "off",
+        "react-hooks/exhaustive-deps": "warn",
+        "react/prop-types": "off",
+        "react/display-name": "off",
+        // "@typescript-eslint/explicit-module-boundary-types": "on",
+        "prettier/prettier": "warn",
+        "react/jsx-filename-extension": [
+            1,
+            {
+                "extensions": [".ts", ".tsx"]
+            }
+        ],
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": ["error"],
+        "unused-imports/no-unused-imports": "warn",
+        "unused-imports/no-unused-vars": [
+            "off",
+            {
+                "vars": "all",
+                "varsIgnorePattern": "^_",
+                "args": "after-used",
+                "argsIgnorePattern": "^_"
+            }
+        ],
+        "import/extensions": "off",
+        "react/jsx-props-no-spreading": "off", //["warn", { "exceptions": ["TextInput", "Text", "Button","RotateOViewer", "RotateOSelector"] }],
+        "react/function-component-definition": [
+            "error",
+            { "namedComponents": "arrow-function", "unnamedComponents": "arrow-function" }
+        ],
+        "react/require-default-props": ["error", { "ignoreFunctionalComponents": true }],
+        "import/order": [
+            "warn",
+            {
+                "pathGroups": [
+                    {
+                        "pattern": "@src/**",
+                        "group": "internal",
+                        "// position": "after"
+                    }
+                ],
+                "pathGroupsExcludedImportTypes": ["external"],
+                "newlines-between": "always",
+                "groups": [
+                    "builtin",
+                    "external",
+                    "internal",
+                    "parent",
+                    "sibling",
+                    "index",
+                    "object"
+                ]
+            }
+        ]
+    }
+}

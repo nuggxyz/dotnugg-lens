@@ -1,13 +1,10 @@
-import { NLStyleSheetCreator } from '../../lib';
-import Colors from '../../lib/colors';
-import globalStyles from '../../lib/globalStyles';
-import Layout from '../../lib/layout';
+import lib from '@src/lib';
 
-const styles = NLStyleSheetCreator({
+const styles = lib.layout.NLStyleSheetCreator({
     powerButton: {
         position: 'absolute',
-        top: '1.5rem',
-        right: '2rem',
+        top: '3rem',
+        left: '4.5rem',
     },
     trayButton: {
         position: 'absolute',
@@ -19,27 +16,27 @@ const styles = NLStyleSheetCreator({
         top: '-.4rem',
         right: '-.2rem',
         color: 'white',
-        background: Colors.nuggRedText,
+        background: lib.colors.nuggRedText,
         padding: '.2rem .4rem',
-        borderRadius: Layout.borderRadius.large,
-        fontFamily: Layout.font.code.regular,
+        borderRadius: lib.layout.borderRadius.large,
+        fontFamily: lib.layout.fontFamily.monospace,
     },
     artLocationPicker: {
-        color: Colors.nuggBlueText,
+        color: lib.colors.nuggBlueText,
     },
     buttonRound: {
-        borderRadius: Layout.borderRadius.large,
-        background: Colors.nuggBlueTransparent,
+        borderRadius: lib.layout.borderRadius.large,
+        background: lib.colors.nuggBlueTransparent,
         padding: '.5rem ',
     },
     buttonRoundSmall: {
-        borderRadius: Layout.borderRadius.large,
-        background: Colors.nuggBlueTransparent,
+        borderRadius: lib.layout.borderRadius.large,
+        background: lib.colors.nuggBlueTransparent,
         padding: '.1rem ',
     },
     buttonLong: {
-        borderRadius: Layout.borderRadius.large,
-        background: Colors.nuggBlueTransparent,
+        borderRadius: lib.layout.borderRadius.large,
+        background: lib.colors.nuggBlueTransparent,
         padding: '.5rem 1rem',
     },
     loaderContainer: {
@@ -48,8 +45,8 @@ const styles = NLStyleSheetCreator({
         justifyContent: 'center',
         alignItems: 'center',
         padding: '.5rem .7rem',
-        background: Colors.transparentWhite,
-        borderRadius: Layout.borderRadius.mediumish,
+        background: lib.colors.transparentWhite,
+        borderRadius: lib.layout.borderRadius.mediumish,
     },
 });
 

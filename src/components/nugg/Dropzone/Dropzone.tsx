@@ -1,28 +1,27 @@
+/* eslint-disable no-restricted-syntax */
 import React, {
     CSSProperties,
     FunctionComponent,
+    PropsWithChildren,
     useCallback,
     useEffect,
     useRef,
     useState,
 } from 'react';
-import { animated, useSpring } from 'react-spring';
+import { animated, useSpring } from '@react-spring/web';
 
-import { isUndefinedOrNullOrObjectEmpty } from '../../../lib';
-import Colors from '../../../lib/colors';
-import Text from '../../general/Texts/Text/Text';
+import Text from '@src/components/general/Texts/Text/Text';
 
 import styles from './Dropzone.styles';
 
-type Props = {
+type Props = PropsWithChildren<{
     onDrop: (filePaths: string[]) => void;
-    children?: React.ReactChild | React.ReactChild[];
     style?: CSSProperties;
-};
+}>;
 
-const Dropzone: FunctionComponent<Props> = ({ onDrop, children, style }) => {
+const Dropzone: FunctionComponent<Props> = ({ onDrop, children }) => {
     const [dragging, setDragging] = useState(false);
-    const ref = useRef<HTMLDivElement>();
+    const ref = useRef<HTMLDivElement>(null);
 
     const onDragOverEvent = useCallback(
         (event: DragEvent) => {
@@ -47,19 +46,21 @@ const Dropzone: FunctionComponent<Props> = ({ onDrop, children, style }) => {
             event.stopPropagation();
             event.preventDefault();
             setDragging(false);
-            const files = [];
-            for (let file of event.dataTransfer.files) {
+            const files: string[] = [];
+            // @ts-ignore
+            for (const file of event.dataTransfer.files) {
                 // @ts-ignore
-                files.push(file.path);
+                files.push(file.path as string);
             }
+            // @ts-ignore
             onDrop(files);
         },
         [setDragging, onDrop],
     );
 
     useEffect(() => {
-        if (!isUndefinedOrNullOrObjectEmpty(ref.current)) {
-            const current = ref.current;
+        if (ref.current) {
+            const { current } = ref;
             current.addEventListener('dragover', onDragOverEvent);
             current.addEventListener('dragleave', onDragLeaveEvent);
             current.addEventListener('drop', onDropEvent);
@@ -70,6 +71,7 @@ const Dropzone: FunctionComponent<Props> = ({ onDrop, children, style }) => {
                 current.removeEventListener('drop', onDropEvent);
             };
         }
+        return undefined;
     }, [ref, onDragOverEvent, onDragLeaveEvent, onDropEvent]);
 
     const textStyle = useSpring({

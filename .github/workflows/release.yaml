@@ -3,7 +3,13 @@ name: Build/release
 on:
     push:
         tags:
-            - "v*"
+            - 'v*'
+env:
+    NUGG_APP_ETHERSCAN_KEY: ${{ secrets.NUGG_APP_ETHERSCAN_KEY }}
+    NUGG_APP_INFURA_KEY: ${{ secrets.NUGG_APP_INFURA_KEY }}
+    NUGG_APP_ALCHEMY_KEY: ${{ secrets.NUGG_APP_ALCHEMY_KEY }}
+    NUGG_APP_GOOGLE_ANALYTICS_ID: ${{ secrets.NUGG_APP_GOOGLE_ANALYTICS_ID }}
+    NODE_OPTIONS: '--experimental-modules'
 
 jobs:
     release:
@@ -11,7 +17,7 @@ jobs:
 
         strategy:
             matrix:
-                os: [macos-latest, ubuntu-latest, windows-latest]
+                os: [macos-latest, ubuntu-latest]
 
         steps:
             - name: Check out Git repository
@@ -20,7 +26,7 @@ jobs:
             - name: Install Node.js, NPM and Yarn
               uses: actions/setup-node@v1
               with:
-                  node-version: 16
+                  node-version: 18
 
             - name: Build/release Electron app
               uses: samuelmeuli/action-electron-builder@v1
@@ -28,7 +34,6 @@ jobs:
                   # GitHub token, automatically provided to the action
                   # (No need to define this secret in the repo settings)
                   github_token: ${{ secrets.github_token }}
-
                   mac_certs: ${{ secrets.mac_certs }}
                   mac_certs_password: ${{ secrets.mac_certs_password }}
 

@@ -1,15 +1,13 @@
-import { NLStyleSheetCreator } from '../../../lib';
-import Colors from '../../../lib/colors';
-import Layout from '../../../lib/layout';
+import lib from '@src/lib';
 
-const styles = NLStyleSheetCreator({
+const styles = lib.layout.NLStyleSheetCreator({
     container: {
         pointerEvents: 'none',
         position: 'absolute',
         display: 'flex',
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
-        paddingTop: Layout.header.height,
+        paddingTop: lib.layout.header.height,
         overflow: 'hidden',
         height: '100%',
         width: '100%',
@@ -22,14 +20,14 @@ const styles = NLStyleSheetCreator({
     toast: {
         pointerEvents: 'auto',
         position: 'relative',
-        transition: `all .5s ${Layout.animation}`,
-        borderRadius: Layout.borderRadius.smallish,
+        transition: `all .5s ${lib.layout.animation}`,
+        borderRadius: lib.layout.borderRadius.smallish,
         display: 'flex',
         flexDirection: 'column',
         textAlign: 'left',
         alignItems: 'left',
         padding: '0rem',
-        background: Colors.background,
+        background: lib.colors.background,
         justifyContent: 'center',
         overflow: 'hidden',
         // maxWidth: '300px',
@@ -43,12 +41,12 @@ const styles = NLStyleSheetCreator({
         right: '.5rem',
     },
     error: {
-        color: Colors.nuggRed,
-        boxShadow: Layout.boxShadow.dark,
+        color: lib.colors.nuggRed,
+        boxShadow: lib.layout.boxShadow.dark,
     },
     success: {
-        color: Colors.green,
-        boxShadow: Layout.boxShadow.dark,
+        color: lib.colors.green,
+        boxShadow: lib.layout.boxShadow.dark,
     },
     visible: {
         left: '1rem',
@@ -59,9 +57,9 @@ const styles = NLStyleSheetCreator({
         opacity: 0,
     },
     text: {
-        fontFamily: Layout.font.sf.bold,
+        ...lib.layout.presets.font.main.bold,
         fontWeight: 'bold',
-        color: Colors.textColor,
+        color: lib.colors.textColor,
     },
     buttonContainer: {
         position: 'absolute',
