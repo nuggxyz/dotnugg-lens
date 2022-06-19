@@ -118,7 +118,7 @@ const useStore = create(
                         async (element) => {
                             await single(element);
                         },
-                        { concurrency: 10 },
+                        { concurrency: 100 },
                     );
                 };
 
