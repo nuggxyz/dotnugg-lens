@@ -1,9 +1,6 @@
 import * as React from 'react';
-import { IoPower } from 'react-icons/io5';
 
-import { isUndefinedOrNullOrStringEmpty } from '@src/lib';
 import Button from '@src/components/general/Buttons/Button/Button';
-import Colors from '@src/lib/colors';
 import ArtRepoHandler from '@src/components/nugg/ArtRepoHandler/ArtRepoHandler';
 import NuggAssembler from '@src/components/nugg/NuggAssembler/NuggAssembler';
 import UseOurs from '@src/components/nugg/UseOurs';
@@ -12,7 +9,6 @@ import client from '@src/client';
 import styles from './Main.styles';
 
 const Main = () => {
-    const updateInfuraKey = client.compiled.useUpdateInfuraKey();
     const artLocation = client.compiled.useArtDir();
     // const loading = client.compiled.useLoading();
 
@@ -28,17 +24,7 @@ const Main = () => {
                     WebkitAppRegion: 'drag',
                 }}
             />
-            {/* <FadeInOut toggle={loading} style={styles.loaderContainer}>
-                <Text
-                    textStyle={{
-                        color: Colors.nuggBlueText,
-                        marginRight: '.5rem',
-                    }}
-                >
-                    Computing
-                </Text>
-                <Loader color={Colors.nuggBlueText} />
-            </FadeInOut> */}
+
             <div
                 // toggle={!loading}
                 style={{
@@ -49,11 +35,11 @@ const Main = () => {
             >
                 <ArtRepoHandler />
             </div>
-            <Button
+            {/* <Button
                 buttonStyle={{ ...styles.powerButton, ...styles.buttonRound }}
                 rightIcon={<IoPower color={Colors.nuggBlueText} size={25} />}
                 onClick={() => updateInfuraKey('')}
-            />
+            /> */}
             {/* {artLocation ? (
                 <Flyout
                     containerStyle={styles.trayButton}
@@ -83,11 +69,10 @@ const Main = () => {
                         </>
                     }
                 >
-                    <AsepriteFlyout asepriteFiles={asepriteFiles} artLocation={artLocation} />
                 </Flyout>
             ) : null} */}
 
-            {isUndefinedOrNullOrStringEmpty(artLocation) ? (
+            {!artLocation ? (
                 <div>
                     <Button
                         textStyle={styles.artLocationPicker}
@@ -97,8 +82,9 @@ const Main = () => {
                     />
                     <UseOurs />
                 </div>
-            ) : null}
-            {!isUndefinedOrNullOrStringEmpty(artLocation) ? <NuggAssembler /> : null}
+            ) : (
+                <NuggAssembler />
+            )}
         </>
     );
 };

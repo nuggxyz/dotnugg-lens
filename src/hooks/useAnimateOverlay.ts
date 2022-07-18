@@ -1,18 +1,18 @@
-import { useSpring } from '@react-spring/web';
-import { CSSProperties } from 'react';
+import { useSpring, UseSpringProps } from '@react-spring/web';
 
 import { NLStyleSheetCreator } from '@src/lib';
 
-const useAnimateOverlay = (isOpen: boolean, style?: CSSProperties) => {
-    const wrapperStyle = useSpring({
-        ...styles.wrapper,
-        opacity: isOpen ? 1 : 0,
-        pointerEvents: isOpen ? 'auto' : 'none',
-        justifyContent: 'center',
-        alignItems: 'center',
-        ...style,
-    });
-    return wrapperStyle;
+const useAnimateOverlay = (isOpen: boolean, style?: UseSpringProps<any>) => {
+    const [wrapperStyle] = useSpring(
+        {
+            to: {
+                opacity: isOpen ? 1 : 0,
+                pointerEvents: isOpen ? 'auto' : 'none',
+            },
+        },
+        [isOpen],
+    );
+    return { ...styles.wrapper, ...wrapperStyle, ...style };
 };
 
 export default useAnimateOverlay;
