@@ -174,25 +174,25 @@ class IpcListener {
                 .then(({ filePaths }) => {
                     if (filePaths) {
                         event.sender.send('file-selected', filePaths[0]);
-                        fs.readdir(filePaths[0], (err, list) => {
-                            if (err) throw err;
-                            for (let i = 0; i < list.length; i++) {
-                                if (path.extname(list[i]) === 'collection.nugg') {
-                                    console.log(list[i]);
-                                    return;
-                                }
-                            }
-                            exec(
-                                `cat "${
-                                    __DEV__
-                                        ? `lentsDefault${pathDelimiter()}collection.nugg`
-                                        : path.join(
-                                              __dirname,
-                                              `..${pathDelimiter()}lensDefault${pathDelimiter()}collection.nugg`,
-                                          )
-                                }" >> "${filePaths[0]}${pathDelimiter()}collection.nugg"`,
-                            );
-                        });
+                        // fs.readdir(filePaths[0], (err, list) => {
+                        //     if (err) throw err;
+                        //     for (let i = 0; i < list.length; i++) {
+                        //         if (path.extname(list[i]) === 'collection.nugg') {
+                        //             console.log(list[i]);
+                        //             return;
+                        //         }
+                        //     }
+                        //     exec(
+                        //         `cat "${
+                        //             __DEV__
+                        //                 ? `lentsDefault${pathDelimiter()}collection.nugg`
+                        //                 : path.join(
+                        //                       __dirname,
+                        //                       `..${pathDelimiter()}lensDefault${pathDelimiter()}collection.nugg`,
+                        //                   )
+                        //         }" >> "${filePaths[0]}${pathDelimiter()}collection.nugg"`,
+                        //     );
+                        // });
                     } else {
                         event.sender.send('file-error');
                     }
@@ -205,32 +205,32 @@ class IpcListener {
                 .then(({ filePaths }) => {
                     if (filePaths) {
                         event.sender.send('file-selected', filePaths[0]);
-                        fs.readdir(filePaths[0], (err, list) => {
-                            if (err) throw err;
-                            for (let i = 0; i < list.length; i++) {
-                                if (path.extname(list[i]) === 'collection.nugg') {
-                                    console.log(list[i]);
-                                    return;
-                                }
-                            }
-                            exec(
-                                `cat "${
-                                    __DEV__
-                                        ? `lentsDefault${pathDelimiter()}collection.nugg`
-                                        : path.join(
-                                              __dirname,
-                                              `..${pathDelimiter()}lensDefault${pathDelimiter()}collection.nugg`,
-                                          )
-                                }" >> "${filePaths[0]}${pathDelimiter()}collection.nugg"`,
-                            );
-                        });
+                        // fs.readdir(filePaths[0], (err, list) => {
+                        //     if (err) throw err;
+                        //     for (let i = 0; i < list.length; i++) {
+                        //         if (path.extname(list[i]) === 'collection.nugg') {
+                        //             console.log(list[i]);
+                        //             return;
+                        //         }
+                        //     }
+                        //     exec(
+                        //         `cat "${
+                        //             __DEV__
+                        //                 ? `lentsDefault${pathDelimiter()}collection.nugg`
+                        //                 : path.join(
+                        //                       __dirname,
+                        //                       `..${pathDelimiter()}lensDefault${pathDelimiter()}collection.nugg`,
+                        //                   )
+                        //         }" >> "${filePaths[0]}${pathDelimiter()}collection.nugg"`,
+                        //     );
+                        // });
                     } else {
-                        event.sender.send('file-error');
+                        throw new Error('No file selected');
                     }
                 })
                 .catch((err) => {
                     console.log('ERROR: ', err);
-                    alert(err);
+                    event.sender.send(err.message);
                 });
         }
     };
