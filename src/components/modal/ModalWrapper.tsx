@@ -69,7 +69,7 @@ const Modal: FC<unknown> = () => {
     useEffect(() => {
         animate({
             height: `${
-                data && contentRef.current ? contentRef.current.offsetHeight : wrapperHeight
+                data && contentRef.current ? contentRef.current.clientHeight : wrapperHeight
             }px`,
         });
     }, [animate, contentRef, data, wrapperHeight]);

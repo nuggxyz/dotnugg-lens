@@ -2,7 +2,7 @@
     "name": "dotnugg-lens",
     "productName": "dotnuggLens",
     "homepage": ".",
-    "version": "0.2.1-beta.5",
+    "version": "0.2.2-beta.1",
     "description": "dotnugg desktop application",
     "main": "index.js",
     "author": "@nuggxyz",

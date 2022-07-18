@@ -164,7 +164,7 @@ interface Window {
         clearCache: (path: string) => void;
         openLink: (url: string) => void;
         selectFiles: () => void;
-        convertAseprite: (sourcePath: string, destPath: string, layer?: string) => void;
+        convertAseprite: (sourcePath: string, destPath: string, id: string, layer?: string) => void;
         checkOs: () => NL.Redux.App.OS;
         listLayers: (path: string) => void;
         getHex: (

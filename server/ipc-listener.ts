@@ -10,8 +10,9 @@ import { ethers } from 'ethers';
 import { Output } from '@nuggxyz/dotnugg-sdk/dist/builder/types/BuilderTypes';
 
 // eslint-disable-next-line module-resolver/use-alias
-import type { Item } from '../src/client/compiled';
-import { dotnugg } from '../../dotnugg-sdk';
+import { dotnugg } from '@nuggxyz/dotnugg-sdk';
+
+import type { Item } from '@src/client/compiled';
 
 import utils from './utils';
 import Main from './main';

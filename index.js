@@ -163,6 +163,7 @@ class IpcListener {
         ipcMain.on('clear-cache', IpcListener.onClearCache);
         ipcMain.on('get-lens-default', IpcListener.onGetLensDefault);
         ipcMain.on('list-layers', IpcListener.onListLayers);
+        ipcMain.on('convert-aseprite', IpcListener.onConvertAseprite);
     };
 
     static onSelectFiles = (event) => {
@@ -299,7 +300,7 @@ class IpcListener {
         }
     };
 
-    static onConvertAseprite = (event, sourcePath, destPath, layer = '_') => {
+    static onConvertAseprite = (event, sourcePath, destPath, id, layer) => {
         void IpcListener.safeExecAseprite(
             () => {
                 try {
@@ -310,17 +311,17 @@ class IpcListener {
                         throw new Error('Incorrect Art Repo');
                     }
                     const filenames = sourcePath.split('.')[0].split(pathDelimiter());
-                    const dir = `generated_${filenames[filenames.length - 1]}`;
-                    const base = `${destPath}${pathDelimiter()}${dir}`;
-                    const count = fs
-                        .readdirSync(destPath, { withFileTypes: true })
-                        .filter((entry) => entry.isDirectory() && entry.name.includes(dir)).length;
-                    exec(`mkdir "${base}_${count + 1}"`);
+                    const dir = `${filenames[filenames.length - 1]}.aseprite`;
+                    const base = `${destPath}${pathDelimiter()}.generated${pathDelimiter()}${dir}`;
+                    // const count = fs
+                    //     .readdirSync(destPath, { withFileTypes: true })
+                    //     .filter((entry) => entry.isDirectory() && entry.name.includes(dir)).length;
+                    const name = `${base}${pathDelimiter()}${id}`;
+                    console.log('name: ', name, 'layer: ', layer);
+                    exec(`mkdir -p "${name}"`);
 
                     exec(
-                        `${asepritePath()} -b --script-param source="${sourcePath}" --script-param dest="${base}_${
-                            count + 1
-                        }" --script-param layer="${layer}" --script "${
+                        `${asepritePath()} -b --script-param source="${sourcePath}" --script-param dest="${name}" --script-param layer="${layer}" --script "${
                             __DEV__
                                 ? `.${pathDelimiter()}aseprite2dotnugg.lua`
                                 : path.join(__dirname, `..${pathDelimiter()}aseprite2dotnugg.lua`)
@@ -329,6 +330,18 @@ class IpcListener {
                             if (error !== null) {
                                 throw new Error(error);
                             }
+
+                            exec(`echo ".generated/*" >> ${destPath}${pathDelimiter()}.gitignore`);
+                            if (layer === '_')
+                                exec(
+                                    `open -a "Visual Studio Code" ${name.replaceAll(
+                                        ' ',
+                                        '\\ ',
+                                    )}/instructions.txt`,
+                                );
+
+                            exec(`echo "instructions" > ${name}/instructions.txt`);
+
                             // shell.openPath(destPath + '/generated');
                             event.sender.send('script-success', sourcePath, layer);
                         },

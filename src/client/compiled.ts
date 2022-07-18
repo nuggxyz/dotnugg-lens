@@ -168,21 +168,16 @@ const useStore = create(
 
                     console.log({ item });
 
+                    const check = get().images[item.fileUri];
+
+                    if (check && item.mtimeMs === check.mTimeMs) return;
+
                     // @ts-ignore
                     set((data) => {
                         data.images[item.fileUri] = undefined;
                     });
 
                     const payload = [build(item.bits)];
-
-                    // const items = get()
-                    //     .selected.map((x) => {
-                    //         if (x) return get().items[x].bits;
-                    //         return null;
-                    //     })
-                    //     .filter((x) => x) as Byter[][];
-
-                    // const payload = items.map((item) => build(item));
 
                     await contract
                         .connect(new InfuraProvider(web3.constants.DEFAULT_CHAIN, get().infuraKey))

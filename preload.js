@@ -33,8 +33,8 @@ process.once('loaded', () => {
         checkOs: () => {
             return ipcRenderer.sendSync('check-os');
         },
-        convertAseprite: (sourcePath, destPath, layer) => {
-            ipcRenderer.send('convert-aseprite', sourcePath, destPath, layer);
+        convertAseprite: (sourcePath, destPath, id, layer) => {
+            ipcRenderer.send('convert-aseprite', sourcePath, destPath, id, layer);
         },
         listLayers: (path) => {
             ipcRenderer.send('list-layers', path);
