@@ -8,6 +8,7 @@
     "author": "@nuggxyz",
     "license": "MIT",
     "private": true,
+    "packageManager": "yarn@3.2.1",
     "scripts": {
         "test": "ts-node --project ./webpack/tsconfig.json webpack/scripts/test.ts",
         "start": "NODE_ENV=development ts-node --project ./webpack/tsconfig.json  webpack/scripts/start.ts",
