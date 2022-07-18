@@ -35,6 +35,8 @@ const { dotnugg } = require('@nuggxyz/dotnugg-sdk');
 
 const __DEV__ = process.env.NODE_ENV === 'development';
 
+console.log({ __DEV__ });
+
 const pathDelimiter = () => {
     return os.platform() === 'win32' ? '\\' : '/';
 };
@@ -98,7 +100,6 @@ class Main {
             // transparent: true,
         });
 
-        console.log(Main._window);
         void Main._window.loadURL(
             __DEV__
                 ? 'http://localhost:3000'
