@@ -24,14 +24,15 @@ const contract = new BaseContract(
 
 const breakup = (input: BigNumber): BigNumber[] => {
     let len = ethers.utils.hexDataLength(input._hex);
+
     let res: BigNumber[] = [];
+
     while (len > 0) {
         res.push(
             ethers.BigNumber.from(
                 ethers.utils.hexDataSlice(input._hex, len >= 32 ? len - 32 : 0, len),
             ),
         );
-
         len -= 32;
     }
 
@@ -118,7 +119,7 @@ const useStore = create(
                         async (element) => {
                             await single(element);
                         },
-                        { concurrency: 100 },
+                        { concurrency: 1000 },
                     );
                 };
 
@@ -135,10 +136,14 @@ const useStore = create(
                         set((data) => {
                             data.selected[item.feature] = item.fileUri;
                             data.recents.filterInPlace((x) => x.fileUri !== item.fileUri);
-                            data.recents.push({
+                            data.recents.unshift({
                                 fileUri: item.fileUri,
                                 time: new Date().getTime(),
                             });
+
+                            if (data.recents.length > 50) {
+                                data.recents.pop();
+                            }
                         });
 
                         void combo();
@@ -267,7 +272,18 @@ const useStore = create(
                 };
             },
         ),
-        { name: 'dotnugg-lens-compiled' },
+        {
+            name: 'dotnugg-lens-compiled',
+
+            partialize: (x) => {
+                return {
+                    artDir: x.artDir,
+                    infuraKey: x.infuraKey,
+                    images: x.images,
+                    recents: x.recents,
+                };
+            },
+        },
     ),
 );
 

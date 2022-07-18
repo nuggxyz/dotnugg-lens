@@ -12,7 +12,10 @@ const useStore = create(
                 const push = (fileUri: string) => {
                     // @ts-ignore
                     set((data) => {
-                        data.items.push({ fileUri, time: new Date().getTime() });
+                        data.items.unshift({ fileUri, time: new Date().getTime() });
+                        if (data.items.length > 50) {
+                            data.items.pop();
+                        }
                     });
                 };
 

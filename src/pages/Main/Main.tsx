@@ -3,12 +3,9 @@ import { IoPower } from 'react-icons/io5';
 
 import { isUndefinedOrNullOrStringEmpty } from '@src/lib';
 import Button from '@src/components/general/Buttons/Button/Button';
-import Text from '@src/components/general/Texts/Text/Text';
 import Colors from '@src/lib/colors';
 import ArtRepoHandler from '@src/components/nugg/ArtRepoHandler/ArtRepoHandler';
 import NuggAssembler from '@src/components/nugg/NuggAssembler/NuggAssembler';
-import FadeInOut from '@src/components/general/FadeInOut/FadeInOut';
-import Loader from '@src/components/general/Loader/Loader';
 import UseOurs from '@src/components/nugg/UseOurs';
 import client from '@src/client';
 
@@ -17,7 +14,7 @@ import styles from './Main.styles';
 const Main = () => {
     const updateInfuraKey = client.compiled.useUpdateInfuraKey();
     const artLocation = client.compiled.useArtDir();
-    const loading = client.compiled.useLoading();
+    // const loading = client.compiled.useLoading();
 
     return (
         <>
@@ -31,7 +28,7 @@ const Main = () => {
                     WebkitAppRegion: 'drag',
                 }}
             />
-            <FadeInOut toggle={loading} style={styles.loaderContainer}>
+            {/* <FadeInOut toggle={loading} style={styles.loaderContainer}>
                 <Text
                     textStyle={{
                         color: Colors.nuggBlueText,
@@ -41,9 +38,9 @@ const Main = () => {
                     Computing
                 </Text>
                 <Loader color={Colors.nuggBlueText} />
-            </FadeInOut>
-            <FadeInOut
-                toggle={!loading}
+            </FadeInOut> */}
+            <div
+                // toggle={!loading}
                 style={{
                     position: 'absolute',
                     top: '2.5rem',
@@ -51,7 +48,7 @@ const Main = () => {
                 }}
             >
                 <ArtRepoHandler />
-            </FadeInOut>
+            </div>
             <Button
                 buttonStyle={{ ...styles.powerButton, ...styles.buttonRound }}
                 rightIcon={<IoPower color={Colors.nuggBlueText} size={25} />}
