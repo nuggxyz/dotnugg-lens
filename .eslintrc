@@ -46,6 +46,7 @@
         "module-resolver"
     ],
     "rules": {
+        "import/no-extraneous-dependencies": "off",
         "new-cap": "warn",
         "react/no-unused-prop-types": "off",
         "@typescript-eslint/no-unnecessary-type-assertion": "off",

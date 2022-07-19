@@ -1,8 +1,8 @@
 {
     "compilerOptions": {
         "jsx": "react",
-        "target": "es2021",
-        "lib": ["dom", "dom.iterable", "esnext", "WebWorker"],
+        "target": "es2022",
+        "lib": ["esnext", "dom", "dom.iterable"],
         "allowJs": true,
         "skipLibCheck": true,
         "esModuleInterop": true,
@@ -18,12 +18,13 @@
         "plugins": [{ "name": "typescript-plugin-css-modules" }],
 
         "paths": {
-            "@src/*": ["src/*"]
+            "@src/*": ["src/*"],
+            "@server/*": ["server/*"]
         },
         // "exactOptionalPropertyTypes": true,
         "types": ["node", "jest"],
         "strict": true
     },
-    "include": ["src"],
-    "exclude": ["node_modules"]
+    "include": ["src", "server"],
+    "exclude": ["node_modules", "archive/*"]
 }

@@ -2,9 +2,9 @@
 import * as path from 'path';
 
 import { autoUpdater } from 'electron/main';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { app, BrowserWindow, shell, Menu } from 'electron';
-
-import { dotnugg } from '../../dotnugg-sdk';
+import { dotnugg } from '@nuggxyz/dotnugg-sdk';
 
 const __DEV__ = process.env.NODE_ENV === 'development';
 
@@ -33,6 +33,7 @@ export default class Main {
 
     private static onClose() {
         // Dereference the _window object.
+        // @ts-ignore
         this._window = null;
     }
 
@@ -49,7 +50,7 @@ export default class Main {
             width: 800,
             height: 600,
             webPreferences: {
-                preload: path.join(__dirname, '../preload.js'),
+                preload: path.join(__dirname, './preload.js'),
                 nodeIntegration: true,
                 // contextIsolation: false,
             },
@@ -59,7 +60,6 @@ export default class Main {
             // transparent: true,
         });
 
-        console.log(this._window);
         void this._window.loadURL(
             __DEV__
                 ? 'http://localhost:3000'

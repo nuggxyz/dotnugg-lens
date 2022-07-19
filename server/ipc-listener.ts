@@ -6,13 +6,10 @@ import { exec } from 'child_process';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ipcMain, dialog, shell } from 'electron';
-import { ethers } from 'ethers';
 import { Output } from '@nuggxyz/dotnugg-sdk/dist/builder/types/BuilderTypes';
 
 // eslint-disable-next-line module-resolver/use-alias
 import { dotnugg } from '@nuggxyz/dotnugg-sdk';
-
-import type { Item } from '@src/client/compiled';
 
 import utils from './utils';
 import Main from './main';
@@ -30,6 +27,7 @@ export class IpcListener {
         ipcMain.on('clear-cache', this.onClearCache);
         ipcMain.on('get-lens-default', this.onGetLensDefault);
         ipcMain.on('list-layers', this.onListLayers);
+        ipcMain.on('convert-aseprite', IpcListener.onConvertAseprite);
     };
 
     public static onSelectFiles = (event: Electron.IpcMainEvent) => {
@@ -40,28 +38,9 @@ export class IpcListener {
                 })
                 .then(({ filePaths }) => {
                     if (filePaths) {
-                        event.reply('file-selected', filePaths[0]);
-                        fs.readdir(filePaths[0], (err, list) => {
-                            if (err) throw err;
-                            for (let i = 0; i < list.length; i++) {
-                                if (path.extname(list[i]) === 'collection.nugg') {
-                                    console.log(list[i]);
-                                    return;
-                                }
-                            }
-                            exec(
-                                `cat "${
-                                    __DEV__
-                                        ? `lentsDefault${utils.pathDelimiter()}collection.nugg`
-                                        : path.join(
-                                              __dirname,
-                                              `..${utils.pathDelimiter()}lensDefault${utils.pathDelimiter()}collection.nugg`,
-                                          )
-                                }" >> "${filePaths[0]}${utils.pathDelimiter()}collection.nugg"`,
-                            );
-                        });
+                        event.sender.send('file-selected', filePaths[0]);
                     } else {
-                        event.reply('file-error');
+                        event.sender.send('file-error');
                     }
                 });
         } else {
@@ -71,32 +50,18 @@ export class IpcListener {
                 })
                 .then(({ filePaths }) => {
                     if (filePaths) {
-                        event.reply('file-selected', filePaths[0]);
-                        fs.readdir(filePaths[0], (err, list) => {
-                            if (err) throw err;
-                            for (let i = 0; i < list.length; i++) {
-                                if (path.extname(list[i]) === 'collection.nugg') {
-                                    console.log(list[i]);
-                                    return;
-                                }
-                            }
-                            exec(
-                                `cat "${
-                                    __DEV__
-                                        ? `lentsDefault${utils.pathDelimiter()}collection.nugg`
-                                        : path.join(
-                                              __dirname,
-                                              `..${utils.pathDelimiter()}lensDefault${utils.pathDelimiter()}collection.nugg`,
-                                          )
-                                }" >> "${filePaths[0]}${utils.pathDelimiter()}collection.nugg"`,
-                            );
-                        });
+                        event.sender.send('file-selected', filePaths[0]);
                     } else {
-                        event.reply('file-error');
+                        event.sender.send('file-error');
                     }
                 })
                 .catch((err) => {
-                    console.log('ERROR: ', err);
+                    if (err instanceof Error) {
+                        console.log('ERROR: ', err);
+                        event.sender.send('files-error', err.message);
+                    } else {
+                        event.sender.send('files-error', err);
+                    }
                 });
         }
     };
@@ -133,46 +98,27 @@ export class IpcListener {
         }
     };
 
-    public static onFetchCompilerItems = async (
-        event: Electron.IpcMainEvent,
-        filePath: string,
-        address: string,
-        apiKey: string,
-    ) => {
+    public static onFetchCompilerItems = (event: Electron.IpcMainEvent, filePath: string) => {
         try {
-            console.log(filePath, address, apiKey);
-            const infura = new ethers.providers.InfuraProvider('goerli', apiKey);
-
-            console.log('SUP', Main.window);
-
-            Main._watcher = dotnugg.watcher.watch(
+            Main._watcher = dotnugg.watcher.watchNoRender(
                 Main.APP_NAME,
                 filePath,
-                address,
-                infura,
+
                 (fileUri) => {
                     console.log('###################### FILE ', fileUri);
                     event.sender.send('main-loading');
                 },
 
-                async (fileUri, me) => {
+                (fileUri: string) => {
                     console.log('######## DONE COMPILING ##########', fileUri);
-
-                    await me.renderer.wait();
 
                     this.formatAndSend(event);
                 },
-
-                (error) => {
-                    event.sender.send('compiler-error', error);
-                },
             );
-
-            await Main.watcher.renderer.wait();
 
             this.formatAndSend(event);
         } catch (e: unknown) {
-            event.reply('compiler-error', `Compilation error: ${e as string}`);
+            event.sender.send('compiler-error', `Compilation error: ${e as string}`);
         }
     };
 
@@ -180,9 +126,11 @@ export class IpcListener {
         event: Electron.IpcMainEvent,
         sourcePath: string,
         destPath: string,
+        id: string,
+
         layer = '_',
     ) => {
-        void this.safeExecAseprite(
+        void IpcListener.safeExecAseprite(
             () => {
                 try {
                     if (!sourcePath.endsWith('.aseprite')) {
@@ -192,17 +140,17 @@ export class IpcListener {
                         throw new Error('Incorrect Art Repo');
                     }
                     const filenames = sourcePath.split('.')[0].split(utils.pathDelimiter());
-                    const dir = `generated_${filenames[filenames.length - 1]}`;
-                    const base = `${destPath}${utils.pathDelimiter()}${dir}`;
-                    const count = fs
-                        .readdirSync(destPath, { withFileTypes: true })
-                        .filter((entry) => entry.isDirectory() && entry.name.includes(dir)).length;
-                    exec(`mkdir "${base}_${count + 1}"`);
+                    const dir = `${filenames[filenames.length - 1]}.aseprite`;
+                    const base = `${destPath}${utils.pathDelimiter()}.generated${utils.pathDelimiter()}${dir}`;
+                    // const count = fs
+                    //     .readdirSync(destPath, { withFileTypes: true })
+                    //     .filter((entry) => entry.isDirectory() && entry.name.includes(dir)).length;
+                    const name = `${base}${utils.pathDelimiter()}${id}`;
+                    console.log('name: ', name, 'layer: ', layer);
+                    exec(`mkdir -p "${name}"`);
 
                     exec(
-                        `${utils.asepritePath()} -b --script-param source="${sourcePath}" --script-param dest="${base}_${
-                            count + 1
-                        }" --script-param layer="${layer}" --script "${
+                        `${utils.asepritePath()} -b --script-param source="${sourcePath}" --script-param dest="${name}" --script-param layer="${layer}" --script "${
                             __DEV__
                                 ? `.${utils.pathDelimiter()}aseprite2dotnugg.lua`
                                 : path.join(
@@ -212,8 +160,25 @@ export class IpcListener {
                         }"`,
                         (error) => {
                             if (error !== null) {
-                                throw new Error(error as unknown as string);
+                                if (error instanceof Error) {
+                                    throw new Error(error.message);
+                                }
+                                throw new Error(error);
                             }
+
+                            exec(
+                                `echo ".generated/*" >> ${destPath}${utils.pathDelimiter()}.gitignore`,
+                            );
+                            if (layer === '_')
+                                exec(
+                                    `open -a "Visual Studio Code" ${name.replaceAll(
+                                        ' ',
+                                        '\\ ',
+                                    )}/instructions.txt`,
+                                );
+
+                            exec(`echo "instructions" > ${name}/instructions.txt`);
+
                             // shell.openPath(destPath + '/generated');
                             event.sender.send('script-success', sourcePath, layer);
                         },
@@ -293,15 +258,12 @@ export class IpcListener {
     };
 
     private static formatAndSend = (event: Electron.IpcMainEvent) => {
-        // @ts-ignore
-        const res: Item[] = Main.watcher.builder.output.map((item) => {
-            return {
-                ...item,
-                svg: Main.watcher.renderer.results[item.fileUri].data,
-            };
-        });
-        if (res) {
-            event.sender.send('items-fetched', res, Main.watcher.parsedDocument);
+        if (Main.watcher.builder.output) {
+            event.sender.send(
+                'items-fetched',
+                Main.watcher.builder.output,
+                Main.watcher.parsedDocument,
+            );
         } else {
             event.sender.send('compiler-error', 'Error: unknown error while compiling files');
         }
