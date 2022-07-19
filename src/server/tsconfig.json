@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "outDir": "../../build/server",
+        "outDir": "../../build/server/",
         "lib": ["esnext"],
         "target": "esnext",
         "skipLibCheck": true,

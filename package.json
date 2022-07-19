@@ -2,7 +2,7 @@
     "name": "dotnugg-lens",
     "productName": "dotnuggLens",
     "homepage": ".",
-    "version": "0.3.0-beta.4",
+    "version": "0.3.0-beta.5",
     "description": "dotnugg desktop application",
     "main": "./build/server/index.js",
     "author": "@nuggxyz",
@@ -12,10 +12,10 @@
     "scripts": {
         "test": "ts-node --project ./webpack/tsconfig.json webpack/scripts/test.ts",
         "start": "NODE_ENV=development ts-node --project ./webpack/tsconfig.json  webpack/scripts/start.ts",
-        "build": "yarn prep && NODE_OPTIONS='--experimental-modules' ts-node --project ./webpack/tsconfig.json  webpack/scripts/build.ts",
+        "build": "NODE_OPTIONS='--experimental-modules' ts-node --project ./webpack/tsconfig.json  webpack/scripts/build.ts && yarn prep",
         "serve": "serve -s build",
         "typechain": "typechain --target ethers-v5 --out-dir src/typechain/ './src/abis/*'",
-        "dist": "yarn prep && yarn build && NODE_OPTIONS='--experimental-modules'  electron-builder",
+        "dist": "yarn build && NODE_OPTIONS='--experimental-modules'  electron-builder",
         "dev": "concurrently -k \"BROWSER=none yarn start\" \"npm:electron\"",
         "prep": "tsc -p src/server/tsconfig.json ",
         "electron": "yarn prep && wait-on tcp:3000  && NODE_ENV=development electron ./build/server/index.js"
