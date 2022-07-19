@@ -56,7 +56,7 @@ export default {
     appBuild: resolveApp(buildPath),
     appPublic: resolveApp('public'),
     appHtml: resolveApp('public/index.html'),
-    appIndexJs: resolveModule(resolveApp, 'src/index'),
+    appIndexJs: resolveModule(resolveApp, 'src/app/index'),
     appPackageJson: resolveApp('package.json'),
     appSrc: resolveApp('src'),
     appTsConfig: resolveApp('tsconfig.json'),
@@ -67,7 +67,7 @@ export default {
     appNodeModules: resolveApp('node_modules'),
     appWebpackCache: resolveApp('node_modules/.cache'),
     appTsBuildInfoFile: resolveApp('node_modules/.cache/tsconfig.tsbuildinfo'),
-    swSrc: resolveModule(resolveApp, 'src/service-worker'),
+    swSrc: resolveModule(resolveApp, 'src/app/service-worker'),
     publicUrlOrPath,
     moduleFileExtensions,
 };

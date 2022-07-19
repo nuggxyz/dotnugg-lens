@@ -2,7 +2,7 @@
     "name": "dotnugg-lens",
     "productName": "dotnuggLens",
     "homepage": ".",
-    "version": "0.2.2-beta.1",
+    "version": "0.3.0-beta.1",
     "description": "dotnugg desktop application",
     "main": "server/dist/index.js",
     "author": "@nuggxyz",
@@ -17,19 +17,17 @@
         "typechain": "typechain --target ethers-v5 --out-dir src/typechain/ './src/abis/*'",
         "dist": "yarn prep && yarn build && NODE_OPTIONS='--experimental-modules'  electron-builder",
         "dev": "concurrently -k \"BROWSER=none yarn start\" \"npm:electron\"",
-        "prep": "tsc server/index.ts --outDir ./server/dist && tsc server/preload.ts --outDir ./server/dist",
-        "electron": "wait-on tcp:3000 && yarn prep && NODE_ENV=development electron ./server/dist/index.js"
+        "prep": "tsc -p src/server/tsconfig.json ",
+        "electron": "yarn prep && wait-on tcp:3000  && NODE_ENV=development electron ./build/server/index.js"
     },
     "build": {
         "extends": null,
         "productName": "dotnuggLens",
         "appId": "com.nuggxyz.dotnuggLens",
-        "icon": "./AppIcon/AppIcon.icns",
+        "icon": "./macos/AppIcon/AppIcon.icns",
         "copyright": "Copyright © 2022 @nuggxyz",
         "files": [
-            "./build/**/*",
-            "./index.js",
-            "./preload.js"
+            "./build/**/*"
         ],
         "extraResources": [
             "./aseprite2dotnugg.lua",

@@ -1,26 +1,24 @@
 {
     "compilerOptions": {
-        "jsx": "react",
-        "target": "es2022",
-        "lib": ["esnext", "dom", "dom.iterable"],
-        "allowJs": true,
+        "outDir": "../../build/server",
+        "lib": ["esnext"],
+        "target": "esnext",
         "skipLibCheck": true,
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
         "forceConsistentCasingInFileNames": true,
         "noFallthroughCasesInSwitch": true,
-        "module": "esNext",
+        "module": "commonjs",
         "moduleResolution": "node",
         "resolveJsonModule": true,
         "isolatedModules": true,
-        "noEmit": true,
         "baseUrl": ".",
         "paths": {
-            "@src/app/*": ["src/app/*"]
+            "@src/server/*": ["./*"]
         },
         "types": ["node", "jest"],
         "strict": true
     },
-    "include": ["src/app"],
-    "exclude": ["node_modules", "archive/*"]
+    "include": ["."],
+    "files": ["index.ts", "preload.ts"]
 }

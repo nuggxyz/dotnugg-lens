@@ -39,7 +39,7 @@ node_modules/
 jspm_packages/
 
 # Typescript v1 declaration files
-typings/
+# typings/
 
 # Optional npm cache directory
 .npm
@@ -55,6 +55,7 @@ typings/
 
 # dotenv environment variable files
 .env*
+!.env.example
 
 # gatsby files
 .cache/
