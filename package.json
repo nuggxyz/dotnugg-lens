@@ -2,7 +2,7 @@
     "name": "dotnugg-lens",
     "productName": "dotnuggLens",
     "homepage": ".",
-    "version": "0.3.0-beta.3",
+    "version": "0.3.0-beta.4",
     "description": "dotnugg desktop application",
     "main": "./build/server/index.js",
     "author": "@nuggxyz",
@@ -21,6 +21,9 @@
         "electron": "yarn prep && wait-on tcp:3000  && NODE_ENV=development electron ./build/server/index.js"
     },
     "build": {
+        "extraMetadata": {
+            "main": "build/server/index.js"
+          },
         "extends": null,
         "productName": "dotnuggLens",
         "appId": "com.nuggxyz.dotnuggLens",
