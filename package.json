@@ -23,7 +23,7 @@
     "build": {
         "extraMetadata": {
             "main": "build/server/index.js"
-          },
+        },
         "extends": null,
         "productName": "dotnuggLens",
         "appId": "com.nuggxyz.dotnuggLens",
