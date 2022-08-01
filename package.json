@@ -2,13 +2,13 @@
     "name": "dotnugg-lens",
     "productName": "dotnuggLens",
     "homepage": ".",
-    "version": "0.3.0-beta.5",
+    "version": "0.3.0",
     "description": "dotnugg desktop application",
     "main": "./build/server/index.js",
     "author": "@nuggxyz",
     "license": "MIT",
     "private": true,
-    "packageManager": "yarn@3.2.1",
+    "packageManager": "yarn@3.2.2",
     "scripts": {
         "test": "ts-node --project ./webpack/tsconfig.json webpack/scripts/test.ts",
         "start": "NODE_ENV=development ts-node --project ./webpack/tsconfig.json  webpack/scripts/start.ts",
@@ -18,7 +18,13 @@
         "dist": "yarn build && NODE_OPTIONS='--experimental-modules'  electron-builder",
         "dev": "concurrently -k \"BROWSER=none yarn start\" \"npm:electron\"",
         "prep": "tsc -p src/server/tsconfig.json ",
-        "electron": "yarn prep && wait-on tcp:3000  && NODE_ENV=development electron ./build/server/index.js"
+        "electron": "yarn prep && wait-on tcp:3000  && NODE_ENV=development electron ./build/server/index.js",
+        "version:tag": "yarn changeset tag",
+        "version:get": "grep '\"version\"' package.json | sed 's/.*\"version\": \"\\(.*\\)\".*/\\1/'",
+        "version:commit": "git add . && git commit -m \"v$(yarn version:get)\"",
+        "version:changeset": "yarn changeset add && yarn changeset version",
+        "version:platform": "echo \"v$(yarn version:get)\"",
+        "release": "yarn version:changeset && yarn version:platform  && yarn version:commit && yarn version:tag"
     },
     "build": {
         "extraMetadata": {
@@ -158,6 +164,7 @@
         "workbox-webpack-plugin": "^6.5.3"
     },
     "dependencies": {
+        "@changesets/cli": "^2.24.1",
         "@ethersproject/abi": "^5.6.4",
         "@ethersproject/address": "^5.6.1",
         "@ethersproject/bignumber": "^5.6.2",
@@ -169,7 +176,7 @@
         "@lingui/macro": "^3.14.0",
         "@lingui/react": "^3.14.0",
         "@loadable/component": "^5.15.2",
-        "@nuggxyz/dotnugg-sdk": "^0.3.6",
+        "@nuggxyz/dotnugg-sdk": "^0.4.13",
         "@react-spring/web": "^9.5.0",
         "@reduxjs/toolkit": "^1.8.3",
         "@web3-react/core": "^6.1.9",
