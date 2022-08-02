@@ -34,7 +34,7 @@ export default class Main {
     private static onClose() {
         // Dereference the _window object.
         // @ts-ignore
-        this._window = null;
+        // this._window = null;
     }
 
     private static onActivate() {

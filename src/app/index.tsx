@@ -31,7 +31,6 @@ const root = createRoot(container);
 root.render(
     <React.StrictMode>
         <GlobalHooks />
-
         <ErrorBoundary>
             <ContentBlock>
                 <App />

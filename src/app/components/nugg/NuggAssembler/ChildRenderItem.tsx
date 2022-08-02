@@ -15,7 +15,6 @@ const ChildRenderItem: FunctionComponent<{
     index: number;
 }> = ({ fileUri, index }) => {
     const item = client.compiled.useCompiledItem(fileUri);
-    const pushToRecents = client.recents.usePushToRecents();
     const select = client.compiled.useSelect();
     const featureNames = client.compiled.useFeautureNames();
 
@@ -41,7 +40,6 @@ const ChildRenderItem: FunctionComponent<{
                 boxShadow: lib.layout.boxShadow.basic,
             }}
             onClick={() => {
-                pushToRecents(item.fileUri);
                 select(item.fileUri);
             }}
         >

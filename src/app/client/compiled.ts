@@ -166,8 +166,6 @@ const useStore = create(
                 const single = async (item: Item) => {
                     if (!item) return;
 
-                    console.log({ item });
-
                     const check = get().images[item.fileUri];
 
                     if (check && item.mtimeMs === check.mTimeMs) return;
@@ -269,7 +267,7 @@ const useStore = create(
         ),
         {
             name: 'dotnugg-lens-compiled',
-
+            version: 2,
             partialize: (x) => {
                 return {
                     artDir: x.artDir,
