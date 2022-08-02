@@ -2,7 +2,7 @@
     "name": "dotnugg-lens",
     "productName": "dotnuggLens",
     "homepage": ".",
-    "version": "0.3.0",
+    "version": "0.3.1-beta.0",
     "description": "dotnugg desktop application",
     "main": "./build/server/index.js",
     "author": "@nuggxyz",
@@ -23,6 +23,8 @@
         "version:get": "grep '\"version\"' package.json | sed 's/.*\"version\": \"\\(.*\\)\".*/\\1/'",
         "version:commit": "git add . && git commit -m \"v$(yarn version:get)\"",
         "version:changeset": "yarn changeset add && yarn changeset version",
+        "version:beta:enter": "yarn changeset pre enter beta",
+        "version:beta:exit": "yarn changeset pre exit",
         "version:platform": "echo \"v$(yarn version:get)\"",
         "release": "yarn version:changeset && yarn version:platform  && yarn version:commit && yarn version:tag"
     },
