@@ -61,9 +61,7 @@ export default class Main {
         });
 
         void this._window.loadURL(
-            __DEV__
-                ? 'http://localhost:3000'
-                : `file://${path.join(__dirname, '../build/index.html')}`,
+            __DEV__ ? 'http://localhost:3000' : `file://${path.join(__dirname, '../index.html')}`,
         );
         this._window.maximize();
         this._window.on('closed', () => this.onClose());

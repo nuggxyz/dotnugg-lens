@@ -1,5 +1,11 @@
 # dotnugg-lens
 
+## 0.4.0-beta.2
+
+### Patch Changes
+
+-   fixing path for build
+
 ## 0.4.0-beta.1
 
 ### Patch Changes
