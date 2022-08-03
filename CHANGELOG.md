@@ -1,5 +1,11 @@
 # dotnugg-lens
 
+## 0.4.0-beta.3
+
+### Patch Changes
+
+-   bug fixes and performance improvisations
+
 ## 0.4.0-beta.2
 
 ### Patch Changes
