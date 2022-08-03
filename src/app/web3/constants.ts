@@ -87,13 +87,14 @@ export const CONTRACTS = {
         MintOffset: 1000000,
     },
     [Chain.GOERLI]: {
-        NuggftV1: '0x69420000c537a53ff966610aee8c8884f02c88f8',
-        xNuggftV1: '0x028a7a584173b89ee374189168368a0142970e22',
-        DotnuggV1: '0x57be1d7ef7a4099fb0937b60027ff789de9e3337',
-        Genesis: 7047552,
+        NuggftV1: '0x694200008FaB2B40054C3c0762f2f34505e484E6',
+        xNuggftV1: '0x0d1e49490bC70e7F2Ba594033600463a5Ab41580',
+        DotnuggV1: '0x5529C5229B59f7E49d0C2292109Ae14b584e7cfF',
+        Genesis: 7341120,
         Interval: 64,
         Offset: 1,
         MintOffset: 1000000,
+        PreMintTokens: 2000,
     },
     [Chain.KOVAN]: {
         NuggftV1: '0x694200002e1540157c5fe987705e418ee0a9577d',
