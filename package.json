@@ -11,14 +11,15 @@
     "packageManager": "yarn@3.2.2",
     "scripts": {
         "test": "ts-node --project ./webpack/tsconfig.json webpack/scripts/test.ts",
-        "start": "BROWSER=none NODE_ENV=development ts-node --project ./webpack/tsconfig.json  webpack/scripts/start.ts",
         "build": "NODE_OPTIONS='--experimental-modules' ts-node --project ./webpack/tsconfig.json  webpack/scripts/build.ts && yarn prep",
         "serve": "serve -s build",
         "typechain": "typechain --target ethers-v5 --out-dir src/typechain/ './src/abis/*'",
         "dist": "yarn build && NODE_OPTIONS='--experimental-modules'  electron-builder",
-        "dev": "yarn prep && concurrently -k \"npm:start\" \"npm:electron\"",
+        "dev": "yarn prep && concurrently -k \"npm:app\" \"npm:server\"",
         "prep": "tsc -p src/server/tsconfig.json ",
-        "electron": "wait-on tcp:3000  && NODE_ENV=development electron ./build/server/index.js",
+        "server": "wait-on tcp:3000  && NODE_ENV=development electron ./build/server/index.js",
+        "app": "BROWSER=none NODE_ENV=development ts-node --project ./webpack/tsconfig.json  webpack/scripts/start.ts",
+
         "version:tag": "yarn changeset tag",
         "version:get": "grep '\"version\"' package.json | sed 's/.*\"version\": \"\\(.*\\)\".*/\\1/'",
         "version:commit": "git add . && git commit -m \"v$(yarn version:get)\"",
