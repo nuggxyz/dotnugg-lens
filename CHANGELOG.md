@@ -1,5 +1,11 @@
 # dotnugg-lens
 
+## 0.4.0-beta.6
+
+### Patch Changes
+
+-   yarn runs
+
 ## 0.4.0-beta.5
 
 ### Patch Changes
