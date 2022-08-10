@@ -28,22 +28,23 @@
         "version:platform": "echo \"v$(yarn version:get)\"",
         "release": "yarn version:changeset && yarn version:platform  && yarn version:commit && yarn version:tag"
     },
+    "config": {
+        "forge": "./forge.config.js"
+    },
     "build": {
         "extraMetadata": {
             "main": "build/server/index.js"
         },
         "extends": null,
-        "productName": "dotnuggLens",
-        "appId": "com.nuggxyz.dotnuggLens",
+        "productName": "dotnugg-lens",
+        "appId": "com.nuggxyz.dotnugg.lens.v1",
         "icon": "./macos/AppIcon/AppIcon.icns",
         "copyright": "Copyright © 2022 @nuggxyz",
         "files": [
             "./build/**/*"
         ],
         "extraResources": [
-            "./aseprite2dotnugg.lua",
-            "./collection.nugg",
-            "./lensDefault/**/*.nugg"
+            "./aseprite2dotnugg.lua"
         ],
         "mac": {
             "artifactName": "${productName}-${version}.${ext}",
@@ -94,7 +95,14 @@
         "@babel/preset-react": "^7.18.6",
         "@babel/preset-typescript": "^7.18.6",
         "@babel/register": "^7.18.9",
+        "@electron-forge/cli": "^6.0.0-beta.65",
+        "@electron-forge/core": "^6.0.0-beta.65",
+        "@electron-forge/maker-dmg": "^6.0.0-beta.65",
+        "@electron-forge/maker-pkg": "^6.0.0-beta.65",
+        "@electron-forge/maker-squirrel": "^6.0.0-beta.65",
+        "@electron-forge/maker-zip": "^6.0.0-beta.65",
         "@electron-forge/plugin-webpack": "^6.0.0-beta.65",
+        "@electron-forge/publisher-github": "^6.0.0-beta.65",
         "@lingui/cli": "^3.14.0",
         "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
         "@svgr/webpack": "^6.3.1",
