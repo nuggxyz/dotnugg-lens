@@ -1,5 +1,11 @@
 # dotnugg-lens
 
+## 0.4.0-beta.7
+
+### Patch Changes
+
+-   lua script fix
+
 ## 0.4.0-beta.6
 
 ### Patch Changes
