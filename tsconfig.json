@@ -21,6 +21,6 @@
         "types": ["node", "jest"],
         "strict": true
     },
-    "include": ["src/app"],
+    "include": ["src/app", "webpack/config.forge.ts"],
     "exclude": ["node_modules", "archive/*"]
 }
