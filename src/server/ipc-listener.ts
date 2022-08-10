@@ -139,9 +139,7 @@ export class IpcListener {
                     const filenames = sourcePath.split('.')[0].split(utils.pathDelimiter());
                     const dir = `${filenames[filenames.length - 1]}.aseprite`;
                     const base = `${destPath}${utils.pathDelimiter()}.generated${utils.pathDelimiter()}${dir}`;
-                    // const count = fs
-                    //     .readdirSync(destPath, { withFileTypes: true })
-                    //     .filter((entry) => entry.isDirectory() && entry.name.includes(dir)).length;
+
                     const name = `${base}${utils.pathDelimiter()}${id}`;
                     console.log('name: ', name, 'layer: ', layer);
                     exec(`mkdir -p "${name}"`);
@@ -155,12 +153,17 @@ export class IpcListener {
                                       `..${utils.pathDelimiter()}aseprite2dotnugg.lua`,
                                   )
                         }"`,
-                        (error) => {
-                            if (error !== null) {
-                                if (error instanceof Error) {
-                                    throw new Error(error.message);
-                                }
-                                throw new Error(error);
+                        (error, stdout, stderr) => {
+                            if (error) {
+                                console.error(
+                                    '[onConvertAseprite] exec (aseprite) error: ',
+                                    // error,
+                                    JSON.stringify({ stdout, stderr }),
+                                );
+                                // if (error instanceof Error) {
+                                //     throw new Error(error.message);
+                                // }
+                                throw new Error(JSON.stringify({ stdout, stderr }));
                             }
 
                             exec(
@@ -181,6 +184,7 @@ export class IpcListener {
                         },
                     );
                 } catch (e) {
+                    console.error('ERROR IN onConvertAseprite: ', e);
                     event.sender.send('script-error', e, sourcePath);
                 }
             },
