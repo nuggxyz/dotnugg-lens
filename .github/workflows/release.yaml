@@ -11,6 +11,8 @@ env:
     NUGG_APP_GOOGLE_ANALYTICS_ID: ${{ secrets.NUGG_APP_GOOGLE_ANALYTICS_ID }}
     NUGG_APP_APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
     NUGG_APP_APPLE_ID_EMAIL: ${{ secrets.APPLE_ID_EMAIL }}
+    NUGG_APP_WINDOWS_PFX_FILE: ${{ secrets.WINDOWS_PFX_FILE }}
+    NUGG_APP_WINDOWS_PFX_PASSWORD: ${{ secrets.WINDOWS_PFX_PASSWORD }}
     NODE_OPTIONS: '--experimental-modules'
 jobs:
     release:
@@ -22,13 +24,41 @@ jobs:
 
         steps:
             - uses: actions/checkout@v2
-            - id: nvm
-              name: read .nvmrc
+            - name: Add MacOS certs
+              if: matrix.os == 'macos-latest' && startsWith(github.ref, 'refs/tags/')
+              run: chmod +x add-osx-cert.sh && ./add-osx-cert.sh
+              env:
+                  CERTIFICATE_OSX_APPLICATION: ${{ secrets.CERTIFICATE_OSX_APPLICATION }}
+                  CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
+            - name: Add Windows certificate
+              if: matrix.os == 'windows-latest' && startsWith(github.ref, 'refs/tags/')
+              id: write_file
+              uses: timheuer/base64-to-file@v1
+              with:
+                  fileName: 'win-certificate.pfx'
+                  encodedString: ${{ secrets.CERTIFICATE_WINDOWS_PFX }}
+            - name: read .nvmrc (macos & ubuntu)
+              if: matrix.os == 'macos-latest' || matrix.os == 'ubuntu-latest'
+              id: nvm
               run: echo "##[set-output name=NVMRC;]$(cat .nvmrc)"
-            - uses: actions/setup-node@v2
+            - name: read .nvmrc (windows)
+              if: matrix.os == 'windows-latest'
+              id: nvmWin
+              run: echo "##[set-output name=NVMRC;]$(Get-Content .nvmrc)"
+            - name: 'install node (macos & ubuntu)'
+              uses: actions/setup-node@v2
+              if: matrix.os == 'macos-latest' || matrix.os == 'ubuntu-latest'
               with:
                   node-version: '${{ steps.nvm.outputs.NVMRC }}'
                   registry-url: 'https://registry.npmjs.org'
                   scope: '@nuggxyz'
+            - name: 'install node (windows)'
+              uses: actions/setup-node@v2
+              if: matrix.os == 'windows-latest'
+              with:
+                  node-version: '${{ steps.nvmWin.outputs.NVMRC }}'
+                  registry-url: 'https://registry.npmjs.org'
+                  scope: '@nuggxyz'
             - run: yarn
             - run: yarn make
+            - name: Release

@@ -26,30 +26,40 @@ if (!env.NUGG_APP_APPLE_ID_PASSWORD || !env.NUGG_APP_APPLE_ID_EMAIL) {
     throw Error('NUGG_APP_APPLE_ID_PASSWORD and NUGG_APP_APPLE_ID_EMAIL are required');
 }
 
+if (!env.NUGG_APP_WINDOWS_PFX_FILE || !env.NUGG_APP_WINDOWS_PFX_PASSWORD) {
+    throw Error('NUGG_APP_WINDOWS_PFX_FILE and NUGG_APP_WINDOWS_PFX_PASSWORD are required');
+}
+
 const BUNDLE_ID = 'prod';
 
 const APP_BUNDLE_ID = `com.nuggxyz.dotnugg.lens.v1`;
 
-const APPLE_DEV_ID = 'Apple Distribution: Dark Horse Labs LLC (S2XCG88739)';
+const APPLE_DEV_ID_APP_CERT_IDENTITY = 'Developer ID Application: Dark Horse Labs LLC (S2XCG88739)';
 
-const APPLE_TEAM_ID = 'S2XCG88739';
+// const APPLE_TEAM_ID = 'S2XCG88739';
 
 const forgeConfig: ForgeConfig = {
     buildIdentifier: BUNDLE_ID,
     packagerConfig: {
+        asar: true,
+        overwrite: true,
+        name: 'Dotnugg Lens',
         appBundleId: APP_BUNDLE_ID,
+        appCopyright: 'Copyright © 2022 Dark Horse Labs LLC',
+        darwinDarkModeSupport: true,
+        appCategoryType: 'public.app-category.creativity',
+        icon: './macos/AppIcon/AppIcon.icns',
         osxSign: exact<OsxSignOptions>({
-            identity: APPLE_DEV_ID,
             hardenedRuntime: true,
             entitlements: './macos/entitlements.plist',
             'entitlements-inherit': './macos/entitlements.plist',
+            // 'gatekeeper-assess': false,
+            identity: APPLE_DEV_ID_APP_CERT_IDENTITY,
         }),
         osxNotarize: exact<OsxNotarizeOptions>({
             appleId: env.NUGG_APP_APPLE_ID_EMAIL,
             appleIdPassword: env.NUGG_APP_APPLE_ID_PASSWORD,
-            ascProvider: APPLE_TEAM_ID,
-            // teamId: 'S2XCG88739',
-            // tool: 'notarytool',
+            // ascProvider: APPLE_TEAM_ID,
         }),
     },
     electronRebuildConfig: {},
@@ -64,8 +74,8 @@ const forgeConfig: ForgeConfig = {
         {
             name: '@electron-forge/maker-squirrel',
             config: exact<MakerSquirrelConfig>({
-                certificateFile: './cert.pfx',
-                certificatePassword: 'this-is-a-secret',
+                certificateFile: env.NUGG_APP_WINDOWS_PFX_FILE,
+                certificatePassword: env.NUGG_APP_WINDOWS_PFX_PASSWORD,
             }),
             enabled: true,
             platforms: ['linux'],
@@ -73,7 +83,7 @@ const forgeConfig: ForgeConfig = {
         {
             name: '@electron-forge/maker-pkg',
             enabled: true,
-            platforms: ['darwin'],
+            platforms: ['darwin', 'mas'],
             config: exact<MakerPKGConfig>({
                 install: '/Applications',
             }),
@@ -99,16 +109,6 @@ const forgeConfig: ForgeConfig = {
         //         },
         //     }),
         // },
-        {
-            name: '@electron-forge/maker-appx',
-            enabled: false,
-            platforms: ['win32'],
-            config: {
-                publisher: 'CN=developmentca',
-                devCert: 'C:\\devcert.pfx',
-                certPass: 'abcd',
-            },
-        },
     ],
     publishers: [
         {
