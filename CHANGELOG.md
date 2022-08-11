@@ -1,5 +1,27 @@
 # dotnugg-lens
 
+## 0.4.0
+
+### Minor Changes
+
+-   211c14e: nodejs fix
+
+### Patch Changes
+
+-   d11c0fe: forge start
+-   83a1e73: just mac
+-   de8ce97: bump cache version
+-   9e2bec0: bfimp
+-   5330b3f: no more lfs
+-   fc9a624: config bump
+-   53fd999: fixing path for build
+-   2fe1af8: only mac
+-   af5bba1: bug fixes and performance improvisations
+-   82496f3: bug fix
+-   1934680: lua script fix
+-   start of forge
+-   23eff42: yarn runs
+
 ## 0.4.0-beta.12
 
 ### Patch Changes
