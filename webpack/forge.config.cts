@@ -68,7 +68,7 @@ const forgeConfig: ForgeConfig = {
                 certificatePassword: 'this-is-a-secret',
             }),
             enabled: true,
-            platforms: ['win32'],
+            platforms: ['linux'],
         },
         {
             name: '@electron-forge/maker-pkg',
