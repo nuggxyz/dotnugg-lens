@@ -1,6 +1,6 @@
 {
     "name": "dotnugg-lens",
-    "productName": "dotnuggLens",
+    "productName": "dotnugg-lens",
     "homepage": ".",
     "version": "0.4.0-beta.9",
     "description": "dotnugg desktop application",
@@ -27,7 +27,7 @@
         "version:changeset": "yarn changeset add && yarn changeset version",
         "version:platform": "echo \"v$(yarn version:get)\"",
         "release": "yarn version:changeset && yarn version:platform  && yarn version:commit && yarn version:tag",
-        "make": "yarn make:app && yarn make:server && yarn make:forge && sudo yarn electron-forge make",
+        "make": "yarn make:app && yarn make:server && yarn make:forge && yarn electron-forge make",
         "make:app": "NODE_OPTIONS='--experimental-modules' ts-node --project ./webpack/app/tsconfig.json  webpack/app/scripts/build.ts",
         "make:server": "tsc -p src/server/tsconfig.json",
         "make:forge": "tsc --project ./webpack/tsconfig.json"

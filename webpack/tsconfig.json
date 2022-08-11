@@ -1,9 +1,13 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
+        "outDir": "../build/config",
+        "target": "ESNext",
+        "module": "CommonJS",
+        "skipLibCheck": true,
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
         "moduleResolution": "node",
         "types": ["node", "jest"]
-    }
+    },
+    "files": ["./forge.config.cts"]
 }

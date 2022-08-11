@@ -16,20 +16,19 @@ import ModuleScopePlugin from 'react-dev-utils/ModuleScopePlugin';
 import getCSSModuleLocalIdent from 'react-dev-utils/getCSSModuleLocalIdent';
 import ESLintPlugin from 'eslint-webpack-plugin';
 import WebpackBundleAnalyzer from 'webpack-bundle-analyzer';
-
 import ModuleNotFoundPlugin from 'react-dev-utils/ModuleNotFoundPlugin';
+import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 
 import paths from './paths';
 import modules from './modules';
 import getClientEnvironment from './env';
-
-const ForkTsCheckerWebpackPlugin =
-    process.env.TSC_COMPILE_ON_ERROR === 'true'
-        ? require('react-dev-utils/ForkTsCheckerWarningWebpackPlugin')
-        : require('react-dev-utils/ForkTsCheckerWebpackPlugin');
-import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
-
 import createEnvironmentHash from './persistentCache/createEnvironmentHash';
+
+// const ForkTsCheckerWebpackPlugin =
+//     process.env.TSC_COMPILE_ON_ERROR === 'true'
+//         ? ForkTsCheckerWarningWebpackPlugin
+//         : ForkTsCheckerWebpackPlugin;
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
@@ -63,7 +62,7 @@ const useTypeScript = fs.existsSync(paths.appTsConfig);
 const useTailwind = fs.existsSync(path.join(paths.appPath, 'tailwind.config.js'));
 
 // Get the path to the uncompiled service worker (if it exists).
-const swSrc = paths.swSrc;
+const { swSrc } = paths;
 
 // style files regexes
 const cssRegex = /\.css$/;
@@ -364,7 +363,7 @@ export default function (webpackEnv: 'production' | 'development'): webpack.Conf
                 // To fix this, we prevent you from importing files out of src/ -- if you'd like to,
                 // please link the files into your node_modules/ and let module-resolution kick in.
                 // Make sure your source files are compiled, as they will not be processed in any way.
-                //@ts-ignore
+                // @ts-ignore
                 new ModuleScopePlugin(paths.appSrc, [
                     paths.appPackageJson,
                     reactRefreshRuntimeEntry,
@@ -668,6 +667,7 @@ export default function (webpackEnv: 'production' | 'development'): webpack.Conf
                 },
             ].filter(Boolean) as webpack.RuleSetRule[],
         },
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         plugins: [
             new webpack.ProvidePlugin({
                 Promise: 'es6-promise-promise',
@@ -676,31 +676,26 @@ export default function (webpackEnv: 'production' | 'development'): webpack.Conf
                 process: 'process/browser',
             }),
             // Generates an `index.html` file with the <script> injected.
-            new HtmlWebpackPlugin(
-                Object.assign(
-                    {},
-                    {
-                        inject: true,
-                        template: paths.appHtml,
-                    },
-                    isEnvProduction
-                        ? {
-                              minify: {
-                                  removeComments: true,
-                                  collapseWhitespace: true,
-                                  removeRedundantAttributes: true,
-                                  useShortDoctype: true,
-                                  removeEmptyAttributes: true,
-                                  removeStyleLinkTypeAttributes: true,
-                                  keepClosingSlash: true,
-                                  minifyJS: true,
-                                  minifyCSS: true,
-                                  minifyURLs: true,
-                              },
-                          }
-                        : undefined,
-                ),
-            ),
+            new HtmlWebpackPlugin({
+                inject: true,
+                template: paths.appHtml,
+                ...(isEnvProduction
+                    ? {
+                          minify: {
+                              removeComments: true,
+                              collapseWhitespace: true,
+                              removeRedundantAttributes: true,
+                              useShortDoctype: true,
+                              removeEmptyAttributes: true,
+                              removeStyleLinkTypeAttributes: true,
+                              keepClosingSlash: true,
+                              minifyJS: true,
+                              minifyCSS: true,
+                              minifyURLs: true,
+                          },
+                      }
+                    : undefined),
+            }),
             // Inlines the webpack runtime script. This script is too small to warrant
             // a network request.
             // https://github.com/facebook/create-react-app/issues/5358
@@ -721,6 +716,7 @@ export default function (webpackEnv: 'production' | 'development'): webpack.Conf
             ),
             // This gives some necessary context to module not found errors, such as
             // the requesting resource.
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-call
             new ModuleNotFoundPlugin(paths.appPath),
             // Makes some environment variables available to the JS code, for example:
             // if (process.env.NODE_ENV === 'production') { ... }. See `./env.js`.
@@ -738,6 +734,7 @@ export default function (webpackEnv: 'production' | 'development'): webpack.Conf
             // Watcher doesn't work well if you mistype casing in a path so we use
             // a plugin that prints an error when you attempt to do this.
             // See https://github.com/facebook/create-react-app/issues/240
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-call
             isEnvDevelopment && new CaseSensitivePathsPlugin(),
             isEnvProduction &&
                 new MiniCssExtractPlugin({
@@ -768,7 +765,7 @@ export default function (webpackEnv: 'production' | 'development'): webpack.Conf
                     return {
                         files: manifestFiles,
                         entrypoints: entrypointFiles,
-                    } as { [key: string]: any };
+                    } as { [key: string]: unknown };
                 },
             }),
             // Moment.js is an extremely popular library that bundles large locale files
@@ -783,8 +780,10 @@ export default function (webpackEnv: 'production' | 'development'): webpack.Conf
             // Generate a service worker script that will precache, and keep up to date,
             // the HTML & assets that are part of the webpack build.
             isEnvProduction &&
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                 fs.existsSync(swSrc) &&
                 new WorkboxWebpackPlugin.InjectManifest({
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     swSrc,
                     dontCacheBustURLsMatching: /\.[0-9a-f]{8}\./,
                     exclude: [/\.map$/, /asset-manifest\.json$/, /LICENSE/],
@@ -836,9 +835,10 @@ export default function (webpackEnv: 'production' | 'development'): webpack.Conf
                             { file: '**/src/setupTests.*' },
                         ],
                     },
-                    logger: {
-                        infrastructure: 'silent',
-                    },
+                    // logger: {
+                    //     // infrastructure: 'silent',
+
+                    // },
                 }),
             !disableESLintPlugin &&
                 new ESLintPlugin({
@@ -864,6 +864,7 @@ export default function (webpackEnv: 'production' | 'development'): webpack.Conf
                     },
                 }),
             // https://www.useanvil.com/blog/engineering/minimizing-webpack-bundle-size/
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
             shouldAnalyzeBundle && new WebpackBundleAnalyzer.BundleAnalyzerPlugin(),
         ].filter(Boolean),
         // Turn off performance processing because we utilize
