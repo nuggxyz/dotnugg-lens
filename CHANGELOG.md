@@ -1,5 +1,11 @@
 # dotnugg-lens
 
+## 0.4.0-beta.11
+
+### Patch Changes
+
+-   no more lfs
+
 ## 0.4.0-beta.10
 
 ### Patch Changes
