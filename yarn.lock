@@ -2396,6 +2396,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@electron/get@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@electron/get@npm:2.0.0"
+  dependencies:
+    debug: ^4.1.1
+    env-paths: ^2.2.0
+    fs-extra: ^8.1.0
+    global-agent: ^3.0.0
+    global-tunnel-ng: ^2.7.1
+    got: ^11.8.5
+    progress: ^2.0.3
+    semver: ^6.2.0
+    sumchecker: ^3.0.1
+  dependenciesMeta:
+    global-agent:
+      optional: true
+    global-tunnel-ng:
+      optional: true
+  checksum: 7c9b63c263f63e83519dbbc3fe12846b4fdb1e287fe409984b0d23c31c3c163775440b20662ba90eb7dc1df0e2d414d41e4a354be18aaf8fe84820922937edb3
+  languageName: node
+  linkType: hard
+
 "@electron/universal@npm:1.2.1":
   version: 1.2.1
   resolution: "@electron/universal@npm:1.2.1"
@@ -9047,175 +9069,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotnugg-lens@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "dotnugg-lens@workspace:."
-  dependencies:
-    "@babel/core": ^7.18.10
-    "@babel/eslint-parser": ^7.18.9
-    "@babel/plugin-proposal-decorators": ^7.18.10
-    "@babel/plugin-transform-typescript": ^7.18.12
-    "@babel/preset-env": ^7.18.10
-    "@babel/preset-react": ^7.18.6
-    "@babel/preset-typescript": ^7.18.6
-    "@babel/register": ^7.18.9
-    "@changesets/cli": ^2.24.2
-    "@electron-forge/cli": ^6.0.0-beta.65
-    "@electron-forge/core": ^6.0.0-beta.65
-    "@electron-forge/maker-dmg": ^6.0.0-beta.65
-    "@electron-forge/maker-pkg": ^6.0.0-beta.65
-    "@electron-forge/maker-squirrel": ^6.0.0-beta.65
-    "@electron-forge/maker-zip": ^6.0.0-beta.65
-    "@electron-forge/plugin-auto-unpack-natives": ^6.0.0-beta.65
-    "@electron-forge/plugin-electronegativity": ^6.0.0-beta.65
-    "@electron-forge/plugin-webpack": ^6.0.0-beta.65
-    "@electron-forge/publisher-github": ^6.0.0-beta.65
-    "@ethersproject/abi": ^5.6.4
-    "@ethersproject/address": ^5.6.1
-    "@ethersproject/bignumber": ^5.6.2
-    "@ethersproject/bytes": ^5.6.1
-    "@ethersproject/contracts": ^5.6.2
-    "@ethersproject/providers": ^5.6.8
-    "@ethersproject/units": ^5.6.1
-    "@lingui/cli": ^3.14.0
-    "@lingui/core": ^3.14.0
-    "@lingui/macro": ^3.14.0
-    "@lingui/react": ^3.14.0
-    "@loadable/component": ^5.15.2
-    "@nuggxyz/dotnugg-sdk": ^0.4.13
-    "@pmmmwh/react-refresh-webpack-plugin": ^0.5.7
-    "@react-spring/web": ^9.5.2
-    "@reduxjs/toolkit": ^1.8.3
-    "@svgr/webpack": ^6.3.1
-    "@typechain/ethers-v5": ^10.1.0
-    "@types/bluebird": ^3.5.36
-    "@types/chai": ^4.3.3
-    "@types/mocha": ^9.1.1
-    "@types/node": ^18.6.5
-    "@types/react-dev-utils": ^9.0.11
-    "@types/react-dom": ^18.0.6
-    "@types/react-helmet": ^6.1.5
-    "@types/tapable": ^2.2.2
-    "@types/ua-parser-js": ^0.7.36
-    "@types/websocket": ^1.0.5
-    "@typescript-eslint/eslint-plugin": ^5.33.0
-    "@typescript-eslint/parser": ^5.33.0
-    "@web3-react/core": ^6.1.9
-    "@web3-react/network-connector": ^6.2.9
-    assert: ^2.0.0
-    babel-eslint: ^10.1.0
-    babel-jest: ^28.1.3
-    babel-loader: ^8.2.5
-    babel-plugin-dev-expression: ^0.2.3
-    babel-plugin-import-directory: ^1.1.0
-    babel-plugin-module-resolver: ^4.1.0
-    babel-plugin-named-asset-import: ^0.3.8
-    babel-plugin-transform-class-properties: ^6.24.1
-    babel-plugin-wildcard: ^7.0.0
-    babel-preset-react-app: ^10.0.1
-    bfj: ^7.0.2
-    bluebird: ^3.7.2
-    browserslist: ^4.21.3
-    buffer: ^6.0.3
-    case-sensitive-paths-webpack-plugin: ^2.4.0
-    child_process: ^1.0.2
-    concurrently: ^7.3.0
-    console-browserify: ^1.2.0
-    constants-browserify: ^1.0.0
-    crypto-browserify: ^3.12.0
-    css-loader: ^6.7.1
-    css-minimizer-webpack-plugin: ^4.0.0
-    decimal.js-light: ^2.5.1
-    dotenv: ^16.0.1
-    dotenv-expand: ^8.0.3
-    electron: ^20.0.1
-    electron-builder: ^23.3.3
-    electron-is-dev: ^2.0.0
-    electron-reloader: ^1.2.3
-    electron-updater: ^5.2.1
-    es6-promise-promise: ^1.0.0
-    eslint: ^8.21.0
-    eslint-config-airbnb: ^19.0.4
-    eslint-config-airbnb-typescript: ^17.0.0
-    eslint-config-prettier: ^8.5.0
-    eslint-config-react-app: ^7.0.1
-    eslint-config-universe: ^11.1.0
-    eslint-import-resolver-babel-module: ^5.3.1
-    eslint-plugin-gatsby: ^1.0.2
-    eslint-plugin-import: ^2.26.0
-    eslint-plugin-jsx-a11y: ^6.6.1
-    eslint-plugin-module-resolver: ^1.4.0
-    eslint-plugin-prettier: ^4.2.1
-    eslint-plugin-react: ^7.30.1
-    eslint-plugin-unused-imports: ^2.0.0
-    eslint-plugin-yaml: ^0.5.0
-    eslint-webpack-plugin: ^3.2.0
-    ethers: ^5.6.9
-    eventemitter3: ^4.0.7
-    file-loader: ^6.2.0
-    fix-path: 4.0.0
-    fork-ts-checker-webpack-plugin: ^7.2.13
-    fs: ^0.0.1-security
-    fs-extra: ^10.1.0
-    html-webpack-plugin: ^5.5.0
-    https-browserify: ^1.0.0
-    identity-obj-proxy: ^3.0.0
-    jest: ^28.1.3
-    mini-css-extract-plugin: ^2.6.1
-    numbro: ^2.3.6
-    os-browserify: ^0.3.0
-    path-browserify: ^1.0.1
-    polished: ^4.2.2
-    postcss: ^8.4.16
-    postcss-flexbugs-fixes: ^5.0.2
-    postcss-loader: ^7.0.1
-    postcss-normalize: ^10.0.1
-    postcss-preset-env: ^7.7.2
-    prettier: ^2.7.1
-    prompts: ^2.4.2
-    react: ^18.2.0
-    react-confetti: ^6.1.0
-    react-dev-utils: ^12.0.1
-    react-dom: ^18.2.0
-    react-flip-move: ^3.0.4
-    react-ga4: ^1.4.1
-    react-helmet: ^6.1.0
-    react-icons: ^4.4.0
-    react-redux: ^8.0.2
-    react-refresh: ^0.14.0
-    react-spring: ^9.5.2
-    redux-thunk: ^2.4.1
-    repl: ^0.1.3
-    resolve: ^1.22.1
-    resolve-url-loader: ^5.0.0
-    sass-loader: ^13.0.2
-    semver: ^7.3.7
-    source-map-loader: ^4.0.0
-    stream-browserify: ^3.0.0
-    stream-http: ^3.2.0
-    style-loader: ^3.3.1
-    subscriptions-transport-ws: ^0.11.0
-    tailwindcss: ^3.1.8
-    terser-webpack-plugin: ^5.3.3
-    tiny-invariant: ^1.2.0
-    ts-node: ^10.9.1
-    tsc: ^2.0.4
-    typechain: ^8.1.0
-    typescript: ^4.7.4
-    ua-parser-js: ^1.0.2
-    url: ^0.11.0
-    vm-browserify: ^1.1.2
-    wait-on: 6.0.1
-    web-vitals: ^2.1.4
-    webpack: ^5.74.0
-    webpack-bundle-analyzer: ^4.5.0
-    webpack-dev-server: ^4.9.3
-    webpack-manifest-plugin: ^5.0.0
-    workbox-webpack-plugin: ^6.5.4
-    zustand: ^4.0.0
-  languageName: unknown
-  linkType: soft
-
 "ds-store@npm:^0.1.5":
   version: 0.1.6
   resolution: "ds-store@npm:0.1.6"
@@ -9382,6 +9235,35 @@ __metadata:
   bin:
     electron-packager: bin/electron-packager.js
   checksum: d62887bf362a3c0a63ce50600e348ad63728587219a3845e69e979a0edfdeff4ccfeef154ca5f93b45690edcb44fef6075c17c88cea09814e4131cc3b78af066
+  languageName: node
+  linkType: hard
+
+"electron-packager@npm:^16.0.0":
+  version: 16.0.0
+  resolution: "electron-packager@npm:16.0.0"
+  dependencies:
+    "@electron/get": ^2.0.0
+    "@electron/universal": ^1.2.1
+    asar: ^3.1.0
+    cross-spawn-windows-exe: ^1.2.0
+    debug: ^4.0.1
+    electron-notarize: ^1.1.1
+    electron-osx-sign: ^0.5.0
+    extract-zip: ^2.0.0
+    filenamify: ^4.1.0
+    fs-extra: ^10.1.0
+    galactus: ^0.2.1
+    get-package-info: ^1.0.0
+    junk: ^3.1.0
+    parse-author: ^2.0.0
+    plist: ^3.0.0
+    rcedit: ^3.0.1
+    resolve: ^1.1.6
+    semver: ^7.1.3
+    yargs-parser: ^21.1.1
+  bin:
+    electron-packager: bin/electron-packager.js
+  checksum: 8ae53629faab217e79814d21d7ef204ac28d3a1c4eb768eb5a5fe99024066b21d94e1e920c5290e414e04a450d2207db9fe6c1aee428d1918dfb679106d1d0a3
   languageName: node
   linkType: hard
 
@@ -13735,6 +13617,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"json@npm:^11.0.0":
+  version: 11.0.0
+  resolution: "json@npm:11.0.0"
+  bin:
+    json: lib/json.js
+  checksum: 0beb8689722fc30251638543caf791bedc1a25199c18eb0281de115a0dadb00a07d4d36cbd7ff7680e04157fcb2bba76f29ed940b1e4e92f60c6fbaa74523fce
+  languageName: node
+  linkType: hard
+
 "jsonfile@npm:^4.0.0":
   version: 4.0.0
   resolution: "jsonfile@npm:4.0.0"
@@ -15185,6 +15076,177 @@ __metadata:
   checksum: 5afc3dafcd1573b08877ca8e6148c52abd565f1d06b1eb08caf982e3fa289a82f2cae697ffb55b5021e146d60443f1590a5d6b944844e944714a5b549675bcd3
   languageName: node
   linkType: hard
+
+"nugg-lens@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "nugg-lens@workspace:."
+  dependencies:
+    "@babel/core": ^7.18.10
+    "@babel/eslint-parser": ^7.18.9
+    "@babel/plugin-proposal-decorators": ^7.18.10
+    "@babel/plugin-transform-typescript": ^7.18.12
+    "@babel/preset-env": ^7.18.10
+    "@babel/preset-react": ^7.18.6
+    "@babel/preset-typescript": ^7.18.6
+    "@babel/register": ^7.18.9
+    "@changesets/cli": ^2.24.2
+    "@electron-forge/cli": ^6.0.0-beta.65
+    "@electron-forge/core": ^6.0.0-beta.65
+    "@electron-forge/maker-dmg": ^6.0.0-beta.65
+    "@electron-forge/maker-pkg": ^6.0.0-beta.65
+    "@electron-forge/maker-squirrel": ^6.0.0-beta.65
+    "@electron-forge/maker-zip": ^6.0.0-beta.65
+    "@electron-forge/plugin-auto-unpack-natives": ^6.0.0-beta.65
+    "@electron-forge/plugin-electronegativity": ^6.0.0-beta.65
+    "@electron-forge/plugin-webpack": ^6.0.0-beta.65
+    "@electron-forge/publisher-github": ^6.0.0-beta.65
+    "@ethersproject/abi": ^5.6.4
+    "@ethersproject/address": ^5.6.1
+    "@ethersproject/bignumber": ^5.6.2
+    "@ethersproject/bytes": ^5.6.1
+    "@ethersproject/contracts": ^5.6.2
+    "@ethersproject/providers": ^5.6.8
+    "@ethersproject/units": ^5.6.1
+    "@lingui/cli": ^3.14.0
+    "@lingui/core": ^3.14.0
+    "@lingui/macro": ^3.14.0
+    "@lingui/react": ^3.14.0
+    "@loadable/component": ^5.15.2
+    "@nuggxyz/dotnugg-sdk": ^0.4.13
+    "@pmmmwh/react-refresh-webpack-plugin": ^0.5.7
+    "@react-spring/web": ^9.5.2
+    "@reduxjs/toolkit": ^1.8.3
+    "@svgr/webpack": ^6.3.1
+    "@typechain/ethers-v5": ^10.1.0
+    "@types/bluebird": ^3.5.36
+    "@types/chai": ^4.3.3
+    "@types/mocha": ^9.1.1
+    "@types/node": ^18.6.5
+    "@types/react-dev-utils": ^9.0.11
+    "@types/react-dom": ^18.0.6
+    "@types/react-helmet": ^6.1.5
+    "@types/tapable": ^2.2.2
+    "@types/ua-parser-js": ^0.7.36
+    "@types/websocket": ^1.0.5
+    "@typescript-eslint/eslint-plugin": ^5.33.0
+    "@typescript-eslint/parser": ^5.33.0
+    "@web3-react/core": ^6.1.9
+    "@web3-react/network-connector": ^6.2.9
+    assert: ^2.0.0
+    babel-eslint: ^10.1.0
+    babel-jest: ^28.1.3
+    babel-loader: ^8.2.5
+    babel-plugin-dev-expression: ^0.2.3
+    babel-plugin-import-directory: ^1.1.0
+    babel-plugin-module-resolver: ^4.1.0
+    babel-plugin-named-asset-import: ^0.3.8
+    babel-plugin-transform-class-properties: ^6.24.1
+    babel-plugin-wildcard: ^7.0.0
+    babel-preset-react-app: ^10.0.1
+    bfj: ^7.0.2
+    bluebird: ^3.7.2
+    browserslist: ^4.21.3
+    buffer: ^6.0.3
+    case-sensitive-paths-webpack-plugin: ^2.4.0
+    child_process: ^1.0.2
+    concurrently: ^7.3.0
+    console-browserify: ^1.2.0
+    constants-browserify: ^1.0.0
+    crypto-browserify: ^3.12.0
+    css-loader: ^6.7.1
+    css-minimizer-webpack-plugin: ^4.0.0
+    decimal.js-light: ^2.5.1
+    dotenv: ^16.0.1
+    dotenv-expand: ^8.0.3
+    electron: ^20.0.1
+    electron-builder: ^23.3.3
+    electron-is-dev: ^2.0.0
+    electron-packager: ^16.0.0
+    electron-reloader: ^1.2.3
+    electron-updater: ^5.2.1
+    es6-promise-promise: ^1.0.0
+    eslint: ^8.21.0
+    eslint-config-airbnb: ^19.0.4
+    eslint-config-airbnb-typescript: ^17.0.0
+    eslint-config-prettier: ^8.5.0
+    eslint-config-react-app: ^7.0.1
+    eslint-config-universe: ^11.1.0
+    eslint-import-resolver-babel-module: ^5.3.1
+    eslint-plugin-gatsby: ^1.0.2
+    eslint-plugin-import: ^2.26.0
+    eslint-plugin-jsx-a11y: ^6.6.1
+    eslint-plugin-module-resolver: ^1.4.0
+    eslint-plugin-prettier: ^4.2.1
+    eslint-plugin-react: ^7.30.1
+    eslint-plugin-unused-imports: ^2.0.0
+    eslint-plugin-yaml: ^0.5.0
+    eslint-webpack-plugin: ^3.2.0
+    ethers: ^5.6.9
+    eventemitter3: ^4.0.7
+    file-loader: ^6.2.0
+    fix-path: 4.0.0
+    fork-ts-checker-webpack-plugin: ^7.2.13
+    fs: ^0.0.1-security
+    fs-extra: ^10.1.0
+    html-webpack-plugin: ^5.5.0
+    https-browserify: ^1.0.0
+    identity-obj-proxy: ^3.0.0
+    jest: ^28.1.3
+    json: ^11.0.0
+    mini-css-extract-plugin: ^2.6.1
+    numbro: ^2.3.6
+    os-browserify: ^0.3.0
+    path-browserify: ^1.0.1
+    polished: ^4.2.2
+    postcss: ^8.4.16
+    postcss-flexbugs-fixes: ^5.0.2
+    postcss-loader: ^7.0.1
+    postcss-normalize: ^10.0.1
+    postcss-preset-env: ^7.7.2
+    prettier: ^2.7.1
+    prompts: ^2.4.2
+    react: ^18.2.0
+    react-confetti: ^6.1.0
+    react-dev-utils: ^12.0.1
+    react-dom: ^18.2.0
+    react-flip-move: ^3.0.4
+    react-ga4: ^1.4.1
+    react-helmet: ^6.1.0
+    react-icons: ^4.4.0
+    react-redux: ^8.0.2
+    react-refresh: ^0.14.0
+    react-spring: ^9.5.2
+    redux-thunk: ^2.4.1
+    repl: ^0.1.3
+    resolve: ^1.22.1
+    resolve-url-loader: ^5.0.0
+    sass-loader: ^13.0.2
+    semver: ^7.3.7
+    source-map-loader: ^4.0.0
+    stream-browserify: ^3.0.0
+    stream-http: ^3.2.0
+    style-loader: ^3.3.1
+    subscriptions-transport-ws: ^0.11.0
+    tailwindcss: ^3.1.8
+    terser-webpack-plugin: ^5.3.3
+    tiny-invariant: ^1.2.0
+    ts-node: ^10.9.1
+    tsc: ^2.0.4
+    typechain: ^8.1.0
+    typescript: ^4.7.4
+    ua-parser-js: ^1.0.2
+    url: ^0.11.0
+    vm-browserify: ^1.1.2
+    wait-on: 6.0.1
+    web-vitals: ^2.1.4
+    webpack: ^5.74.0
+    webpack-bundle-analyzer: ^4.5.0
+    webpack-dev-server: ^4.9.3
+    webpack-manifest-plugin: ^5.0.0
+    workbox-webpack-plugin: ^6.5.4
+    zustand: ^4.0.0
+  languageName: unknown
+  linkType: soft
 
 "numbro@npm:^2.3.6":
   version: 2.3.6
@@ -21021,6 +21083,13 @@ __metadata:
   version: 21.0.1
   resolution: "yargs-parser@npm:21.0.1"
   checksum: c3ea2ed12cad0377ce3096b3f138df8267edf7b1aa7d710cd502fe16af417bafe4443dd71b28158c22fcd1be5dfd0e86319597e47badf42ff83815485887323a
+  languageName: node
+  linkType: hard
+
+"yargs-parser@npm:^21.1.1":
+  version: 21.1.1
+  resolution: "yargs-parser@npm:21.1.1"
+  checksum: ed2d96a616a9e3e1cc7d204c62ecc61f7aaab633dcbfab2c6df50f7f87b393993fe6640d017759fe112d0cb1e0119f2b4150a87305cc873fd90831c6a58ccf1c
   languageName: node
   linkType: hard
 

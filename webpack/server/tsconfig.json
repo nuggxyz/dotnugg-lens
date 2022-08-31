@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        // "outDir": "../../build/config",
+        // "target": "ES3",
+        "module": "commonjs",
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "moduleResolution": "Node",
+        "types": ["node", "jest"]
+    }
+}

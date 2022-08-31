@@ -108,3 +108,6 @@ archive
 !.yarn/versions
 
 out
+.secrets
+.tmp
+*.app

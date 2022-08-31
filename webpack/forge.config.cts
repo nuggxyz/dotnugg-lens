@@ -1,9 +1,11 @@
+/* eslint-disable prefer-regex-literals */
 import type { ForgeConfig } from '@electron-forge/shared-types';
+import type { PublisherGitHubConfig } from '@electron-forge/publisher-github';
+import type { OsxSignOptions, OsxNotarizeOptions } from 'electron-packager';
+import type { MakerDMGConfig } from '@electron-forge/maker-dmg';
 import type { MakerPKGConfig } from '@electron-forge/maker-pkg';
 import type { MakerSquirrelConfig } from '@electron-forge/maker-squirrel';
-import type { PublisherGitHubConfig } from '@electron-forge/publisher-github';
 import type { MakerZIPConfig } from '@electron-forge/maker-zip';
-import type { OsxSignOptions, OsxNotarizeOptions } from 'electron-packager';
 
 import getClientEnvironment from './env';
 
@@ -26,40 +28,64 @@ if (!env.NUGG_APP_APPLE_ID_PASSWORD || !env.NUGG_APP_APPLE_ID_EMAIL) {
     throw Error('NUGG_APP_APPLE_ID_PASSWORD and NUGG_APP_APPLE_ID_EMAIL are required');
 }
 
-if (!env.NUGG_APP_WINDOWS_PFX_FILE || !env.NUGG_APP_WINDOWS_PFX_PASSWORD) {
-    throw Error('NUGG_APP_WINDOWS_PFX_FILE and NUGG_APP_WINDOWS_PFX_PASSWORD are required');
-}
+// if (!env.NUGG_APP_WINDOWS_PFX_FILE || !env.NUGG_APP_WINDOWS_PFX_PASSWORD) {
+//     throw Error('NUGG_APP_WINDOWS_PFX_FILE and NUGG_APP_WINDOWS_PFX_PASSWORD are required');
+// }
 
-const BUNDLE_ID = 'prod';
-
-const APP_BUNDLE_ID = `com.nuggxyz.dotnugg.lens.v1`;
-
-const APPLE_DEV_ID_APP_CERT_IDENTITY = 'Developer ID Application: Dark Horse Labs LLC (S2XCG88739)';
-
-// const APPLE_TEAM_ID = 'S2XCG88739';
+// const BUNDLE_ID = 'main';
 
 const forgeConfig: ForgeConfig = {
-    buildIdentifier: BUNDLE_ID,
+    buildIdentifier: 'main',
+
     packagerConfig: {
+        dir: '.',
+        junk: true,
+        // tmpdir: './.tmp',
+        prune: true,
+        ignore: [
+            new RegExp('^(/apps$)'),
+            new RegExp('^(/dist$)'),
+            new RegExp('^(/libs$)'),
+            new RegExp('^(/out$)'),
+            new RegExp('^(/out-tsc$)'),
+            new RegExp('^(/scripts$)'),
+            new RegExp('^(/styles$)'),
+            new RegExp('^(/themes$)'),
+            new RegExp('^(/node_modules$)'),
+            new RegExp('.editorconfig'),
+            new RegExp('.gitignore'),
+            new RegExp('yarn.lock'),
+            new RegExp('^(/README.md$)'),
+            new RegExp('tsconfig.json'),
+            new RegExp('tslint.json'),
+        ],
         asar: true,
         overwrite: true,
-        name: 'Dotnugg Lens',
-        appBundleId: APP_BUNDLE_ID,
-        appCopyright: 'Copyright © 2022 Dark Horse Labs LLC',
+        name: 'nugg-lens',
+        // executableName: 'nugg-lens',
+        appBundleId: `xyz.nugg.lens`,
+        appCopyright: '2022 nugg.xyz LLC',
         darwinDarkModeSupport: true,
-        appCategoryType: 'public.app-category.creativity',
-        icon: './macos/AppIcon/AppIcon.icns',
+        appCategoryType: 'public.app-category.graphics-design',
+        icon: './webpack/macos/AppIcon/AppIcon.icns',
         osxSign: exact<OsxSignOptions>({
-            hardenedRuntime: true,
-            entitlements: './macos/entitlements.plist',
-            'entitlements-inherit': './macos/entitlements.plist',
-            // 'gatekeeper-assess': false,
-            identity: APPLE_DEV_ID_APP_CERT_IDENTITY,
+            hardenedRuntime: false, // default is true
+            'identity-validation': true, // default is true
+            'pre-embed-provisioning-profile': true, // default is true
+            'pre-auto-entitlements': true,
+            'provisioning-profile': './.secrets/dev_id_nugg_lens.provisionprofile',
+            entitlements: './webpack/macos/entitlements.plist',
+            'entitlements-inherit': './webpack/macos/entitlements.plist',
+            type: 'distribution',
+            identity: 'Developer ID Application: nugg.xyz LLC (4497QJSAD3)',
+            // identity: '3rd Party Mac Developer Application: nugg.xyz LLC (4497QJSAD3)',
+            'gatekeeper-assess': false,
         }),
         osxNotarize: exact<OsxNotarizeOptions>({
+            tool: 'notarytool',
             appleId: env.NUGG_APP_APPLE_ID_EMAIL,
             appleIdPassword: env.NUGG_APP_APPLE_ID_PASSWORD,
-            // ascProvider: APPLE_TEAM_ID,
+            teamId: '4497QJSAD3',
         }),
     },
     electronRebuildConfig: {},
@@ -70,7 +96,6 @@ const forgeConfig: ForgeConfig = {
             config: exact<MakerZIPConfig>({}),
             enabled: true,
         },
-
         {
             name: '@electron-forge/maker-squirrel',
             config: exact<MakerSquirrelConfig>({
@@ -78,37 +103,39 @@ const forgeConfig: ForgeConfig = {
                 certificatePassword: env.NUGG_APP_WINDOWS_PFX_PASSWORD,
             }),
             enabled: true,
-            platforms: ['linux'],
+            platforms: ['win32'],
         },
         {
             name: '@electron-forge/maker-pkg',
             enabled: true,
-            platforms: ['darwin', 'mas'],
+            platforms: ['darwin'],
             config: exact<MakerPKGConfig>({
                 install: '/Applications',
+                identity: '3rd Party Mac Developer Installer: nugg.xyz LLC (4497QJSAD3)',
+                // identity: 'Apple Distribution: nugg.xyz LLC (4497QJSAD3)',
             }),
         },
-        // {
-        //     name: '@electron-forge/maker-dmg',
-        //     enabled: true,
-        //     platforms: ['darwin'],
-        //     config: exact<MakerDMGConfig>({
-        //         overwrite: true,
-        //         name: 'dotnugg-lens',
-        //         format: 'UDCO',
-        //         icon: './macos/AppIcon/icon.icns',
-        //         debug: true,
-        //         additionalDMGOptions: {
-        //             'background-color': '#ffffff',
-        //             window: {
-        //                 size: {
-        //                     width: 690,
-        //                     height: 590,
-        //                 },
-        //             },
-        //         },
-        //     }),
-        // },
+        {
+            name: '@electron-forge/maker-dmg',
+            enabled: false,
+            platforms: ['darwin'],
+            config: exact<MakerDMGConfig>({
+                overwrite: true,
+                name: 'dotnugg lens',
+                format: 'UDCO',
+                icon: './webpack/macos/AppIcon/icon.icns',
+                debug: true,
+                additionalDMGOptions: {
+                    'background-color': '#ffffff',
+                    window: {
+                        size: {
+                            width: 690,
+                            height: 590,
+                        },
+                    },
+                },
+            }),
+        },
     ],
     publishers: [
         {

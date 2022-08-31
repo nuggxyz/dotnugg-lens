@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import * as path from 'path';
 
-import { autoUpdater } from 'electron/main';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { app, BrowserWindow, shell, Menu } from 'electron';
+import { app, BrowserWindow, shell, Menu, autoUpdater } from 'electron';
 import { dotnugg } from '@nuggxyz/dotnugg-sdk';
 
 const __DEV__ = process.env.NODE_ENV === 'development';

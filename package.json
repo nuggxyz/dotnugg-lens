@@ -1,10 +1,9 @@
 {
-    "name": "dotnugg-lens",
-    "productName": "dotnugg-lens",
-    "homepage": ".",
+    "name": "nugg-lens",
+    "productName": "nugg-lens",
     "version": "0.4.0",
     "description": "dotnugg desktop application",
-    "main": "./build/server/index.js",
+    "main": "./build/server/js/bundle.js",
     "author": "@nuggxyz",
     "license": "MIT",
     "private": true,
@@ -27,50 +26,17 @@
         "version:changeset": "yarn changeset add && yarn changeset version",
         "version:platform": "echo \"v$(yarn version:get)\"",
         "release": "yarn version:changeset && yarn version:platform  && yarn version:commit && yarn version:tag",
-        "make": "yarn make:app && yarn make:server && yarn make:forge && yarn electron-forge make",
+        "make": "yarn make:app && yarn make:server && yarn make:forge && yarn electron-forge make --config ./build/config/forge.config.cjs --arch=universal --platform=darwin",
         "make:app": "NODE_OPTIONS='--experimental-modules' ts-node --project ./webpack/app/tsconfig.json  webpack/app/scripts/build.ts",
-        "make:server": "tsc -p src/server/tsconfig.json",
-        "make:forge": "tsc --project ./webpack/tsconfig.json"
+        "make:server": "NODE_OPTIONS='--experimental-modules' ts-node --project ./webpack/server/tsconfig.json  webpack/server/scripts/build.ts",
+        "make:forge": "tsc --project ./webpack/tsconfig.json",
+        "package:mac": "yarn electron-packager ./build --platform=darwin --arch=x64,arm64 --out ./out/ --overwrite",
+        "package:universal": "NODE_OPTIONS='--experimental-modules' ts-node --project ./webpack/scripts/tsconfig.json ./webpack/scripts/universalize.ts",
+        "make:json": "cp ./package.json ./build/package.json && yarn json -I -f ./build/package.json -e \"this.main='server/js/bundle.js'\" && yarn json -I -f ./build/package.json -e \"this.dependencies={}\" && touch ./build/yarn.lock",
+        "package": "yarn make:app && yarn make:server && yarn make:json && yarn package:mac && yarn package:universal"
     },
     "config": {
         "forge": "./build/config/forge.config.cjs"
-    },
-    "build": {
-        "extraMetadata": {
-            "main": "build/server/index.js"
-        },
-        "extends": null,
-        "productName": "dotnugg-lens",
-        "appId": "com.nuggxyz.dotnugg.lens.v1",
-        "icon": "./macos/AppIcon/AppIcon.icns",
-        "copyright": "Copyright © 2022 @nuggxyz",
-        "files": [
-            "./build/**/*"
-        ],
-        "extraResources": [
-            "./aseprite2dotnugg.lua"
-        ],
-        "mac": {
-            "artifactName": "${productName}-${version}.${ext}",
-            "category": "public.app-category.productivity",
-            "target": [
-                "dmg"
-            ]
-        },
-        "linux": {
-            "artifactName": "${productName}-${version}-${arch}.${ext}",
-            "maintainer": "xxxx",
-            "target": [
-                "tar.gz",
-                "deb",
-                "rpm"
-            ]
-        },
-        "win": {
-            "target": [
-                "nsis"
-            ]
-        }
     },
     "eslintConfig": {
         "extends": [
@@ -144,6 +110,7 @@
         "css-minimizer-webpack-plugin": "^4.0.0",
         "electron": "^20.0.1",
         "electron-builder": "^23.3.3",
+        "electron-packager": "^16.0.0",
         "electron-reloader": "^1.2.3",
         "eslint": "^8.21.0",
         "eslint-config-airbnb": "^19.0.4",
@@ -164,6 +131,7 @@
         "fork-ts-checker-webpack-plugin": "^7.2.13",
         "html-webpack-plugin": "^5.5.0",
         "jest": "^28.1.3",
+        "json": "^11.0.0",
         "path-browserify": "^1.0.1",
         "prettier": "^2.7.1",
         "sass-loader": "^13.0.2",
