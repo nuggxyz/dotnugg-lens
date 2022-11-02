@@ -9,12 +9,12 @@ import { Output } from '@nuggxyz/dotnugg-sdk/dist/builder/types/BuilderTypes';
 import { dotnugg } from '@nuggxyz/dotnugg-sdk';
 
 import utils from './utils';
-import Main from './main';
+import { __MAIN } from './main';
 
 const __DEV__ = process.env.NODE_ENV === 'development';
 
 export class IpcListener {
-    static register = () => {
+    register = () => {
         ipcMain.on('select-files', this.onSelectFiles);
         ipcMain.on('open-to', this.onOpenTo);
         ipcMain.on('open-to-vscode', this.onOpenToVsCode);
@@ -24,10 +24,10 @@ export class IpcListener {
         ipcMain.on('clear-cache', this.onClearCache);
         ipcMain.on('get-lens-default', this.onGetLensDefault);
         ipcMain.on('list-layers', this.onListLayers);
-        ipcMain.on('convert-aseprite', IpcListener.onConvertAseprite);
+        ipcMain.on('convert-aseprite', this.onConvertAseprite);
     };
 
-    public static onSelectFiles = (event: Electron.IpcMainEvent) => {
+    public onSelectFiles = (event: Electron.IpcMainEvent) => {
         if (os.platform() === 'linux' || os.platform() === 'win32') {
             void dialog
                 .showOpenDialog({
@@ -63,11 +63,7 @@ export class IpcListener {
         }
     };
 
-    public static onOpenTo = (
-        event: Electron.IpcMainEvent,
-        filePath: string,
-        application: string,
-    ) => {
+    public onOpenTo = (event: Electron.IpcMainEvent, filePath: string, application: string) => {
         if (application) {
             exec(`open -a "${application}" ${filePath.replaceAll(' ', '\\ ')}`);
         } else {
@@ -75,7 +71,7 @@ export class IpcListener {
         }
     };
 
-    public static onOpenToVsCode = (event: Electron.IpcMainEvent, filePath: string) => {
+    public onOpenToVsCode = (event: Electron.IpcMainEvent, filePath: string) => {
         if (os.platform() === 'win32') {
             exec(`code ${filePath}`);
         } else {
@@ -83,22 +79,22 @@ export class IpcListener {
         }
     };
 
-    public static onCheckOs = (event: Electron.IpcMainEvent) => {
+    public onCheckOs = (event: Electron.IpcMainEvent) => {
         event.returnValue = os.platform();
     };
 
-    public static onGetHex = (event: Electron.IpcMainEvent, item: Output) => {
+    public onGetHex = (event: Electron.IpcMainEvent, item: Output) => {
         try {
-            event.returnValue = Main.watcher.builder.hexArray(item);
+            event.returnValue = __MAIN.watcher?.builder.hexArray(item);
         } catch (e) {
             event.returnValue = e as string;
         }
     };
 
-    public static onFetchCompilerItems = (event: Electron.IpcMainEvent, filePath: string) => {
+    public onFetchCompilerItems = (event: Electron.IpcMainEvent, filePath: string) => {
         try {
-            Main._watcher = dotnugg.watcher.watchNoRender(
-                Main.APP_NAME,
+            __MAIN._watcher = dotnugg.watcher.watchNoRender(
+                __MAIN.APP_NAME,
                 filePath,
 
                 (fileUri) => {
@@ -119,7 +115,7 @@ export class IpcListener {
         }
     };
 
-    public static onConvertAseprite = (
+    public onConvertAseprite = (
         event: Electron.IpcMainEvent,
         sourcePath: string,
         destPath: string,
@@ -127,7 +123,7 @@ export class IpcListener {
 
         layer = '_',
     ) => {
-        void IpcListener.safeExecAseprite(
+        void this.safeExecAseprite(
             () => {
                 try {
                     if (!sourcePath.endsWith('.aseprite')) {
@@ -193,16 +189,16 @@ export class IpcListener {
         );
     };
 
-    public static onOpenLink = (event: Electron.IpcMainEvent, url: string) => {
+    public onOpenLink = (event: Electron.IpcMainEvent, url: string) => {
         void shell.openExternal(url);
     };
 
-    public static onClearCache = (event: Electron.IpcMainEvent, filePath: string) => {
+    public onClearCache = (event: Electron.IpcMainEvent, filePath: string) => {
         const command = os.platform() === 'win32' ? 'rmdir /s /q' : 'rm -rf';
         exec(`${command} ${path.join(filePath, '.dotnugg-cache')}`);
     };
 
-    public static onListLayers = (event: Electron.IpcMainEvent, filePath: string) => {
+    public onListLayers = (event: Electron.IpcMainEvent, filePath: string) => {
         this.safeExecAseprite(
             () => {
                 try {
@@ -224,15 +220,15 @@ export class IpcListener {
         );
     };
 
-    public static onGetLensDefault = (event: Electron.IpcMainEvent) => {
+    public onGetLensDefault = (event: Electron.IpcMainEvent) => {
         event.returnValue = path.join(
             __dirname,
             __DEV__ ? '' : `..${utils.pathDelimiter()}`,
-            Main.DEFAULT,
+            __MAIN.DEFAULT,
         );
     };
 
-    private static safeExecAseprite = (
+    public safeExecAseprite = (
         callback: () => void,
         filePath: string,
         event: Electron.IpcMainEvent,
@@ -258,12 +254,12 @@ export class IpcListener {
         });
     };
 
-    private static formatAndSend = (event: Electron.IpcMainEvent) => {
-        if (Main.watcher.builder.output) {
+    public formatAndSend = (event: Electron.IpcMainEvent) => {
+        if (__MAIN?.watcher?.builder.output) {
             event.sender.send(
                 'items-fetched',
-                Main.watcher.builder.output,
-                Main.watcher.parsedDocument,
+                __MAIN?.watcher.builder.output,
+                __MAIN?.watcher.parsedDocument,
             );
         } else {
             event.sender.send('compiler-error', 'Error: unknown error while compiling files');

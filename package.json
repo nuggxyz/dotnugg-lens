@@ -1,7 +1,7 @@
 {
     "name": "nugg-lens",
     "productName": "nugg-lens",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "description": "dotnugg desktop application",
     "main": "./build/server/js/bundle.js",
     "author": "@nuggxyz",
@@ -17,7 +17,7 @@
         "dev": "yarn prep && concurrently -k \"npm:app\" \"npm:server\"",
         "prep": "tsc -p src/server/tsconfig.json ",
         "electron": "wait-on tcp:3000  && NODE_ENV=development electron ./build/server/index.js",
-        "start": "BROWSER=none NODE_ENV=development ts-node --project ./webpack/tsconfig.json  webpack/scripts/start.ts",
+        "start": "BROWSER=none NODE_ENV=development ts-node --project ./webpack/tsconfig.json  webpack/app/scripts/start.ts",
         "server": "yarn electron",
         "app": "yarn start",
         "version:tag": "yarn changeset tag",
@@ -32,7 +32,7 @@
         "make:forge": "tsc --project ./webpack/tsconfig.json",
         "package:mac": "yarn electron-packager ./build --platform=darwin --arch=x64,arm64 --out ./out/ --overwrite",
         "package:universal": "NODE_OPTIONS='--experimental-modules' ts-node --project ./webpack/scripts/tsconfig.json ./webpack/scripts/universalize.ts",
-        "make:json": "cp ./package.json ./build/package.json && yarn json -I -f ./build/package.json -e \"this.main='server/js/bundle.js'\" && yarn json -I -f ./build/package.json -e \"this.dependencies={}\" && touch ./build/yarn.lock",
+        "make:json": "cp ./genesis.json ./build/genesis.json && cp ./package.json ./build/package.json && yarn json -I -f ./build/package.json -e \"this.main='server/js/bundle.js'\" && yarn json -I -f ./build/package.json -e \"this.dependencies={}\" && touch ./build/yarn.lock",
         "package": "yarn make:app && yarn make:server && yarn make:json && yarn package:mac && yarn package:universal"
     },
     "config": {

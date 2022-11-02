@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState } from 'react';
-import { InfuraProvider, JsonRpcProvider } from '@ethersproject/providers';
+import { JsonRpcProvider } from '@ethersproject/providers';
 
 import Loader from '@src/app/components/general/Loader/Loader';
 import Text from '@src/app/components/general/Texts/Text/Text';
@@ -12,8 +12,9 @@ import client from '@src/app/client';
 
 import styles from './Connect.styles';
 
-export const createInfuraProvider = (chain: string, key: string): JsonRpcProvider => {
-    return new InfuraProvider(chain, key);
+// eslint-disable-next-line
+export const createInfuraProvider = (_no: string, no2: string): JsonRpcProvider => {
+    return new JsonRpcProvider(`localhost:8585`);
 };
 
 const Connect: FunctionComponent<unknown> = () => {

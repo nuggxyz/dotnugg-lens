@@ -1,48 +1,103 @@
+/* eslint-disable import/order */
 /* eslint-disable @typescript-eslint/unbound-method */
 import * as path from 'path';
 
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { app, BrowserWindow, shell, Menu, autoUpdater } from 'electron';
 import { dotnugg } from '@nuggxyz/dotnugg-sdk';
 
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { ChildProcess, exec } from 'child_process';
+
 const __DEV__ = process.env.NODE_ENV === 'development';
 
-export default class Main {
-    private static _window: Electron.BrowserWindow;
+const RunAnvil = () => {
+    const hi = exec(
+        `anvil --init ./genesis.json --silent --gas-limit 0 --port 8585 --fork-url "https://eth-goerli.g.alchemy.com/v2/0kFgtjruNi-_3q2wWzjCgN1L1l3M3WN-"`,
+    );
 
-    public static get window() {
+    // hi.stdout?.on('data', (data) => {
+    //     console.log(data);
+    // });
+
+    if (hi) {
+        console.log('Anvil started', hi?.connected);
+
+        hi?.stdout?.on('data', (data) => {
+            console.log('anvil-output', data);
+        });
+
+        hi?.stderr?.on('data', (data) => {
+            console.log('anvil-output', data);
+        });
+
+        hi?.on('close', (code) => {
+            console.log('anvil-close', code);
+        });
+
+        hi?.on('error', (err) => {
+            console.log('anvil-error', err);
+        });
+
+        return hi;
+    }
+
+    return undefined;
+};
+
+export default class Main {
+    constructor() {
+        // we pass the Electron.App object and the
+        // Electron.BrowserWindow into this function
+        // so this class has no dependencies. This
+        // makes the code easier to write tests for
+
+        app.on('window-all-closed', this.onWindowAllClosed);
+        app.on('ready', this.onReady);
+        app.on('activate', this.onActivate);
+
+        void dotnugg.parser.init('lens/main');
+    }
+
+    public _window: Electron.BrowserWindow | undefined;
+
+    public get window() {
         return this._window;
     }
 
-    public static _watcher: dotnugg.watcher;
+    public _watcher: dotnugg.watcher | undefined;
 
-    public static get watcher() {
+    public get watcher() {
         return this._watcher;
     }
 
-    public static readonly APP_NAME = 'lens/main';
+    public readonly APP_NAME = 'lens/main';
 
-    public static readonly DEFAULT = 'lensDefault';
+    public readonly DEFAULT = 'lensDefault';
 
-    private static onWindowAllClosed() {
+    public onWindowAllClosed() {
         if (process.platform !== 'darwin') {
             app.quit();
         }
     }
 
-    private static onClose() {
+    public proc: ChildProcess | undefined;
+
+    public onClose() {
         // Dereference the _window object.
         // @ts-ignore
         // this._window = null;
+        if (this.proc) {
+            void this.proc?.kill();
+        }
     }
 
-    private static onActivate() {
+    public onActivate() {
         if (BrowserWindow.getAllWindows().length === 0) {
             this.onReady();
         }
     }
 
-    private static onReady() {
+    public onReady() {
         // console.log(__DEV__, process.env.NODE_ENVIRONMENT);
 
         this._window = new BrowserWindow({
@@ -56,18 +111,25 @@ export default class Main {
             icon: path.join(__dirname, 'AppIcon/AppIcon.icns'),
             titleBarStyle: 'hiddenInset',
             titleBarOverlay: true,
+
             // transparent: true,
         });
+
+        this._window.webContents.openDevTools();
+
+        this.proc = RunAnvil();
 
         void this._window.loadURL(
             __DEV__ ? 'http://localhost:3000' : `file://${path.join(__dirname, '../index.html')}`,
         );
         this._window.maximize();
-        this._window.on('closed', () => this.onClose());
 
-        if (__DEV__) {
-            this._window.webContents.openDevTools();
-        }
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
+        const self = this;
+
+        this._window.on('closed', function () {
+            self.onClose();
+        });
 
         autoUpdater.checkForUpdates();
         Menu.setApplicationMenu(
@@ -94,17 +156,6 @@ export default class Main {
             ]),
         );
     }
-
-    static main() {
-        // we pass the Electron.App object and the
-        // Electron.BrowserWindow into this function
-        // so this class has no dependencies. This
-        // makes the code easier to write tests for
-
-        app.on('window-all-closed', this.onWindowAllClosed);
-        app.on('ready', this.onReady);
-        app.on('activate', this.onActivate);
-
-        void dotnugg.parser.init('lens/main');
-    }
 }
+
+export const __MAIN = new Main();

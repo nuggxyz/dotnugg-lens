@@ -43,6 +43,9 @@ process.once('loaded', () => {
             getLensDefault: () => {
                 ipcRenderer.sendSync('get-lens-default');
             },
+            startAnvil: () => {
+                ipcRenderer.sendSync('start-anvil');
+            },
         });
     });
 });

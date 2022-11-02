@@ -5,7 +5,7 @@ import { Output } from '@nuggxyz/dotnugg-sdk/dist/builder/types/BuilderTypes';
 import React from 'react';
 import { Byter } from '@nuggxyz/dotnugg-sdk/dist/builder/types/EncoderTypes';
 import { BaseContract } from '@ethersproject/contracts';
-import { InfuraProvider } from '@ethersproject/providers';
+import { JsonRpcProvider } from '@ethersproject/providers';
 import { ethers } from 'ethers';
 import invariant from 'tiny-invariant';
 import { Document } from '@nuggxyz/dotnugg-sdk/dist/builder/types/TransformTypes';
@@ -176,9 +176,9 @@ const useStore = create(
                     });
 
                     const payload = [build(item.bits)];
-
+                    // new InfuraProvider(web3.constants.DEFAULT_CHAIN, get().infuraKey)
                     await contract
-                        .connect(new InfuraProvider(web3.constants.DEFAULT_CHAIN, get().infuraKey))
+                        .connect(new JsonRpcProvider('http://localhost:8585'))
                         .combo(
                             payload,
 
@@ -212,7 +212,7 @@ const useStore = create(
                     const payload = items.map((item) => build(item));
 
                     await contract
-                        .connect(new InfuraProvider(web3.constants.DEFAULT_CHAIN, get().infuraKey))
+                        .connect(new JsonRpcProvider('http://localhost:8585'))
                         .combo(
                             payload,
 
